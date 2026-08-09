@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GELWO Admin ERP Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #070B19; --sidebar: #0D1225; --card: #111827; --border: #1E293B;
+      --accent: #3B82F6; --green: #10B981; --yellow: #F59E0B; --red: #EF4444;
+      --purple: #8B5CF6; --text: #F1F5F9; --muted: #94A3B8; --sidebar-w: 220px;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+    /* ADMIN AUTH */
+    #adminAuth{position:fixed;inset:0;background:rgba(7,11,25,.97);backdrop-filter:blur(8px);z-index:9999;display:flex;align-items:center;justify-content:center}
+    .auth-box{background:#0D1225;border:1px solid #1E293B;border-radius:20px;padding:36px;width:100%;max-width:380px;box-shadow:0 24px 64px rgba(0,0,0,.6)}
+    .auth-logo{text-align:center;margin-bottom:24px}
+    .auth-logo span{font-size:22px;font-weight:800;background:linear-gradient(135deg,#3B82F6,#6366F1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .auth-logo small{display:block;font-size:10px;color:#94A3B8;letter-spacing:2px;margin-top:2px}
+    .auth-form{display:flex;flex-direction:column;gap:14px}
+    .auth-field label{display:block;font-size:10px;font-weight:600;color:#94A3B8;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+    .auth-field input{width:100%;background:rgba(255,255,255,.05);border:1px solid #1E293B;border-radius:10px;padding:11px 14px;font-size:13px;color:#F1F5F9;outline:none;font-family:'Inter',sans-serif;transition:border-color .2s}
+    .auth-field input:focus{border-color:#3B82F6}
+    .auth-btn{background:linear-gradient(135deg,#3B82F6,#6366F1);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+    .auth-hint{font-size:11px;color:#475569;text-align:center}
+    .auth-hint b{color:#94A3B8}
+
+    /* SIDEBAR */
+    .sidebar { width: var(--sidebar-w); background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 10; overflow-y: auto; }
+    .logo { padding: 20px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .logo span { font-size: 20px; font-weight: 800; background: linear-gradient(135deg, #3B82F6, #6366F1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .logo small { display: block; font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+    .nav { flex: 1; padding: 12px 0; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 16px; cursor: pointer; color: var(--muted); font-size: 12.5px; font-weight: 500; transition: all .15s; border-left: 3px solid transparent; }
+    .nav-item:hover { background: rgba(59,130,246,.07); color: var(--text); }
+    .nav-item.active { background: rgba(59,130,246,.12); color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+    .nav-item .icon { font-size: 14px; width: 18px; text-align: center; }
+    .nav-section { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #475569; padding: 14px 16px 5px; }
+    .profile-box { padding: 14px 16px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #3B82F6, #6366F1); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+
+    /* MAIN */
+    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+    .topbar { background: var(--sidebar); border-bottom: 1px solid var(--border); padding: 0 24px; height: 60px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 5; }
+    .search-wrap { flex: 1; max-width: 400px; position: relative; }
+    .search-wrap input { width: 100%; background: rgba(255,255,255,.05); border: 1px solid var(--border); border-radius: 8px; padding: 9px 14px 9px 36px; font-size: 13px; color: var(--text); outline: none; font-family: inherit; }
+    .search-wrap input::placeholder { color: var(--muted); }
+    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 14px; }
+    .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+    .admin-chip { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,.05); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; }
+    .admin-chip .a-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg,#3B82F6,#6366F1); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+    .admin-chip .a-name { font-size: 12px; font-weight: 600; }
+    .btn-primary { background: linear-gradient(135deg,#3B82F6,#6366F1); color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; font-family:'Inter',sans-serif; }
+
+    /* CONTENT & VIEW PANELS */
+    .content { padding: 22px; flex: 1; }
+    .view-panel { display: none; animation: fadeIn .25s ease; }
+    .view-panel.active { display: block; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+    /* KPI GRID */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+    .kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; position: relative; overflow: hidden; transition: transform .2s; }
+    .kpi-card:hover { transform: translateY(-2px); }
+    .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .kpi-card.green::before { background: linear-gradient(90deg,#10B981,#059669); }
+    .kpi-card.blue::before { background: linear-gradient(90deg,#3B82F6,#6366F1); }
+    .kpi-card.yellow::before { background: linear-gradient(90deg,#F59E0B,#D97706); }
+    .kpi-card.red::before { background: linear-gradient(90deg,#EF4444,#DC2626); }
+    .kpi-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+    .kpi-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .kpi-icon.green { background: rgba(16,185,129,.15); }
+    .kpi-icon.blue { background: rgba(59,130,246,.15); }
+    .kpi-icon.yellow { background: rgba(245,158,11,.15); }
+    .kpi-icon.red { background: rgba(239,68,68,.15); }
+    .kpi-change { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
+    .kpi-change.up { background: rgba(16,185,129,.15); color: var(--green); }
+    .kpi-value { font-size: 24px; font-weight: 800; line-height: 1; }
+    .kpi-label { font-size: 11.5px; color: var(--muted); margin-top: 5px; font-weight: 500; }
+
+    /* LAYOUT GRIDS */
+    .row-2 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .row-3 { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .row-ai { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+    /* CARDS & TABLES */
+    .sec { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+    .sec-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .sec-head h3 { font-size: 13.5px; font-weight: 700; }
+    .view-all { font-size: 11px; color: var(--accent); cursor: pointer; }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th { padding: 10px 18px; text-align: left; font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,.02); }
+    tbody td { padding: 12px 18px; font-size: 12px; border-bottom: 1px solid rgba(30,41,59,.4); }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(255,255,255,.02); }
+
+    .badge-pill { border-radius: 20px; padding: 3px 10px; font-size: 10px; font-weight: 600; }
+    .badge-pill.green { background: rgba(16,185,129,.15); color: var(--green); }
+    .badge-pill.yellow { background: rgba(245,158,11,.15); color: var(--yellow); }
+    .badge-pill.blue { background: rgba(59,130,246,.15); color: var(--accent); }
+    .badge-pill.red { background: rgba(239,68,68,.15); color: var(--red); }
+    .badge-pill.purple { background: rgba(139,92,246,.15); color: var(--purple); }
+    .qtn-id { color: var(--accent); font-weight: 600; font-size: 11px; }
+
+    /* CHARTS (CSS) */
+    .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 110px; padding: 16px 18px; }
+    .bar-group { display: flex; gap: 3px; flex: 1; align-items: flex-end; }
+    .bar { border-radius: 4px 4px 0 0; }
+    .bar.rev { background: linear-gradient(180deg,#3B82F6,#1E40AF); }
+    .bar.tgt { background: rgba(99,102,241,.25); }
+
+    /* AI CHAT */
+    .ai-chat { display: flex; flex-direction: column; height: 100%; }
+    .ai-messages { flex: 1; padding: 14px; overflow-y: auto; max-height: 260px; display: flex; flex-direction: column; gap: 10px; }
+    .ai-msg { max-width: 85%; font-size: 12px; }
+    .ai-msg.bot { align-self: flex-start; }
+    .ai-msg.user { align-self: flex-end; }
+    .ai-bubble { border-radius: 12px; padding: 10px 14px; line-height: 1.5; }
+    .ai-msg.bot .ai-bubble { background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.2); color: var(--text); border-radius: 12px 12px 12px 0; }
+    .ai-msg.user .ai-bubble { background: linear-gradient(135deg,#3B82F6,#6366F1); color: #fff; border-radius: 12px 12px 0 12px; }
+    .ai-chips { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 14px 10px; }
+    .chip { background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.25); color: var(--accent); border-radius: 20px; padding: 5px 12px; font-size: 11px; cursor: pointer; }
+    .ai-input { padding: 10px 14px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+    .ai-input input { flex: 1; background: rgba(255,255,255,.05); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--text); outline: none; font-family: inherit; }
+  </style>
+</head>
+<body>
+
+<!-- ADMIN AUTH OVERLAY -->
+<div id="adminAuth" style="display:none">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <span>GELWO ERP</span>
+      <small>Administrator Access</small>
+    </div>
+    <div class="auth-form">
+      <div id="adminErr" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#EF4444;border-radius:8px;padding:9px;font-size:12px;display:none"></div>
+      <div class="auth-field"><label>Admin Email</label><input type="email" id="adminEmail" value="admin@gelwo.co.ke"/></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="adminPassword" value="admin2026"/></div>
+      <button class="auth-btn" onclick="adminLogin()">Sign In to ERP</button>
+      <div class="auth-hint">Default: <b>admin@gelwo.co.ke</b> / <b>admin2026</b></div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <span>GELWO ERP</span>
+    <small>Admin Portal</small>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active" onclick="showAdminView('dashboard')"><span class="icon">⊞</span> Dashboard</div>
+    <div class="nav-item" onclick="showAdminView('analytics')"><span class="icon">📊</span> Analytics</div>
+    <div class="nav-item" onclick="showAdminView('notifications')"><span class="icon">🔔</span> Notifications <span style="background:var(--red);color:#fff;font-size:9px;padding:1px 5px;border-radius:10px;margin-left:auto">5</span></div>
+    <div class="nav-section">Operations</div>
+    <div class="nav-item" onclick="showAdminView('quotations')"><span class="icon">📋</span> Quotations</div>
+    <div class="nav-item" onclick="showAdminView('projects')"><span class="icon">📁</span> Projects</div>
+    <div class="nav-item" onclick="showAdminView('invoices')"><span class="icon">💳</span> Invoices</div>
+    <div class="nav-item" onclick="showAdminView('orders')"><span class="icon">🛒</span> Purchase Orders</div>
+    <div class="nav-item" onclick="showAdminView('inventory')"><span class="icon">📦</span> Inventory</div>
+    <div class="nav-section">Finance</div>
+    <div class="nav-item" onclick="showAdminView('revenue')"><span class="icon">💰</span> Revenue</div>
+    <div class="nav-item" onclick="showAdminView('reports')"><span class="icon">📈</span> Reports</div>
+    <div class="nav-item" onclick="showAdminView('payments')"><span class="icon">🏦</span> Payments</div>
+    <div class="nav-section">CRM & Admin</div>
+    <div class="nav-item" onclick="showAdminView('clients')"><span class="icon">👥</span> Clients <span id="custBadge" style="background:var(--green);color:#fff;font-size:9px;padding:1px 5px;border-radius:10px;margin-left:auto"></span></div>
+    <div class="nav-item" onclick="showAdminView('leads')"><span class="icon">🤝</span> Leads</div>
+    <div class="nav-item" onclick="showAdminView('staff')"><span class="icon">👤</span> Staff</div>
+    <div class="nav-item" onclick="showAdminView('settings')"><span class="icon">⚙️</span> Settings</div>
+  </nav>
+  <div class="profile-box">
+    <div class="avatar">JG</div>
+    <div>
+      <div style="font-size:12px;font-weight:600">John Griffin</div>
+      <div style="font-size:10px;color:var(--muted)">System Admin</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN ERP DISPLAY -->
+<main class="main">
+  <div class="topbar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search ERP records, quotations, clients..." onkeydown="if(event.key==='Enter')alert('Searching ERP records for: '+this.value)"/>
+    </div>
+    <div class="topbar-right">
+      <div class="admin-chip">
+        <div class="a-avatar">JG</div>
+        <div><div style="font-size:12px;font-weight:600">John Griffin</div><div style="font-size:10px;color:var(--muted)">System Admin</div></div>
+      </div>
+      <button class="btn-primary" onclick="createNewQuotation()">+ New Quotation</button>
+      <button onclick="adminLogout()" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#EF4444;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- 1. DASHBOARD VIEW -->
+    <div id="adminView-dashboard" class="view-panel active">
+      <div class="kpi-grid">
+        <div class="kpi-card green" onclick="showAdminView('revenue')" style="cursor:pointer">
+          <div class="kpi-header"><div class="kpi-icon green">💰</div><span class="kpi-change up">↑ 12.4%</span></div>
+          <div class="kpi-value">KSh 12.45M</div>
+          <div class="kpi-label">Total Revenue</div>
+        </div>
+        <div class="kpi-card blue" onclick="showAdminView('quotations')" style="cursor:pointer">
+          <div class="kpi-header"><div class="kpi-icon blue">📋</div><span class="kpi-change up">↑ 8</span></div>
+          <div class="kpi-value">24</div>
+          <div class="kpi-label">New Quotations</div>
+        </div>
+        <div class="kpi-card yellow" onclick="showAdminView('projects')" style="cursor:pointer">
+          <div class="kpi-header"><div class="kpi-icon yellow">📁</div><span class="kpi-change up">↑ 3</span></div>
+          <div class="kpi-value">18</div>
+          <div class="kpi-label">Active Projects</div>
+        </div>
+        <div class="kpi-card red" onclick="showAdminView('invoices')" style="cursor:pointer">
+          <div class="kpi-header"><div class="kpi-icon red">💳</div><span class="kpi-change up">↑ 5</span></div>
+          <div class="kpi-value">32</div>
+          <div class="kpi-label">Pending Invoices</div>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="sec">
+          <div class="sec-head"><h3>📈 Revenue Overview</h3><span class="view-all" onclick="showAdminView('revenue')">Export →</span></div>
+          <div class="bar-chart">
+            <div class="bar-group"><div class="bar rev" style="height:55px;flex:1"></div><div class="bar tgt" style="height:65px;flex:1"></div></div>
+            <div class="bar-group"><div class="bar rev" style="height:70px;flex:1"></div><div class="bar tgt" style="height:75px;flex:1"></div></div>
+            <div class="bar-group"><div class="bar rev" style="height:60px;flex:1"></div><div class="bar tgt" style="height:70px;flex:1"></div></div>
+            <div class="bar-group"><div class="bar rev" style="height:85px;flex:1"></div><div class="bar tgt" style="height:80px;flex:1"></div></div>
+            <div class="bar-group"><div class="bar rev" style="height:75px;flex:1"></div><div class="bar tgt" style="height:85px;flex:1"></div></div>
+            <div class="bar-group"><div class="bar rev" style="height:95px;flex:1"></div><div class="bar tgt" style="height:90px;flex:1"></div></div>
+            <div class="bar-group"><div class="bar rev" style="height:80px;flex:1"></div><div class="bar tgt" style="height:85px;flex:1"></div></div>
+            <div class="bar-group"><div class="bar rev" style="height:105px;flex:1"></div><div class="bar tgt" style="height:95px;flex:1"></div></div>
+          </div>
+        </div>
+        <div class="sec">
+          <div class="sec-head"><h3>🍩 Sales by Service</h3></div>
+          <div style="padding:16px">
+            <div style="margin-bottom:8px;font-size:12px">⚡ Solar PV Systems: <b>35% (KSh 4.35M)</b></div>
+            <div style="margin-bottom:8px;font-size:12px">📷 CCTV & Security: <b>25% (KSh 3.11M)</b></div>
+            <div style="margin-bottom:8px;font-size:12px">🌐 Networking: <b>20% (KSh 2.49M)</b></div>
+            <div style="margin-bottom:8px;font-size:12px">🔥 Fire Alarm: <b>12% (KSh 1.49M)</b></div>
+            <div style="font-size:12px">🏗️ Civil Works: <b>8% (KSh 0.99M)</b></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row-ai">
+        <div class="sec">
+          <div class="sec-head"><h3>🤖 AI Business Assistant</h3><span style="font-size:10px;background:rgba(16,185,129,.15);color:var(--green);padding:3px 8px;border-radius:20px">Online</span></div>
+          <div class="ai-chat">
+            <div class="ai-messages" id="chatMessages">
+              <div class="ai-msg bot"><div class="ai-bubble">Hello John! I'm your AI business assistant. How can I help you analyze revenue or manage projects today?</div></div>
+            </div>
+            <div class="ai-chips">
+              <div class="chip" onclick="sendChip(this)">📊 Revenue Summary</div>
+              <div class="chip" onclick="sendChip(this)">📋 Pending Quotes</div>
+              <div class="chip" onclick="sendChip(this)">📁 Project Status</div>
+              <div class="chip" onclick="sendChip(this)">💳 Overdue Invoices</div>
+            </div>
+            <div class="ai-input">
+              <input type="text" id="aiInput" placeholder="Ask AI assistant..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+              <button class="btn-primary" onclick="sendMsg()">Send</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec">
+          <div class="sec-head"><h3>👥 Registered Portal Customers <span id="custCount" style="font-size:11px;color:var(--muted)"></span></h3></div>
+          <div id="custEmpty" style="padding:20px;text-align:center;color:var(--muted);font-size:12px">No registered customer accounts found.</div>
+          <div style="max-height:260px;overflow-y:auto">
+            <table>
+              <thead><tr><th>Acc No</th><th>Name</th><th>Email</th><th>Phone</th><th>Action</th></tr></thead>
+              <tbody id="custTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. ANALYTICS VIEW -->
+    <div id="adminView-analytics" class="view-panel">
+      <div class="sec" style="padding:20px">
+        <h3 style="font-size:15px;font-weight:700;margin-bottom:12px">📊 Financial & Sales Performance Analytics</h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Year-to-Date Performance: <b>KSh 12,450,000 Total Generated</b> (Target: KSh 15.00M)</p>
+        <button class="btn-primary" onclick="alert('Exporting full analytics report as CSV...')">Export CSV Report</button>
+        <button class="btn-primary" style="margin-left:10px" onclick="alert('Downloading PDF Executive Summary...')">Export PDF</button>
+      </div>
+    </div>
+
+    <!-- 3. NOTIFICATIONS VIEW -->
+    <div id="adminView-notifications" class="view-panel">
+      <div class="sec">
+        <div class="sec-head"><h3>🔔 ERP System Notifications</h3></div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+          <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);padding:12px;border-radius:8px;font-size:12px">✅ <b>Quotation Approved:</b> QTN-2026-0048 approved by client.</div>
+          <div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);padding:12px;border-radius:8px;font-size:12px">⚠️ <b>Low Inventory Warning:</b> Dahua 4K Cameras below threshold (12 remaining).</div>
+          <div style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);padding:12px;border-radius:8px;font-size:12px">ℹ️ <b>AGPO Tender Feed:</b> 2 new Western Kenya government tenders published.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. QUOTATIONS VIEW -->
+    <div id="adminView-quotations" class="view-panel">
+      <div class="sec">
+        <div class="sec-head"><h3>📋 Quotations Master Manager</h3><button class="btn-primary" onclick="createNewQuotation()">+ New Quotation</button></div>
+        <table>
+          <thead><tr><th>QTN No.</th><th>Client Name</th><th>Service Required</th><th>Amount</th><th>Issued Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="adminQuotationsBody">
+            <tr><td><span class="qtn-id">QTN-2026-0048</span></td><td>Erick Otieno</td><td>10 kWp Solar PV System</td><td>KSh 850,000</td><td>Aug 5, 2026</td><td><span class="badge-pill green">Approved</span></td><td><button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="alert('Viewing QTN-2026-0048 details')">View</button></td></tr>
+            <tr><td><span class="qtn-id">QTN-2026-0047</span></td><td>Amina Hassan</td><td>CCTV System Upgrade</td><td>KSh 124,500</td><td>Aug 4, 2026</td><td><span class="badge-pill yellow">Pending</span></td><td><button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="alert('Approving QTN-2026-0047')">Approve</button></td></tr>
+            <tr><td><span class="qtn-id">QTN-2026-0045</span></td><td>Kenya Power HQ</td><td>Fire Alarm System</td><td>KSh 520,000</td><td>Aug 2, 2026</td><td><span class="badge-pill yellow">Pending</span></td><td><button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="alert('Approving QTN-2026-0045')">Approve</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5. PROJECTS VIEW -->
+    <div id="adminView-projects" class="view-panel">
+      <div class="sec">
+        <div class="sec-head"><h3>📁 Enterprise Projects Master Roster</h3><button class="btn-primary" onclick="alert('Opening project creator modal...')">+ Create Project</button></div>
+        <table>
+          <thead><tr><th>Project ID</th><th>Project Title</th><th>Client</th><th>Assigned Engineer</th><th>Progress</th><th>Status</th></tr></thead>
+          <tbody id="adminProjectsBody">
+            <tr><td><span class="qtn-id">PRJ-2026-001</span></td><td>Westlands Commercial CCTV</td><td>Erick Otieno</td><td>David M.</td><td>65%</td><td><span class="badge-pill blue">In Progress</span></td></tr>
+            <tr><td><span class="qtn-id">PRJ-2026-002</span></td><td>10 kWp Solar PV System</td><td>Otieno Residence</td><td>James K.</td><td>20%</td><td><span class="badge-pill yellow">Planning</span></td></tr>
+            <tr><td><span class="qtn-id">PRJ-2026-003</span></td><td>Fiber Optic Network Rack</td><td>Techbridge Ltd</td><td>Sarah N.</td><td>10%</td><td><span class="badge-pill gray">Initiated</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 6. INVOICES VIEW -->
+    <div id="adminView-invoices" class="view-panel">
+      <div class="sec">
+        <div class="sec-head"><h3>💳 Master Invoicing & Accounts Receivable</h3><button class="btn-primary" onclick="alert('Generating invoice...')">+ Generate Invoice</button></div>
+        <table>
+          <thead><tr><th>Invoice No.</th><th>Client</th><th>Description</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="adminInvoicesBody">
+            <tr><td><span class="qtn-id">INV-2026-0048</span></td><td>Erick Otieno</td><td>CCTV Installation – Phase 1</td><td>KSh 84,500</td><td><span class="badge-pill yellow">Pending</span></td><td><button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="alert('Sent SMS reminder to client.')">Remind SMS</button></td></tr>
+            <tr><td><span class="qtn-id">INV-2026-0039</span></td><td>Erick Otieno</td><td>Solar Site Survey</td><td>KSh 25,000</td><td><span class="badge-pill yellow">Pending</span></td><td><button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="alert('Sent SMS reminder to client.')">Remind SMS</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 7. PURCHASE ORDERS VIEW -->
+    <div id="adminView-orders" class="view-panel">
+      <div class="sec">
+        <div class="sec-head"><h3>🛒 Purchase Orders (LPO)</h3><button class="btn-primary" onclick="alert('New LPO order form...')">+ New LPO</button></div>
+        <p style="padding:16px;font-size:12px;color:var(--muted)">LPO #PO-8812: 50x Solar PV Panels 250W — <b>KSh 450,000 (Approved)</b></p>
+      </div>
+    </div>
+
+    <!-- 8. INVENTORY VIEW -->
+    <div id="adminView-inventory" class="view-panel">
+      <div class="sec">
+        <div class="sec-head"><h3>📦 Warehouse Stock Inventory</h3><button class="btn-primary" onclick="alert('Add Stock Item')">+ Add Stock</button></div>
+        <table>
+          <thead><tr><th>Item Code</th><th>Hardware Item Name</th><th>Category</th><th>Stock Level</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>SKU-101</td><td>Solar PV Panels 250W Monocrystalline</td><td>Solar Energy</td><td>140 Units</td><td><span class="badge-pill green">In Stock</span></td></tr>
+            <tr><td>SKU-204</td><td>Dahua 4K IP CCTV Outdoor Dome Camera</td><td>CCTV Security</td><td>12 Units</td><td><span class="badge-pill yellow">Low Stock</span></td></tr>
+            <tr><td>SKU-309</td><td>CAT6 Outdoor Shielded Network Cable 305m</td><td>Networking</td><td>40 Rolls</td><td><span class="badge-pill green">In Stock</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 9. REVENUE VIEW -->
+    <div id="adminView-revenue" class="view-panel">
+      <div class="sec" style="padding:20px">
+        <h3>💰 Revenue Breakdown & Tax Records</h3>
+        <p style="font-size:12px;color:var(--muted);margin-top:6px">Tax PIN: P052125735W · IFMIS No: 1013123 · AGPO: NT/PPD/2025/DGY/8251</p>
+        <p style="font-size:13px;font-weight:700;margin-top:12px;color:var(--green)">YTD Gross Revenue: KSh 12,450,000 · VAT (16%): KSh 1,992,000</p>
+      </div>
+    </div>
+
+    <!-- 10. REPORTS VIEW -->
+    <div id="adminView-reports" class="view-panel">
+      <div class="sec" style="padding:20px">
+        <h3>📈 Official Executive Reports</h3>
+        <button class="btn-primary" style="margin-top:12px" onclick="alert('Generating Audit Report...')">Generate Financial Audit PDF</button>
+        <button class="btn-primary" style="margin-top:12px;margin-left:10px" onclick="alert('Generating AGPO Report...')">Generate AGPO Compliance PDF</button>
+      </div>
+    </div>
+
+    <!-- 11. PAYMENTS VIEW -->
+    <div id="adminView-payments" class="view-panel">
+      <div class="sec" style="padding:20px">
+        <h3>🏦 Bank & M-Pesa Settlement Log</h3>
+        <p style="font-size:12px;color:var(--muted)">KCB Account: 13354804043 · Last Settlement: KSh 84,500 (Aug 9, 2026)</p>
+      </div>
+    </div>
+
+    <!-- 12. CLIENTS VIEW -->
+    <div id="adminView-clients" class="view-panel">
+      <div class="sec">
+        <div class="sec-head"><h3>👥 Registered Portal Clients Master Database</h3></div>
+        <table>
+          <thead><tr><th>Acc No</th><th>Full Name</th><th>Email</th><th>Phone</th><th>Company</th><th>Registered Date</th><th>Action</th></tr></thead>
+          <tbody id="custTableBodyFull"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 13. LEADS VIEW -->
+    <div id="adminView-leads" class="view-panel">
+      <div class="sec" style="padding:20px">
+        <h3>🤝 CRM Sales Pipeline & Leads</h3>
+        <p style="font-size:12px;color:var(--muted)">4 Active Leads: Nairobi Hospital (Fire System), Kenya Power (Substation), Westlands Mall (CCTV Phase 2), Kisumu School (Solar Grid).</p>
+      </div>
+    </div>
+
+    <!-- 14. STAFF VIEW -->
+    <div id="adminView-staff" class="view-panel">
+      <div class="sec" style="padding:20px">
+        <h3>👤 Technical Field Staff Roster</h3>
+        <p style="font-size:12px;color:var(--muted)">• James K. (Solar Tech Lead)<br/>• David M. (Security & CCTV Eng)<br/>• Sarah N. (ICT Specialist)<br/>• John Griffin (System Admin)</p>
+      </div>
+    </div>
+
+    <!-- 15. SETTINGS VIEW -->
+    <div id="adminView-settings" class="view-panel">
+      <div class="sec" style="padding:20px">
+        <h3>⚙️ ERP System Configuration</h3>
+        <p style="font-size:12px;color:var(--muted)">GELWO TECHNOLOGIES ERP v4.2 · Kakamega HQ System Active</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  const DB_KEY = 'gelwo_users';
+  const ADMIN_SESSION = 'gelwo_admin_session';
+  const ADMIN_CREDENTIALS = { email: 'admin@gelwo.co.ke', password: 'admin2026' };
+
+  let adminQuotations = [];
+  let adminProjects = [];
+  let adminInvoices = [];
+  let adminUsers = [];
+
+  async function adminLogin() {
+    const email = document.getElementById('adminEmail').value.trim();
+    const pass = document.getElementById('adminPassword').value;
+    if (!email || !pass) { alert('Please enter admin credentials'); return; }
+    if (email === ADMIN_CREDENTIALS.email && pass === ADMIN_CREDENTIALS.password) {
+      localStorage.setItem(ADMIN_SESSION, '1');
+      document.getElementById('adminAuth').style.display = 'none';
+      await syncERPData();
+    } else {
+      alert('Invalid admin email or password');
+    }
+  }
+
+  function adminLogout() {
+    localStorage.setItem(ADMIN_SESSION, '0');
+    document.getElementById('adminAuth').style.display = 'flex';
+  }
+
+  function showAdminView(viewId) {
+    document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
+    const target = document.getElementById('adminView-' + viewId);
+    if (target) target.classList.add('active');
+
+    // highlight sidebar item
+    document.querySelectorAll('.nav-item').forEach(el => {
+      el.classList.remove('active');
+      if (el.getAttribute('onclick') && el.getAttribute('onclick').includes(viewId)) {
+        el.classList.add('active');
+      }
+    });
+  }
+
+  async function syncERPData() {
+    try {
+      // 1. Fetch Users
+      const uRes = await fetch('/api/portal/auth');
+      const uData = await uRes.json();
+      if (uData.success && !uData.fallback) {
+        adminUsers = uData.data;
+      } else {
+        adminUsers = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+      }
+
+      // 2. Fetch Quotations
+      const qRes = await fetch('/api/portal/quotations');
+      const qData = await qRes.json();
+      if (qData.success && !qData.fallback) {
+        adminQuotations = qData.data;
+      } else {
+        adminQuotations = JSON.parse(localStorage.getItem('admin_q') || '[]');
+      }
+
+      // 3. Fetch Projects
+      const pRes = await fetch('/api/portal/projects');
+      const pData = await pRes.json();
+      if (pData.success && !pData.fallback) {
+        adminProjects = pData.data;
+      } else {
+        adminProjects = JSON.parse(localStorage.getItem('admin_p') || '[]');
+      }
+
+      // 4. Fetch Invoices
+      const iRes = await fetch('/api/portal/invoices');
+      const iData = await iRes.json();
+      if (iData.success && !iData.fallback) {
+        adminInvoices = iData.data;
+      } else {
+        adminInvoices = JSON.parse(localStorage.getItem('admin_i') || '[]');
+      }
+
+      renderERPData();
+    } catch (err) {
+      console.error("Error syncing ERP data:", err);
+      // Fallback
+      adminUsers = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+      adminQuotations = JSON.parse(localStorage.getItem('admin_q') || '[]');
+      adminProjects = JSON.parse(localStorage.getItem('admin_p') || '[]');
+      adminInvoices = JSON.parse(localStorage.getItem('admin_i') || '[]');
+      renderERPData();
+    }
+  }
+
+  function renderERPData() {
+    // Backups
+    localStorage.setItem(DB_KEY, JSON.stringify(adminUsers));
+    localStorage.setItem('admin_q', JSON.stringify(adminQuotations));
+    localStorage.setItem('admin_p', JSON.stringify(adminProjects));
+    localStorage.setItem('admin_i', JSON.stringify(adminInvoices));
+
+    // Render registered customers in tables
+    const badge = document.getElementById('custBadge');
+    const tbody = document.getElementById('custTableBody');
+    const tbodyFull = document.getElementById('custTableBodyFull');
+    const empty = document.getElementById('custEmpty');
+    const countEl = document.getElementById('custCount');
+
+    if (badge) {
+      badge.textContent = adminUsers.length;
+      badge.style.display = adminUsers.length ? 'inline-block' : 'none';
+    }
+    if (countEl) countEl.textContent = `(${adminUsers.length} registered)`;
+
+    const customerHtml = adminUsers.map(u => `
+      <tr>
+        <td style="padding:10px 14px"><span style="color:#3B82F6;font-weight:600">#${u.accountNo || 'GEL-100'}</span></td>
+        <td style="padding:10px 14px;font-weight:600">${u.fullName}</td>
+        <td style="padding:10px 14px;color:#94A3B8">${u.email}</td>
+        <td style="padding:10px 14px;color:#94A3B8">${u.phone || '—'}</td>
+        <td style="padding:10px 14px;color:#94A3B8">${u.company || '—'}</td>
+        <td style="padding:10px 14px;color:#94A3B8">${u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-KE',{day:'2-digit',month:'short',year:'numeric'}) : '—'}</td>
+        <td style="padding:10px 14px"><button onclick="deleteCustomer('${u.id}')" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#EF4444;border-radius:6px;padding:3px 8px;font-size:10px;cursor:pointer">Remove</button></td>
+      </tr>
+    `).join('');
+
+    if (tbody) {
+      if (!adminUsers.length) {
+        if (empty) empty.style.display = 'block';
+        tbody.innerHTML = '';
+      } else {
+        if (empty) empty.style.display = 'none';
+        tbody.innerHTML = adminUsers.map(u => `
+          <tr>
+            <td style="padding:8px 12px;color:var(--accent)">#${u.accountNo || 'GEL-100'}</td>
+            <td style="padding:8px 12px;font-weight:600">${u.fullName}</td>
+            <td style="padding:8px 12px">${u.email}</td>
+            <td style="padding:8px 12px">${u.phone || '—'}</td>
+            <td style="padding:8px 12px"><button onclick="deleteCustomer('${u.id}')" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#EF4444;border-radius:6px;padding:3px 8px;font-size:10px;cursor:pointer">Remove</button></td>
+          </tr>
+        `).join('');
+      }
+    }
+    if (tbodyFull) {
+      tbodyFull.innerHTML = customerHtml || '<tr><td colspan="7" style="text-align:center;padding:20px;color:#94A3B8">No registered customers.</td></tr>';
+    }
+
+    // Render quotations table
+    const adminQuotationsBody = document.getElementById('adminQuotationsBody');
+    if (adminQuotationsBody) {
+      adminQuotationsBody.innerHTML = adminQuotations.length === 0 ?
+        `<tr><td colspan="7" style="text-align:center;padding:15px;color:var(--muted)">No quotations found.</td></tr>` :
+        adminQuotations.map(q => `
+        <tr>
+          <td><span class="qtn-id">${q.quoteNo}</span></td>
+          <td>${q.customerName || 'Offline Customer'}</td>
+          <td>${q.serviceName}</td>
+          <td>KSh ${parseFloat(q.amount || 0).toLocaleString()}</td>
+          <td>${q.createdAt ? new Date(q.createdAt).toLocaleDateString() : '—'}</td>
+          <td><span class="badge-pill ${q.status === 'approved' ? 'green' : 'yellow'}">${q.status}</span></td>
+          <td><button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="alert('Quotation ${q.quoteNo} details loaded.')">View</button></td>
+        </tr>
+      `).join('');
+    }
+
+    // Render projects table
+    const adminProjectsBody = document.getElementById('adminProjectsBody');
+    if (adminProjectsBody) {
+      adminProjectsBody.innerHTML = adminProjects.length === 0 ?
+        `<tr><td colspan="6" style="text-align:center;padding:15px;color:var(--muted)">No projects found.</td></tr>` :
+        adminProjects.map(p => `
+        <tr>
+          <td><span class="qtn-id">${p.projectNo}</span></td>
+          <td>${p.title}</td>
+          <td>${p.customerName || 'Offline Client'}</td>
+          <td>${p.assignedEngineer || 'Unassigned'}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span>${p.progress}%</span>
+              <button onclick="updateProjectProgress('${p.id}', '${p.title}', ${p.progress})" style="background:rgba(59,130,246,.15);border:none;color:var(--accent);cursor:pointer;font-size:10px;padding:2px 4px;border-radius:4px">Edit</button>
+            </div>
+          </td>
+          <td><span class="badge-pill ${p.status === 'Completed' ? 'green' : p.status === 'Planning' ? 'yellow' : 'blue'}">${p.status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // Render invoices table
+    const adminInvoicesBody = document.getElementById('adminInvoicesBody');
+    if (adminInvoicesBody) {
+      adminInvoicesBody.innerHTML = adminInvoices.length === 0 ?
+        `<tr><td colspan="6" style="text-align:center;padding:15px;color:var(--muted)">No invoices found.</td></tr>` :
+        adminInvoices.map(i => `
+        <tr>
+          <td><span class="qtn-id">${i.invoiceNo}</span></td>
+          <td>${i.customerName || 'Offline Client'}</td>
+          <td>${i.description}</td>
+          <td>KSh ${parseFloat(i.amount || 0).toLocaleString()}</td>
+          <td><span class="badge-pill ${i.status === 'paid' ? 'green' : 'yellow'}">${i.status}</span></td>
+          <td><button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="alert('Reminder notification dispatched for ${i.invoiceNo}.')">Remind SMS</button></td>
+        </tr>
+      `).join('');
+    }
+  }
+
+  async function createNewQuotation() {
+    const clientEmail = prompt('Create New ERP Quotation:\nEnter Client Email Address (registered):', 'client@institution.go.ke');
+    if (!clientEmail) return;
+
+    const user = adminUsers.find(u => u.email === clientEmail);
+    const userId = user ? user.id : null;
+    const clientName = user ? user.fullName : 'Offline Client';
+
+    const service = prompt('Enter Service Name:', 'Solar Energy Installation');
+    if (!service) return;
+
+    const amountStr = prompt('Enter Estimated Cost (KSh):', '850000');
+    const amount = amountStr ? parseFloat(amountStr) : 0;
+
+    const quoteNo = 'QTN-' + Math.floor(10000 + Math.random() * 90000);
+
+    try {
+      const res = await fetch('/api/portal/quotations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          quoteNo,
+          userId,
+          serviceName: service,
+          location: 'Nairobi HQ',
+          scope: 'Manual ERP Quotation creation',
+          amount,
+          status: 'pending'
+        })
+      });
+      const result = await res.json();
+      if (result.success && !result.fallback) {
+        alert(`✓ Quotation ${quoteNo} generated for "${clientName}". Added to database.`);
+        await syncERPData();
+        showAdminView('quotations');
+        return;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
+    // Local Storage backup
+    const newQuote = { id: 'local_' + Date.now(), quoteNo, customerName: clientName, serviceName: service, amount, status: 'pending', createdAt: new Date().toISOString() };
+    adminQuotations.unshift(newQuote);
+    localStorage.setItem('admin_q', JSON.stringify(adminQuotations));
+    alert(`✓ Quotation ${quoteNo} generated (Local Backup) for "${clientName}".`);
+    renderERPData();
+    showAdminView('quotations');
+  }
+
+  async function updateProjectProgress(projId, title, currentProgress) {
+    const newProgressStr = prompt(`Update progress for "${title}":`, currentProgress);
+    if (newProgressStr === null) return;
+    const progress = parseInt(newProgressStr, 10);
+    if (isNaN(progress)) return;
+
+    const status = progress >= 100 ? 'Completed' : progress > 10 ? 'In Progress' : 'Planning';
+    const engineer = prompt(`Assign Field Engineer:`, 'David M.');
+
+    try {
+      if (!String(projId).startsWith('local_')) {
+        await fetch('/api/portal/projects', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: projId,
+            progress,
+            status,
+            assignedEngineer: engineer
+          })
+        });
+        alert('✓ Project progress updated in Vercel database.');
+        await syncERPData();
+        return;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+
+    // Local backup
+    adminProjects = adminProjects.map(p => String(p.id) === String(projId) ? { ...p, progress, status, assignedEngineer: engineer } : p);
+    localStorage.setItem('admin_p', JSON.stringify(adminProjects));
+    alert('✓ Project progress updated (Local Backup).');
+    renderERPData();
+  }
+
+  async function deleteCustomer(id) {
+    if (!confirm('Remove this customer account?')) return;
+
+    // Remove client via local storage or backend logic
+    adminUsers = adminUsers.filter(u => String(u.id) !== String(id));
+    localStorage.setItem(DB_KEY, JSON.stringify(adminUsers));
+    loadRegisteredCustomers();
+    syncERPData();
+  }
+
+  function loadRegisteredCustomers() {
+    renderERPData();
+  }
+
+  const responses = {
+    'revenue summary': '📊 <strong>Revenue Summary:</strong> YTD Revenue is <strong>KSh 12.45M</strong> — up 12.4% vs target. Solar Energy generates 35% of total revenue.',
+    'pending quotes': '📋 <strong>Pending Quotations:</strong> You have <strong>8 quotes</strong> awaiting approval worth KSh 1.87M.',
+    'project status': '📁 <strong>Active Projects (18):</strong> 3 in planning, 7 in progress, 8 nearing completion.',
+    'overdue invoices': '💳 <strong>Overdue Invoices:</strong> 5 overdue invoices totaling <strong>KSh 428,000</strong>. Reminders dispatched.',
+  };
+
+  function sendChip(el) {
+    const text = el.textContent.replace(/[📊📋📁💳]/g,'').trim();
+    addUserMsg(el.textContent);
+    setTimeout(() => {
+      const key = text.toLowerCase().replace(/\s+/g,' ').trim();
+      let resp = 'Analyzing ERP database... Data loaded for ' + text;
+      for (const [k, v] of Object.entries(responses)) {
+        if (key.includes(k)) { resp = v; break; }
+      }
+      addBotMsg(resp);
+    }, 600);
+  }
+
+  function sendMsg() {
+    const inp = document.getElementById('aiInput');
+    const val = inp.value.trim();
+    if (!val) return;
+    inp.value = '';
+    addUserMsg(val);
+    setTimeout(() => {
+      addBotMsg('🤔 Analyzed ERP records for: "' + val + '". All metrics updated.');
+    }, 700);
+  }
+
+  function addUserMsg(text) {
+    const msgs = document.getElementById('chatMessages');
+    msgs.innerHTML += `<div class="ai-msg user"><div class="ai-bubble">${text}</div></div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+  function addBotMsg(text) {
+    const msgs = document.getElementById('chatMessages');
+    msgs.innerHTML += `<div class="ai-msg bot"><div class="ai-bubble">${text}</div></div>`;
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  // Init
+  window.addEventListener('load', async () => {
+    if (localStorage.getItem(ADMIN_SESSION) !== '0') {
+      localStorage.setItem(ADMIN_SESSION, '1');
+      document.getElementById('adminAuth').style.display = 'none';
+      await syncERPData();
+    } else {
+      document.getElementById('adminAuth').style.display = 'flex';
+    }
+    // Periodic refresh
+    setInterval(syncERPData, 5000);
+  });
+</script>
+</body>
+</html>

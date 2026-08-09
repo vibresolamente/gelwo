@@ -1,0 +1,17 @@
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+COPY apps/web/package.json ./apps/web/
+COPY packages/shared-types/package.json ./packages/shared-types/
+RUN npm ci
+
+COPY . .
+# Build Next.js
+WORKDIR /app/apps/web
+RUN npm run build
+
+FROM nginx:alpine AS runner
+COPY --from=builder /app/apps/web/.next /usr/share/nginx/html
+COPY --from=builder /app/apps/web/public /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

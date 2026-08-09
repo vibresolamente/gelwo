@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GELWO Customer Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#070B19;--sidebar:#0D1225;--card:#111827;--border:#1E293B;
+      --accent:#3B82F6;--accent2:#6366F1;--green:#10B981;--yellow:#F59E0B;
+      --red:#EF4444;--purple:#8B5CF6;--text:#F1F5F9;--muted:#94A3B8;--sw:240px;
+    }
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}
+
+    /* AUTH OVERLAY */
+    #authOverlay{position:fixed;inset:0;background:rgba(7,11,25,.97);backdrop-filter:blur(10px);z-index:9999;display:flex;align-items:center;justify-content:center}
+    .auth-box{background:#0D1225;border:1px solid #1E293B;border-radius:20px;padding:36px;width:100%;max-width:420px;box-shadow:0 24px 64px rgba(0,0,0,.7)}
+    .auth-logo{text-align:center;margin-bottom:24px}
+    .auth-logo span{font-size:26px;font-weight:800;background:linear-gradient(135deg,#3B82F6,#6366F1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .auth-logo small{display:block;font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:2px;text-transform:uppercase}
+    .auth-tabs{display:flex;background:rgba(255,255,255,.04);border-radius:10px;padding:4px;margin-bottom:20px}
+    .auth-tab{flex:1;padding:9px;border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:600;border-radius:8px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+    .auth-tab.active{background:linear-gradient(135deg,#3B82F6,#6366F1);color:#fff}
+    .auth-form{display:flex;flex-direction:column;gap:13px}
+    .auth-field label{display:block;font-size:10px;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+    .auth-field input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--text);outline:none;font-family:'Inter',sans-serif;transition:border-color .2s}
+    .auth-field input:focus{border-color:var(--accent)}
+    .auth-btn{background:linear-gradient(135deg,#3B82F6,#6366F1);color:#fff;border:none;border-radius:9px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity .2s}
+    .auth-btn:hover{opacity:.88}
+    .auth-err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--red);border-radius:8px;padding:9px 12px;font-size:12px;display:none}
+    .auth-success{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:var(--green);border-radius:8px;padding:9px 12px;font-size:12px;display:none}
+
+    /* SIDEBAR */
+    .sidebar{width:var(--sw);background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:10;overflow-y:auto}
+    .logo{padding:20px 18px;border-bottom:1px solid var(--border)}
+    .logo span{font-size:20px;font-weight:800;background:linear-gradient(135deg,#3B82F6,#6366F1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .logo small{display:block;font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+    .nav{flex:1;padding:12px 0}
+    .nav-item{display:flex;align-items:center;gap:11px;padding:10px 18px;cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;transition:all .15s;border-left:3px solid transparent}
+    .nav-item:hover{background:rgba(59,130,246,.08);color:var(--text)}
+    .nav-item.active{background:rgba(59,130,246,.12);color:var(--accent);border-left-color:var(--accent);font-weight:600}
+    .nav-item .icon{font-size:15px;width:18px;text-align:center}
+    .nav-section{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#475569;padding:14px 18px 5px}
+    .profile-box{padding:14px 18px;border-top:1px solid var(--border);display:flex;align-items:center;gap:11px}
+    .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#6366F1);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+
+    /* MAIN CONTENT */
+    .main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
+    .topbar{background:var(--sidebar);border-bottom:1px solid var(--border);padding:0 26px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+    .topbar h1{font-size:17px;font-weight:700}
+    .topbar p{font-size:11px;color:var(--muted)}
+    .topbar-right{display:flex;align-items:center;gap:12px}
+    .btn-primary{background:linear-gradient(135deg,#3B82F6,#6366F1);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity .15s}
+    .btn-primary:hover{opacity:.9}
+    .btn-logout{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--red);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+    .content{padding:24px;flex:1}
+
+    /* VIEW PANELS */
+    .view-panel{display:none;animation:fadeIn .25s ease}
+    .view-panel.active{display:block}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+    /* UI CARDS & TABLES */
+    .welcome-bar{background:linear-gradient(135deg,rgba(59,130,246,.12),rgba(99,102,241,.08));border:1px solid rgba(59,130,246,.22);border-radius:14px;padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between}
+    .welcome-bar h2{font-size:19px;font-weight:700}
+    .welcome-bar p{font-size:12px;color:var(--muted);margin-top:3px}
+    .status-pill{background:rgba(16,185,129,.12);color:var(--green);border:1px solid rgba(16,185,129,.28);border-radius:20px;padding:5px 13px;font-size:11px;font-weight:600}
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+    .kpi-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative;overflow:hidden;transition:transform .2s}
+    .kpi-card:hover{transform:translateY(-2px)}
+    .kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+    .kpi-card.blue::before{background:linear-gradient(90deg,#3B82F6,#6366F1)}
+    .kpi-card.green::before{background:linear-gradient(90deg,#10B981,#059669)}
+    .kpi-card.yellow::before{background:linear-gradient(90deg,#F59E0B,#D97706)}
+    .kpi-card.purple::before{background:linear-gradient(90deg,#8B5CF6,#7C3AED)}
+    .kpi-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
+    .kpi-icon.blue{background:rgba(59,130,246,.15)} .kpi-icon.green{background:rgba(16,185,129,.15)}
+    .kpi-icon.yellow{background:rgba(245,158,11,.15)} .kpi-icon.purple{background:rgba(139,92,246,.15)}
+    .kpi-value{font-size:28px;font-weight:800;line-height:1}
+    .kpi-label{font-size:11px;color:var(--muted);margin-top:5px;font-weight:500}
+
+    .three-col{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:22px}
+    .sec{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:22px}
+    .sec-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .sec-head h3{font-size:14px;font-weight:700}
+    .view-all{font-size:11px;color:var(--accent);cursor:pointer;font-weight:500}
+    table{width:100%;border-collapse:collapse}
+    thead th{padding:10px 18px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)}
+    tbody td{padding:12px 18px;font-size:12px;border-bottom:1px solid rgba(30,41,59,.4)}
+    tbody tr:last-child td{border-bottom:none}
+    tbody tr:hover td{background:rgba(255,255,255,.02)}
+
+    .progress-wrap{display:flex;align-items:center;gap:9px}
+    .progress-bar{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+    .progress-fill{height:100%;border-radius:99px}
+    .pct{font-size:11px;color:var(--muted);min-width:28px;text-align:right}
+    .badge-pill{border-radius:20px;padding:3px 10px;font-size:10px;font-weight:600}
+    .badge-pill.green{background:rgba(16,185,129,.15);color:var(--green)}
+    .badge-pill.yellow{background:rgba(245,158,11,.15);color:var(--yellow)}
+    .badge-pill.blue{background:rgba(59,130,246,.15);color:var(--accent)}
+    .badge-pill.red{background:rgba(239,68,68,.15);color:var(--red)}
+    .badge-pill.gray{background:rgba(148,163,184,.1);color:var(--muted)}
+    .proj-id{color:var(--accent);font-weight:600;font-size:11px}
+
+    .quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
+    .action-btn{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;text-align:center;transition:all .2s}
+    .action-btn:hover{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.35)}
+    .action-btn .a-icon{font-size:20px;margin-bottom:6px}
+    .action-btn .a-label{font-size:11px;font-weight:600;color:var(--text)}
+    .action-btn .a-sub{font-size:10px;color:var(--muted);margin-top:2px}
+
+    .mobile-frames{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+    .phone-frame{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    .phone-screen{background:#0A0F1E;margin:12px;border-radius:9px;overflow:hidden}
+    .phone-header{padding:12px;display:flex;align-items:center;gap:8px}
+    .phone-body{padding:10px}
+    .ph-row{display:flex;align-items:center;justify-content:space-between;padding:7px 9px;border-radius:7px;margin-bottom:5px;background:rgba(255,255,255,.04)}
+    .ph-label{font-size:9px;color:var(--muted)}.ph-value{font-size:10px;font-weight:600}
+    .tl-item{display:flex;gap:9px;margin-bottom:12px}
+    .tl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
+    .tl-dot.done{background:var(--green)} .tl-dot.active{background:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,.3)} .tl-dot.pending{background:var(--border)}
+    .tl-title{font-size:9px;font-weight:600}.tl-date{font-size:8px;color:var(--muted)}
+    .frame-label{text-align:center;font-size:10px;font-weight:600;color:var(--muted);padding:9px;border-top:1px solid var(--border)}
+
+    /* FORM STYLES */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .form-group{margin-bottom:14px}
+    .form-group label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase}
+    .form-group input,.form-group select,.form-group textarea{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--text);outline:none;font-family:'Inter',sans-serif}
+    .form-group textarea{resize:vertical;min-height:90px}
+
+    /* CHAT STYLES */
+    .chat-box{display:flex;flex-direction:column;height:420px;background:rgba(255,255,255,.02);border-radius:12px;border:1px solid var(--border);overflow:hidden}
+    .chat-messages{flex:1;padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+    .chat-msg{max-width:80%;font-size:12.5px;line-height:1.5;padding:10px 14px;border-radius:12px}
+    .chat-msg.agent{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--text);align-self:flex-start;border-radius:12px 12px 12px 0}
+    .chat-msg.user{background:linear-gradient(135deg,#3B82F6,#6366F1);color:#fff;align-self:flex-end;border-radius:12px 12px 0 12px}
+    .chat-input-wrap{padding:12px;border-top:1px solid var(--border);display:flex;gap:10px}
+    .chat-input-wrap input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--text);outline:none;font-family:'Inter',sans-serif}
+  </style>
+</head>
+<body>
+
+<!-- AUTH OVERLAY -->
+<div id="authOverlay">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <span>GELWO</span>
+      <small>Customer Portal</small>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('register')" id="registerTab">1. Create Account</button>
+      <button class="auth-tab" onclick="switchTab('login')" id="loginTab">2. Sign In</button>
+    </div>
+
+    <!-- REGISTER FORM (DEFAULT FIRST) -->
+    <div id="registerForm" class="auth-form">
+      <div id="regErr" class="auth-err"></div>
+      <div id="regSuccess" class="auth-success"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="auth-field"><label>First Name</label><input type="text" id="regFirst" placeholder="Erick"/></div>
+        <div class="auth-field"><label>Last Name</label><input type="text" id="regLast" placeholder="Otieno"/></div>
+      </div>
+      <div class="auth-field"><label>Email Address</label><input type="email" id="regEmail" placeholder="erick@example.com"/></div>
+      <div class="auth-field"><label>Phone Number</label><input type="tel" id="regPhone" placeholder="0797 829 911"/></div>
+      <div class="auth-field"><label>Company (Optional)</label><input type="text" id="regCompany" placeholder="Otieno Enterprises Ltd"/></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="regPassword" placeholder="Min 6 characters"/></div>
+      <button class="auth-btn" onclick="doRegister()">Register Account</button>
+      <div style="font-size:11px;text-align:center;color:var(--muted);margin-top:4px">Already registered? <span style="color:var(--accent);cursor:pointer;font-weight:600" onclick="switchTab('login')">Sign in here →</span></div>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="loginForm" class="auth-form" style="display:none">
+      <div id="loginErr" class="auth-err"></div>
+      <div class="auth-field"><label>Email Address</label><input type="email" id="loginEmail" placeholder="you@example.com"/></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••"/></div>
+      <button class="auth-btn" onclick="doLogin()">Sign In to Portal</button>
+      <div style="font-size:11px;text-align:center;color:var(--muted);margin-top:4px">Need an account? <span style="color:var(--accent);cursor:pointer;font-weight:600" onclick="switchTab('register')">Register first →</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo"><span>GELWO</span><small>Customer Portal</small></div>
+  <nav class="nav">
+    <div class="nav-section">Main</div>
+    <div class="nav-item active" onclick="showView('dashboard')"><span class="icon">⊞</span> Dashboard</div>
+    <div class="nav-item" onclick="showView('projects')"><span class="icon">📁</span> My Projects</div>
+    <div class="nav-item" onclick="showView('quotations')"><span class="icon">📋</span> Quotations</div>
+    <div class="nav-item" onclick="showView('invoices')"><span class="icon">💳</span> Invoices</div>
+    <div class="nav-section">Services</div>
+    <div class="nav-item" onclick="showView('request')"><span class="icon">⚡</span> Request Service</div>
+    <div class="nav-item" onclick="showView('track')"><span class="icon">📍</span> Track Project</div>
+    <div class="nav-item" onclick="showView('support')"><span class="icon">💬</span> Support Chat</div>
+    <div class="nav-section">Account</div>
+    <div class="nav-item" onclick="showView('profile')"><span class="icon">👤</span> Profile</div>
+    <div class="nav-item" onclick="showView('notifications')"><span class="icon">🔔</span> Notifications</div>
+    <div class="nav-item" onclick="showView('settings')"><span class="icon">⚙️</span> Settings</div>
+  </nav>
+  <div class="profile-box">
+    <div class="avatar" id="sidebarAvatar">EO</div>
+    <div>
+      <div style="font-size:12.5px;font-weight:600" id="sidebarName">Erick Otieno</div>
+      <div style="font-size:10px;color:var(--muted)">Verified Client</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN DISPLAY AREA -->
+<main class="main">
+  <div class="topbar">
+    <div>
+      <h1 id="pageTitle">Dashboard</h1>
+      <p id="topbarDate">Sunday, 9 August 2026</p>
+    </div>
+    <div class="topbar-right">
+      <button class="btn-primary" onclick="showView('request')">+ New Request</button>
+      <button class="btn-logout" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- 1. DASHBOARD VIEW -->
+    <div id="view-dashboard" class="view-panel active">
+      <div class="welcome-bar">
+        <div>
+          <h2 id="welcomeMsg">👋 Welcome back, Erick!</h2>
+          <p>Here's an overview of your projects, quotations, and account balance.</p>
+        </div>
+        <div class="status-pill">✓ Account Active</div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card blue" onclick="showView('projects')" style="cursor:pointer"><div class="kpi-icon blue">📊</div><div class="kpi-value">3</div><div class="kpi-label">Active Projects</div></div>
+        <div class="kpi-card yellow" onclick="showView('invoices')" style="cursor:pointer"><div class="kpi-icon yellow">⏳</div><div class="kpi-value">2</div><div class="kpi-label">Pending Invoices</div></div>
+        <div class="kpi-card green" onclick="showView('quotations')" style="cursor:pointer"><div class="kpi-icon green">✅</div><div class="kpi-value">1</div><div class="kpi-label">Approved Quotes</div></div>
+        <div class="kpi-card purple" onclick="showView('projects')" style="cursor:pointer"><div class="kpi-icon purple">🏆</div><div class="kpi-value">5</div><div class="kpi-label">Completed Orders</div></div>
+      </div>
+
+      <div class="mobile-frames">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="phone-header" style="background:linear-gradient(135deg,#1a237e,#283593)"><div><div style="font-size:11px;font-weight:700">💳 Account & Payment</div><div id="mobileAccName" style="font-size:9px;color:rgba(255,255,255,.6)">Erick Otieno</div></div></div>
+            <div class="phone-body">
+              <div class="ph-row"><span class="ph-label">Account No.</span><span class="ph-value" id="mobileAccNo">#GEL-00124</span></div>
+              <div class="ph-row"><span class="ph-label">Credit Limit</span><span class="ph-value" style="color:var(--green)">KSh 500,000</span></div>
+              <div class="ph-row"><span class="ph-label">Outstanding</span><span class="ph-value" style="color:var(--yellow)">KSh 109,500</span></div>
+              <div class="ph-row"><span class="ph-label">Status</span><span class="ph-value" style="color:var(--green)">● Good Standing</span></div>
+            </div>
+          </div>
+          <div class="frame-label">Account & Payment</div>
+        </div>
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="phone-header" style="background:linear-gradient(135deg,#1B5E20,#2E7D32)"><div><div style="font-size:11px;font-weight:700">📋 QTN-2026-0048</div><div style="font-size:9px;color:rgba(255,255,255,.6)">Solar Installation</div></div></div>
+            <div class="phone-body">
+              <div class="ph-row"><span class="ph-label">Service</span><span class="ph-value">Solar PV System</span></div>
+              <div class="ph-row"><span class="ph-label">Amount</span><span class="ph-value" style="color:var(--accent)">KSh 850,000</span></div>
+              <div class="ph-row"><span class="ph-label">Valid Until</span><span class="ph-value">Sep 1, 2026</span></div>
+              <div class="ph-row"><span class="ph-label">Status</span><span class="ph-value" style="color:var(--green)">✓ Approved</span></div>
+            </div>
+          </div>
+          <div class="frame-label">Quotation Details</div>
+        </div>
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="phone-header" style="background:linear-gradient(135deg,#0D47A1,#1565C0)"><div><div style="font-size:11px;font-weight:700">📍 PRJ-2026-001</div><div style="font-size:9px;color:rgba(255,255,255,.6)">CCTV Installation</div></div></div>
+            <div class="phone-body" style="padding:8px 10px">
+              <div class="tl-item"><div class="tl-dot done"></div><div><div class="tl-title">Site Survey</div><div class="tl-date">Jul 15 – Done</div></div></div>
+              <div class="tl-item"><div class="tl-dot done"></div><div><div class="tl-title">Procurement</div><div class="tl-date">Jul 22 – Done</div></div></div>
+              <div class="tl-item"><div class="tl-dot active"></div><div><div class="tl-title">Installation</div><div class="tl-date">Aug 5 – 65% done</div></div></div>
+              <div class="tl-item"><div class="tl-dot pending"></div><div><div class="tl-title">Handover</div><div class="tl-date">Aug 20 – Pending</div></div></div>
+            </div>
+          </div>
+          <div class="frame-label">Track Project</div>
+        </div>
+      </div>
+
+      <div class="three-col">
+        <div class="sec">
+          <div class="sec-head"><h3>📁 Recent Projects</h3><span class="view-all" onclick="showView('projects')">View All →</span></div>
+          <table>
+            <thead><tr><th>Project ID</th><th>Service</th><th>Progress</th><th>Status</th></tr></thead>
+            <tbody id="recentProjectsBody">
+              <tr><td><span class="proj-id">PRJ-2026-001</span></td><td>CCTV Installation</td><td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:65%;background:linear-gradient(90deg,#3B82F6,#6366F1)"></div></div><span class="pct">65%</span></div></td><td><span class="badge-pill blue">In Progress</span></td></tr>
+              <tr><td><span class="proj-id">PRJ-2026-002</span></td><td>Solar PV System</td><td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:20%;background:linear-gradient(90deg,#F59E0B,#D97706)"></div></div><span class="pct">20%</span></div></td><td><span class="badge-pill yellow">Planning</span></td></tr>
+              <tr><td><span class="proj-id">PRJ-2026-003</span></td><td>Network Setup</td><td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:10%;background:linear-gradient(90deg,#8B5CF6,#7C3AED)"></div></div><span class="pct">10%</span></div></td><td><span class="badge-pill gray">Initiated</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sec">
+          <div class="sec-head"><h3>⚡ Quick Actions</h3></div>
+          <div class="quick-actions">
+            <div class="action-btn" onclick="showView('request')"><div class="a-icon">📋</div><div class="a-label">Request Quote</div><div class="a-sub">New service</div></div>
+            <div class="action-btn" onclick="showView('invoices')"><div class="a-icon">💳</div><div class="a-label">Pay Invoice</div><div class="a-sub">2 pending</div></div>
+            <div class="action-btn" onclick="showView('track')"><div class="a-icon">📍</div><div class="a-label">Track Project</div><div class="a-sub">Live status</div></div>
+            <div class="action-btn" onclick="showView('support')"><div class="a-icon">💬</div><div class="a-label">Contact Us</div><div class="a-sub">Helpdesk</div></div>
+            <div class="action-btn" onclick="showView('profile')"><div class="a-icon">👤</div><div class="a-label">My Profile</div><div class="a-sub">Account</div></div>
+            <div class="action-btn" onclick="showView('notifications')"><div class="a-icon">🔔</div><div class="a-label">Notifications</div><div class="a-sub">3 unread</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. MY PROJECTS VIEW -->
+    <div id="view-projects" class="view-panel">
+      <div class="sec">
+        <div class="sec-head">
+          <h3>📁 My Projects Portfolio</h3>
+          <button class="btn-primary" onclick="showView('request')">+ Request New Project</button>
+        </div>
+        <table>
+          <thead><tr><th>Project ID</th><th>Service Description</th><th>Location</th><th>Start Date</th><th>Target Completion</th><th>Progress</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="allProjectsBody">
+            <tr>
+              <td><span class="proj-id">PRJ-2026-001</span></td>
+              <td>Commercial CCTV System (16 Cameras)</td>
+              <td>Westlands, Nairobi</td>
+              <td>Jul 15, 2026</td>
+              <td>Aug 20, 2026</td>
+              <td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:65%;background:linear-gradient(90deg,#3B82F6,#6366F1)"></div></div><span class="pct">65%</span></div></td>
+              <td><span class="badge-pill blue">In Progress</span></td>
+              <td><button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="showView('track')">Track</button></td>
+            </tr>
+            <tr>
+              <td><span class="proj-id">PRJ-2026-002</span></td>
+              <td>10 kWp Commercial Solar PV System</td>
+              <td>Kakamega HQ Site</td>
+              <td>Aug 1, 2026</td>
+              <td>Sep 15, 2026</td>
+              <td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:20%;background:linear-gradient(90deg,#F59E0B,#D97706)"></div></div><span class="pct">20%</span></div></td>
+              <td><span class="badge-pill yellow">Planning</span></td>
+              <td><button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="showView('track')">Track</button></td>
+            </tr>
+            <tr>
+              <td><span class="proj-id">PRJ-2026-003</span></td>
+              <td>Fiber Optic Network & Rack Setup</td>
+              <td>Nakuru Hub</td>
+              <td>Aug 5, 2026</td>
+              <td>Aug 30, 2026</td>
+              <td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:10%;background:linear-gradient(90deg,#8B5CF6,#7C3AED)"></div></div><span class="pct">10%</span></div></td>
+              <td><span class="badge-pill gray">Initiated</span></td>
+              <td><button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="showView('track')">Track</button></td>
+            </tr>
+            <tr>
+              <td><span class="proj-id">PRJ-2025-018</span></td>
+              <td>Addressable Fire Alarm Installation</td>
+              <td>Mombasa Site</td>
+              <td>Nov 3, 2025</td>
+              <td>Dec 1, 2025</td>
+              <td><div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:100%;background:linear-gradient(90deg,#10B981,#059669)"></div></div><span class="pct">100%</span></div></td>
+              <td><span class="badge-pill green">Completed</span></td>
+              <td><button style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif" onclick="alert('Cert: Handover certificate #HC-8812 downloaded.')">Cert</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. QUOTATIONS VIEW -->
+    <div id="view-quotations" class="view-panel">
+      <div class="sec">
+        <div class="sec-head">
+          <h3>📋 Official Quotations</h3>
+          <button class="btn-primary" onclick="showView('request')">+ Request Quote</button>
+        </div>
+        <table>
+          <thead><tr><th>Quotation No.</th><th>Service Name</th><th>Estimated Cost</th><th>Issued Date</th><th>Valid Until</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="quotationsBody">
+            <tr>
+              <td><span class="proj-id">QTN-2026-0048</span></td>
+              <td>10 kWp Solar PV System Installation</td>
+              <td>KSh 850,000</td>
+              <td>Aug 5, 2026</td>
+              <td>Sep 1, 2026</td>
+              <td><span class="badge-pill green">Approved</span></td>
+              <td><button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="alert('Downloading official PDF for QTN-2026-0048...')">Download PDF</button></td>
+            </tr>
+            <tr>
+              <td><span class="proj-id">QTN-2026-0047</span></td>
+              <td>IP CCTV 16-Camera Upgrade</td>
+              <td>KSh 124,500</td>
+              <td>Aug 4, 2026</td>
+              <td>Aug 25, 2026</td>
+              <td><span class="badge-pill yellow">Pending</span></td>
+              <td>
+                <button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="approveQuote('QTN-2026-0047')">Approve Quote</button>
+              </td>
+            </tr>
+            <tr>
+              <td><span class="proj-id">QTN-2026-0044</span></td>
+              <td>Biometric Access Control System</td>
+              <td>KSh 185,000</td>
+              <td>Aug 1, 2026</td>
+              <td>Aug 20, 2026</td>
+              <td><span class="badge-pill green">Approved</span></td>
+              <td><button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="alert('Downloading official PDF for QTN-2026-0044...')">Download PDF</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 4. INVOICES VIEW -->
+    <div id="view-invoices" class="view-panel">
+      <div class="sec">
+        <div class="sec-head">
+          <h3>💳 Invoices & Payments</h3>
+          <span style="font-size:12px;color:var(--yellow);font-weight:600">Total Due: KSh 109,500</span>
+        </div>
+        <table>
+          <thead><tr><th>Invoice No.</th><th>Description</th><th>Amount</th><th>Issued Date</th><th>Due Date</th><th>Status</th><th>Pay Method</th></tr></thead>
+          <tbody id="invoicesBody">
+            <tr>
+              <td><span class="proj-id">INV-2026-0048</span></td>
+              <td>CCTV Installation – Deposit Phase 1</td>
+              <td>KSh 84,500</td>
+              <td>Aug 1, 2026</td>
+              <td>Aug 15, 2026</td>
+              <td><span class="badge-pill yellow">Pending</span></td>
+              <td><button class="btn-primary" style="padding:5px 14px;font-size:11px" onclick="payMpesa('INV-2026-0048', 84500)">Pay M-Pesa</button></td>
+            </tr>
+            <tr>
+              <td><span class="proj-id">INV-2026-0039</span></td>
+              <td>Solar Site Survey Fee</td>
+              <td>KSh 25,000</td>
+              <td>Aug 5, 2026</td>
+              <td>Aug 20, 2026</td>
+              <td><span class="badge-pill yellow">Pending</span></td>
+              <td><button class="btn-primary" style="padding:5px 14px;font-size:11px" onclick="payMpesa('INV-2026-0039', 25000)">Pay M-Pesa</button></td>
+            </tr>
+            <tr>
+              <td><span class="proj-id">INV-2025-0201</span></td>
+              <td>Fire Alarm Installation – Final Payment</td>
+              <td>KSh 210,000</td>
+              <td>Nov 20, 2025</td>
+              <td>Dec 5, 2025</td>
+              <td><span class="badge-pill green">Paid</span></td>
+              <td><button style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif" onclick="alert('Official E-Receipt #REC-2025-991 loaded.')">Receipt</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5. REQUEST SERVICE VIEW -->
+    <div id="view-request" class="view-panel">
+      <div class="sec" style="padding:22px">
+        <h3 style="font-size:16px;font-weight:700;margin-bottom:6px">⚡ Request New Service / Quotation</h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:20px">Fill in your technical requirements to generate an automated quote request.</p>
+
+        <form onsubmit="submitServiceRequest(event)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Service Category</label>
+              <select id="reqCategory" required>
+                <option value="Solar Energy & Microgrids">Solar Energy & Microgrids</option>
+                <option value="ICT & CCTV Security">ICT & CCTV Security</option>
+                <option value="Network Infrastructure">Network Infrastructure</option>
+                <option value="Fire Alarm & Safety">Fire Alarm & Safety Systems</option>
+                <option value="Civil Construction">Civil Construction & Engineering</option>
+                <option value="General Supplies">General Procurement & Supplies</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Project Location / County</label>
+              <input type="text" id="reqLocation" placeholder="e.g. Kakamega, Nairobi, Nakuru" required/>
+            </div>
+            <div class="form-group">
+              <label>Estimated System Capacity / Scope</label>
+              <input type="text" id="reqScope" placeholder="e.g. 10 kW Solar / 16 Cameras / 48 Ports" required/>
+            </div>
+            <div class="form-group">
+              <label>Target Site Visit Date</label>
+              <input type="date" id="reqDate" required/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Additional Technical Notes & Specifications</label>
+            <textarea id="reqNotes" placeholder="Specify any battery backup requirements, camera resolution, or building dimensions..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="padding:12px 24px;font-size:13px">Submit Quote Request →</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- 6. TRACK PROJECT VIEW -->
+    <div id="view-track" class="view-panel">
+      <div class="sec" style="padding:22px">
+        <h3 style="font-size:16px;font-weight:700;margin-bottom:6px">📍 Live Project Tracker — PRJ-2026-001</h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:20px">Commercial CCTV System Installation · Westlands Site</p>
+
+        <div style="background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+            <span style="font-size:13px;font-weight:600">Overall Progress</span>
+            <span style="font-size:13px;font-weight:700;color:var(--accent)">65% Completed</span>
+          </div>
+          <div style="height:10px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden">
+            <div style="height:100%;width:65%;background:linear-gradient(90deg,#3B82F6,#6366F1);border-radius:99px"></div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px;padding-left:10px">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:14px;height:14px;border-radius:50%;background:var(--green);margin-top:2px"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700">Phase 1: Initial Site Survey & Floorplan Mapping</div>
+              <div style="font-size:11px;color:var(--muted)">Completed on July 15, 2026 · Field Engineer: David M.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:14px;height:14px;border-radius:50%;background:var(--green);margin-top:2px"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700">Phase 2: Equipment Procurement & IP Camera Testing</div>
+              <div style="font-size:11px;color:var(--muted)">Completed on July 22, 2026 · Dahua 4K Cameras delivered.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:14px;height:14px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(59,130,246,.3);margin-top:2px"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700">Phase 3: Cabling, Conduit Installation & Camera Mounting (Active)</div>
+              <div style="font-size:11px;color:var(--accent)">In Progress · 12 of 16 cameras mounted and wired.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:14px;height:14px;border-radius:50%;background:var(--border);margin-top:2px"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700">Phase 4: NVR Setup, Remote Mobile Access & Handover</div>
+              <div style="font-size:11px;color:var(--muted)">Target Date: August 20, 2026 · Pending completion of Phase 3.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. SUPPORT CHAT VIEW -->
+    <div id="view-support" class="view-panel">
+      <div class="sec" style="padding:22px">
+        <h3 style="font-size:16px;font-weight:700;margin-bottom:6px">💬 Live GELWO Technical Support Chat</h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Our support team is online to assist with site visits, quotes, and billing queries.</p>
+
+        <div class="chat-box">
+          <div class="chat-messages" id="chatStream">
+            <div class="chat-msg agent">
+              Hello Erick! 👋 Welcome to GELWO Support. How can we help you with your projects or technical services today?
+            </div>
+          </div>
+          <div class="chat-input-wrap">
+            <input type="text" id="chatInput" placeholder="Type your message..." onkeydown="if(event.key==='Enter')sendUserChat()"/>
+            <button class="btn-primary" onclick="sendUserChat()">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. PROFILE VIEW -->
+    <div id="view-profile" class="view-panel">
+      <div class="sec" style="padding:22px">
+        <h3 style="font-size:16px;font-weight:700;margin-bottom:16px">👤 Account Profile Details</h3>
+        <div class="form-grid">
+          <div class="form-group"><label>Account Number</label><input type="text" id="profAccNo" readonly style="color:var(--accent);font-weight:700"/></div>
+          <div class="form-group"><label>Full Name</label><input type="text" id="profName"/></div>
+          <div class="form-group"><label>Email Address</label><input type="email" id="profEmail"/></div>
+          <div class="form-group"><label>Phone Number</label><input type="text" id="profPhone"/></div>
+          <div class="form-group"><label>Company Name</label><input type="text" id="profCompany"/></div>
+          <div class="form-group"><label>Registration Status</label><input type="text" value="✓ Verified Customer Account" readonly style="color:var(--green);font-weight:600"/></div>
+        </div>
+        <button class="btn-primary" onclick="alert('✓ Profile details saved successfully!')" style="padding:10px 20px">Save Changes</button>
+      </div>
+    </div>
+
+    <!-- 9. NOTIFICATIONS VIEW -->
+    <div id="view-notifications" class="view-panel">
+      <div class="sec">
+        <div class="sec-head"><h3>🔔 Account Notifications</h3><span class="view-all" onclick="alert('All notifications marked as read')">Mark All Read</span></div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+          <div style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:12px">
+            <div style="font-size:13px;font-weight:700;color:var(--accent)">✅ Quotation QTN-2026-0048 Approved</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Your quotation for 10 kWp Solar Installation (KSh 850,000) has been officially approved.</div>
+            <div style="font-size:10px;color:#475569;margin-top:4px">2 hours ago</div>
+          </div>
+          <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:12px">
+            <div style="font-size:13px;font-weight:700;color:var(--yellow)">💳 Invoice INV-2026-0048 Due</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Payment for CCTV Phase 1 (KSh 84,500) is due on August 15, 2026.</div>
+            <div style="font-size:10px;color:#475569;margin-top:4px">1 day ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. SETTINGS VIEW -->
+    <div id="view-settings" class="view-panel">
+      <div class="sec" style="padding:22px">
+        <h3 style="font-size:16px;font-weight:700;margin-bottom:16px">⚙️ Portal Settings & Preferences</h3>
+        <div class="form-group"><label>Portal Language</label><select><option>English (KE)</option><option>Swahili</option></select></div>
+        <div class="form-group"><label>Email Alerts</label><select><option>Enabled for all updates</option><option>Only invoice reminders</option></select></div>
+        <div class="form-group"><label>SMS Notifications</label><select><option>Enabled (0797 829 911)</option><option>Disabled</option></select></div>
+        <button class="btn-primary" onclick="alert('✓ Settings saved!')">Save Preferences</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+// ─── AUTH & MULTI-VIEW NAVIGATION ENGINE ───
+const DB_KEY = 'gelwo_users';
+const SESSION_KEY = 'gelwo_session';
+
+function getUsers(){return JSON.parse(localStorage.getItem(DB_KEY)||'[]')}
+function saveUsers(u){localStorage.setItem(DB_KEY,JSON.stringify(u))}
+function getSession(){return JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}
+function setSession(u){localStorage.setItem(SESSION_KEY,JSON.stringify(u))}
+function clearSession(){localStorage.removeItem(SESSION_KEY)}
+
+function switchTab(tab){
+  document.getElementById('loginForm').style.display = tab==='login'?'flex':'none';
+  document.getElementById('registerForm').style.display = tab==='register'?'flex':'none';
+  document.getElementById('loginTab').className = 'auth-tab'+(tab==='login'?' active':'');
+  document.getElementById('registerTab').className = 'auth-tab'+(tab==='register'?' active':'');
+}
+
+async function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPassword').value;
+  if(!email||!pass){alert('Please fill in email and password');return;}
+  
+  try {
+    const res = await fetch('/api/portal/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'login', email, password: pass })
+    });
+    const result = await res.json();
+    if (result.success && result.data) {
+      setSession(result.data);
+      loadDashboard(result.data);
+      document.getElementById('authOverlay').style.display='none';
+      await syncPortalData(result.data.id);
+      return;
+    } else if (result.fallback) {
+      console.warn("DB Auth unavailable. Using LocalStorage fallback:", result.message);
+    } else {
+      alert(result.error || 'Invalid credentials');
+      return;
+    }
+  } catch (err) {
+    console.error("DB Auth error, falling back to LocalStorage:", err);
+  }
+
+  // LocalStorage Fallback
+  const users=getUsers();
+  const user=users.find(u=>u.email===email&&u.password===pass);
+  if(!user){alert('Invalid credentials. Please register an account first if you do not have one.');return;}
+  setSession(user);
+  loadDashboard(user);
+  document.getElementById('authOverlay').style.display='none';
+  await syncPortalData(user.id);
+}
+
+async function doRegister(){
+  const first=document.getElementById('regFirst').value.trim();
+  const last=document.getElementById('regLast').value.trim();
+  const email=document.getElementById('regEmail').value.trim();
+  const phone=document.getElementById('regPhone').value.trim();
+  const company=document.getElementById('regCompany').value.trim();
+  const pass=document.getElementById('regPassword').value;
+  if(!first||!last||!email||!phone||!pass){alert('Please fill in all required fields');return;}
+
+  const accNo='GEL-'+String(Math.floor(10000+Math.random()*90000));
+  const newUser={firstName:first,lastName:last,fullName:first+' '+last,email,phone,company,password:pass,accountNo:accNo};
+
+  try {
+    const res = await fetch('/api/portal/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'register', ...newUser })
+    });
+    const result = await res.json();
+    if (result.success && result.data) {
+      setSession(result.data);
+      loadDashboard(result.data);
+      alert(`✓ Account created! Account No: #${result.data.accountNo}\nWelcome to GELWO Portal.`);
+      document.getElementById('authOverlay').style.display='none';
+      await syncPortalData(result.data.id);
+      return;
+    } else if (result.fallback) {
+      console.warn("DB Auth unavailable. Using LocalStorage fallback:", result.message);
+    } else {
+      alert(result.error || 'Registration failed');
+      return;
+    }
+  } catch (err) {
+    console.error("DB Auth error, falling back to LocalStorage:", err);
+  }
+
+  // LocalStorage Fallback
+  const users=getUsers();
+  if(users.find(u=>u.email===email)){alert('An account with this email already exists');return;}
+  const localUser = { id: 'local_' + Date.now(), ...newUser, registeredAt: new Date().toISOString() };
+  users.push(localUser);
+  saveUsers(users);
+  setSession(localUser);
+  loadDashboard(localUser);
+  alert(`✓ Account created (Local Backup)! Account No: #${accNo}\nWelcome to GELWO Portal.`);
+  document.getElementById('authOverlay').style.display='none';
+  await syncPortalData(localUser.id);
+}
+
+function doLogout(){clearSession();document.getElementById('authOverlay').style.display='flex'}
+
+function loadDashboard(user){
+  document.getElementById('welcomeMsg').textContent='👋 Welcome back, '+user.firstName+'!';
+  document.getElementById('sidebarName').textContent=user.fullName;
+  document.getElementById('sidebarAvatar').textContent=(user.firstName[0]+(user.lastName?user.lastName[0]:'')).toUpperCase();
+  document.getElementById('mobileAccName').textContent=user.fullName;
+  document.getElementById('mobileAccNo').textContent='#'+user.accountNo;
+  document.getElementById('profAccNo').value='#'+user.accountNo;
+  document.getElementById('profName').value=user.fullName;
+  document.getElementById('profEmail').value=user.email;
+  document.getElementById('profPhone').value=user.phone||'';
+  document.getElementById('profCompany').value=user.company||'';
+}
+
+// ─── DATA RETRIEVAL & SYNCHRONIZATION ENGINE ───
+let quotationsData = [];
+let projectsData = [];
+let invoicesData = [];
+
+async function syncPortalData(userId) {
+  if (!userId) return;
+  try {
+    // 1. Fetch Quotations
+    const qRes = await fetch(`/api/portal/quotations?userId=${userId}`);
+    const qData = await qRes.json();
+    if (qData.success && !qData.fallback) {
+      quotationsData = qData.data;
+    } else {
+      console.warn("Using LocalStorage fallback for Quotations");
+      quotationsData = JSON.parse(localStorage.getItem(`q_${userId}`) || '[]');
+    }
+
+    // 2. Fetch Projects
+    const pRes = await fetch(`/api/portal/projects?userId=${userId}`);
+    const pData = await pRes.json();
+    if (pData.success && !pData.fallback) {
+      projectsData = pData.data;
+    } else {
+      console.warn("Using LocalStorage fallback for Projects");
+      projectsData = JSON.parse(localStorage.getItem(`p_${userId}`) || '[]');
+    }
+
+    // 3. Fetch Invoices
+    const iRes = await fetch(`/api/portal/invoices?userId=${userId}`);
+    const iData = await iRes.json();
+    if (iData.success && !iData.fallback) {
+      invoicesData = iData.data;
+    } else {
+      console.warn("Using LocalStorage fallback for Invoices");
+      invoicesData = JSON.parse(localStorage.getItem(`i_${userId}`) || '[]');
+    }
+
+    renderPortalData(userId);
+  } catch (err) {
+    console.error("Error syncing data with database, using local:", err);
+    quotationsData = JSON.parse(localStorage.getItem(`q_${userId}`) || '[]');
+    projectsData = JSON.parse(localStorage.getItem(`p_${userId}`) || '[]');
+    invoicesData = JSON.parse(localStorage.getItem(`i_${userId}`) || '[]');
+    renderPortalData(userId);
+  }
+}
+
+function renderPortalData(userId) {
+  // Save locally as backup
+  localStorage.setItem(`q_${userId}`, JSON.stringify(quotationsData));
+  localStorage.setItem(`p_${userId}`, JSON.stringify(projectsData));
+  localStorage.setItem(`i_${userId}`, JSON.stringify(invoicesData));
+
+  // Render recent projects table on dashboard
+  const recentProjectsBody = document.getElementById('recentProjectsBody');
+  if (recentProjectsBody) {
+    recentProjectsBody.innerHTML = projectsData.length === 0 ? 
+      `<tr><td colspan="4" style="text-align:center;color:var(--muted)">No projects started yet.</td></tr>` :
+      projectsData.slice(0, 3).map(p => `
+      <tr>
+        <td><span class="proj-id">${p.projectNo}</span></td>
+        <td>${p.title}</td>
+        <td>
+          <div class="progress-wrap">
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:${p.progress}%;background:linear-gradient(90deg,#3B82F6,#6366F1)"></div>
+            </div>
+            <span class="pct">${p.progress}%</span>
+          </div>
+        </td>
+        <td><span class="badge-pill ${p.status === 'Completed' ? 'green' : p.status === 'Planning' ? 'yellow' : 'blue'}">${p.status}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  // Render all projects table
+  const allProjectsBody = document.getElementById('allProjectsBody');
+  if (allProjectsBody) {
+    allProjectsBody.innerHTML = projectsData.length === 0 ?
+      `<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--muted)">No active projects.</td></tr>` :
+      projectsData.map(p => `
+      <tr>
+        <td><span class="proj-id">${p.projectNo}</span></td>
+        <td>${p.title}</td>
+        <td>${p.location || 'Kakamega'}</td>
+        <td>${p.createdAt ? new Date(p.createdAt).toLocaleDateString() : '—'}</td>
+        <td>${p.status === 'Completed' ? 'Finished' : 'Aug 30, 2026'}</td>
+        <td>
+          <div class="progress-wrap">
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:${p.progress}%;background:linear-gradient(90deg,#3B82F6,#6366F1)"></div>
+            </div>
+            <span class="pct">${p.progress}%</span>
+          </div>
+        </td>
+        <td><span class="badge-pill ${p.status === 'Completed' ? 'green' : p.status === 'Planning' ? 'yellow' : 'blue'}">${p.status}</span></td>
+        <td><button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="showView('track')">Track</button></td>
+      </tr>
+    `).join('');
+  }
+
+  // Render quotations table
+  const quotationsBody = document.getElementById('quotationsBody');
+  if (quotationsBody) {
+    quotationsBody.innerHTML = quotationsData.length === 0 ?
+      `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">No quotations found.</td></tr>` :
+      quotationsData.map(q => `
+      <tr>
+        <td><span class="proj-id">${q.quoteNo}</span></td>
+        <td>${q.serviceName}</td>
+        <td>KSh ${parseFloat(q.amount || 0).toLocaleString()}</td>
+        <td>${q.createdAt ? new Date(q.createdAt).toLocaleDateString() : '—'}</td>
+        <td>Sep 1, 2026</td>
+        <td><span class="badge-pill ${q.status === 'approved' ? 'green' : q.status === 'rejected' ? 'red' : 'yellow'}">${q.status}</span></td>
+        <td>
+          ${q.status === 'pending' ? 
+            `<button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="approveQuote('${q.id}', '${q.quoteNo}')">Approve Quote</button>` : 
+            `<button class="btn-primary" style="padding:4px 10px;font-size:11px" onclick="alert('Downloading official PDF for ${q.quoteNo}...')">Download PDF</button>`
+          }
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Render invoices table
+  const invoicesBody = document.getElementById('invoicesBody');
+  if (invoicesBody) {
+    invoicesBody.innerHTML = invoicesData.length === 0 ?
+      `<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">No pending invoices.</td></tr>` :
+      invoicesData.map(i => `
+      <tr>
+        <td><span class="proj-id">${i.invoiceNo}</span></td>
+        <td>${i.description}</td>
+        <td>KSh ${parseFloat(i.amount || 0).toLocaleString()}</td>
+        <td>${i.createdAt ? new Date(i.createdAt).toLocaleDateString() : '—'}</td>
+        <td>${i.dueDate ? new Date(i.dueDate).toLocaleDateString() : '—'}</td>
+        <td><span class="badge-pill ${i.status === 'paid' ? 'green' : 'yellow'}">${i.status}</span></td>
+        <td>
+          ${i.status === 'pending' ? 
+            `<button class="btn-primary" style="padding:5px 14px;font-size:11px" onclick="payMpesa('${i.id}', '${i.invoiceNo}', ${i.amount})">Pay M-Pesa</button>` : 
+            `<button style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif" onclick="alert('Official E-Receipt for ${i.invoiceNo} loaded.')">Receipt</button>`
+          }
+        </td>
+      </tr>
+    `).join('');
+  }
+}
+
+async function approveQuote(quoteId, qtnNo) {
+  try {
+    const session = getSession();
+    if (!session) return;
+
+    if (String(quoteId).startsWith('local_')) {
+      alert(`✓ Quotation ${qtnNo} approved successfully!`);
+      quotationsData = quotationsData.map(q => q.quoteNo === qtnNo ? { ...q, status: 'approved' } : q);
+      renderPortalData(session.id);
+      showView('projects');
+      return;
+    }
+
+    const projNo = 'PRJ-' + Math.floor(10000 + Math.random() * 90000);
+    const service = quotationsData.find(q => String(q.id) === String(quoteId))?.serviceName || "New Service";
+    
+    // Create project
+    await fetch('/api/portal/projects', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        projectNo: projNo,
+        title: service,
+        userId: session.id,
+        location: 'Kakamega Site',
+        progress: 10,
+        status: 'Planning',
+        assignedEngineer: 'GELWO Senior Engineer'
+      })
+    });
+
+    alert(`✓ Quotation ${qtnNo} approved successfully! Our project team has scheduled site preparations.`);
+    await syncPortalData(session.id);
+    showView('projects');
+  } catch (err) {
+    console.error(err);
+    alert(`✓ Quotation ${qtnNo} approved successfully!`);
+    showView('projects');
+  }
+}
+
+async function payMpesa(invoiceId, invNo, amount) {
+  const phone = prompt(`Pay ${invNo} (KSh ${amount.toLocaleString()}) via M-Pesa STK Push.\nEnter M-Pesa Phone Number:`, '0797829911');
+  if (phone) {
+    try {
+      const session = getSession();
+      if (!session) return;
+
+      if (!String(invoiceId).startsWith('local_')) {
+        await fetch('/api/portal/invoices', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: invoiceId, status: 'paid' })
+        });
+        alert(`✓ M-Pesa STK Push sent to ${phone} for KSh ${amount.toLocaleString()}.\nPlease enter your M-Pesa PIN on your phone to complete payment.`);
+        await syncPortalData(session.id);
+      } else {
+        invoicesData = invoicesData.map(i => i.invoiceNo === invNo ? { ...i, status: 'paid' } : i);
+        localStorage.setItem(`i_${session.id}`, JSON.stringify(invoicesData));
+        alert(`✓ M-Pesa STK Push sent to ${phone} for KSh ${amount.toLocaleString()}.\nPlease enter your M-Pesa PIN on your phone to complete payment.`);
+        renderPortalData(session.id);
+      }
+    } catch (err) {
+      console.error(err);
+      alert(`✓ Payment simulated for ${invNo}.`);
+    }
+  }
+}
+
+async function submitServiceRequest(e) {
+  e.preventDefault();
+  const session = getSession();
+  if (!session) return;
+
+  const cat = document.getElementById('reqCategory').value;
+  const loc = document.getElementById('reqLocation').value;
+  const details = document.getElementById('reqDetails')?.value || '';
+  const quoteNo = 'QTN-' + Math.floor(100000 + Math.random() * 900000);
+  const estAmount = cat.includes('Solar') ? 850000 : cat.includes('CCTV') ? 124500 : 185000;
+
+  try {
+    const res = await fetch('/api/portal/quotations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        quoteNo,
+        userId: session.id,
+        serviceName: cat,
+        location: loc,
+        scope: details,
+        amount: estAmount,
+        status: 'pending'
+      })
+    });
+    const result = await res.json();
+    if (result.success && !result.fallback) {
+      alert(`✓ Quote Request Submitted!\nCategory: ${cat}\nLocation: ${loc}\n\nA GELWO Technical Engineer will review your requirements within 2 hours.`);
+      await syncPortalData(session.id);
+      showView('quotations');
+      return;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
+  // Local Storage fallback
+  const newQuote = { id: 'local_' + Date.now(), quoteNo, serviceName: cat, location: loc, scope: details, amount: estAmount, status: 'pending', createdAt: new Date().toISOString() };
+  quotationsData.unshift(newQuote);
+  localStorage.setItem(`q_${session.id}`, JSON.stringify(quotationsData));
+  alert(`✓ Quote Request Submitted (Local Backup)!\nCategory: ${cat}\nLocation: ${loc}\n\nA GELWO Technical Engineer will review your requirements within 2 hours.`);
+  renderPortalData(session.id);
+  showView('quotations');
+}
+
+function showView(viewId){
+  document.querySelectorAll('.view-panel').forEach(el=>el.classList.remove('active'));
+  const target = document.getElementById('view-'+viewId);
+  if(target) target.classList.add('active');
+  const titles = {
+    dashboard:'Dashboard', projects:'My Projects Portfolio', quotations:'Official Quotations',
+    invoices:'Invoices & Payments', request:'Request Service', track:'Live Project Tracker',
+    support:'Technical Support Chat', profile:'Account Profile', notifications:'Notifications', settings:'Settings'
+  };
+  if(titles[viewId]) document.getElementById('pageTitle').textContent = titles[viewId];
+
+  // highlight sidebar item
+  document.querySelectorAll('.nav-item').forEach(el=>{
+    el.classList.remove('active');
+    if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes(viewId)) el.classList.add('active');
+  });
+}
+
+function sendUserChat(){
+  const inp = document.getElementById('chatInput');
+  const txt = inp.value.trim();
+  if(!txt) return;
+  inp.value = '';
+  const stream = document.getElementById('chatStream');
+  stream.innerHTML += `<div class="chat-msg user">${txt}</div>`;
+  stream.scrollTop = stream.scrollHeight;
+  setTimeout(()=>{
+    stream.innerHTML += `<div class="chat-msg agent">Thanks for reaching out! A GELWO support technician has received your message regarding "${txt}". We will update your project file shortly.</div>`;
+    stream.scrollTop = stream.scrollHeight;
+  }, 1000);
+}
+
+// Init
+window.addEventListener('load', async ()=>{
+  const session=getSession();
+  if(session){
+    loadDashboard(session);
+    document.getElementById('authOverlay').style.display='none';
+    await syncPortalData(session.id);
+  } else {
+    switchTab('register');
+  }
+});
+</script>
+</body>
+</html>

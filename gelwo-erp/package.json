@@ -1,0 +1,11 @@
+{
+  "name": "gelwo-erp",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": ["backend", "frontend"],
+  "scripts": {
+    "dev": "docker compose up",
+    "backend:start": "npm run start:dev --workspace backend",
+    "frontend:start": "npm run dev --workspace frontend"
+  }
+}
