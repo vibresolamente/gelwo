@@ -149,7 +149,7 @@ export const HeroSection: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl sm:text-6xl xl:text-7xl font-extrabold text-gelwo-midnight dark:text-gelwo-ivory font-heading leading-tight tracking-tight uppercase"
+              className="text-3xl sm:text-5xl md:text-6xl xl:text-7xl font-extrabold text-gelwo-midnight dark:text-gelwo-ivory font-heading leading-tight tracking-tight uppercase"
             >
               BUILDING WHAT'S <br />
               <span className="text-gradient-purple dark:text-gradient-light">NEXT.</span>
@@ -160,10 +160,10 @@ export const HeroSection: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex items-center space-x-3 text-lg sm:text-2xl text-gelwo-midnight/80 dark:text-gelwo-gray font-medium"
+              className="flex flex-wrap sm:flex-nowrap items-center gap-2 text-base sm:text-xl md:text-2xl text-gelwo-midnight/80 dark:text-gelwo-gray font-medium"
             >
-              <span className="text-gelwo-purple font-semibold">Division:</span>
-              <div className="h-9 overflow-hidden relative inline-block min-w-[280px]">
+              <span className="text-gelwo-purple font-semibold flex-shrink-0">Division:</span>
+              <div className="h-8 sm:h-9 overflow-hidden relative inline-block min-w-0 w-full sm:w-auto flex-1">
                 <AnimatePresence mode="wait">
                   <motion.span
                     key={currentServiceIdx}
@@ -171,7 +171,7 @@ export const HeroSection: React.FC = () => {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -24, opacity: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="absolute font-bold text-gelwo-purple dark:text-gelwo-ivory font-heading block"
+                    className="font-bold text-gelwo-purple dark:text-gelwo-ivory font-heading block truncate"
                   >
                     {servicesList[currentServiceIdx]}
                   </motion.span>
@@ -184,21 +184,21 @@ export const HeroSection: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-gelwo-midnight/70 dark:text-gelwo-gray text-base sm:text-lg leading-relaxed max-w-2xl"
+              className="text-gelwo-midnight/70 dark:text-gelwo-gray text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl"
             >
               Technology • Energy • Security • Supplies • Consultancy • Innovation. GELWO Technologies engineers custom enterprise software, clean energy microgrids, and security infrastructure designed around how African businesses actually work.
             </motion.p>
 
-            {/* CTA Buttons (Gradient 01: Purple -> Dark Royal Purple) */}
+            {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="flex flex-wrap gap-4 pt-2"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 w-full sm:w-auto"
             >
               <button
                 onClick={() => triggerQuotationModal()}
-                className="btn-primary px-8 py-4 rounded-2xl text-sm uppercase flex items-center space-x-3"
+                className="btn-primary px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl text-xs sm:text-sm uppercase flex items-center justify-center space-x-3 w-full sm:w-auto text-center"
               >
                 <FiFileText className="text-lg" />
                 <span>[ REQUEST A QUOTE ]</span>
@@ -207,7 +207,7 @@ export const HeroSection: React.FC = () => {
 
               <button
                 onClick={() => setIsVideoModalOpen(true)}
-                className="btn-secondary px-6 py-4 rounded-2xl text-sm uppercase flex items-center space-x-2"
+                className="btn-secondary px-5 sm:px-6 py-3.5 sm:py-4 rounded-2xl text-xs sm:text-sm uppercase flex items-center justify-center space-x-2 w-full sm:w-auto text-center"
               >
                 <FiPlay className="text-sm text-gelwo-purple" />
                 <span>Watch Reel</span>
@@ -215,18 +215,18 @@ export const HeroSection: React.FC = () => {
             </motion.div>
 
             {/* Quick Metrics Bar */}
-            <div className="pt-6 grid grid-cols-3 gap-6 border-t border-gelwo-gray dark:border-gelwo-royal max-w-lg">
+            <div className="pt-6 grid grid-cols-3 gap-3 sm:gap-6 border-t border-gelwo-gray dark:border-gelwo-royal max-w-lg">
               <div>
-                <span className="text-2xl font-extrabold text-gelwo-purple font-heading block">500+</span>
-                <span className="text-xs text-gelwo-midnight/60 dark:text-gelwo-gray font-mono">Projects Delivered</span>
+                <span className="text-xl sm:text-2xl font-extrabold text-gelwo-purple font-heading block">500+</span>
+                <span className="text-[10px] sm:text-xs text-gelwo-midnight/60 dark:text-gelwo-gray font-mono">Projects</span>
               </div>
               <div>
-                <span className="text-2xl font-extrabold text-gelwo-sage font-heading block">100%</span>
-                <span className="text-xs text-gelwo-midnight/60 dark:text-gelwo-gray font-mono">Compliance SLA</span>
+                <span className="text-xl sm:text-2xl font-extrabold text-gelwo-sage font-heading block">100%</span>
+                <span className="text-[10px] sm:text-xs text-gelwo-midnight/60 dark:text-gelwo-gray font-mono">Compliance</span>
               </div>
               <div>
-                <span className="text-2xl font-extrabold text-gelwo-royal dark:text-gelwo-ivory font-heading block">12</span>
-                <span className="text-xs text-gelwo-midnight/60 dark:text-gelwo-gray font-mono">County Hubs</span>
+                <span className="text-xl sm:text-2xl font-extrabold text-gelwo-royal dark:text-gelwo-ivory font-heading block">12</span>
+                <span className="text-[10px] sm:text-xs text-gelwo-midnight/60 dark:text-gelwo-gray font-mono">County Hubs</span>
               </div>
             </div>
           </div>

@@ -1,12 +1,17 @@
 'use client';
 
+/**
+ * /about — GELWO Corporate Identity & Philosophy
+ * Styled with GELWO Poster Color System & fully responsive on all devices.
+ */
+
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { AIAssistantWidget } from '@/components/AIAssistantWidget';
 import { GlobalModals } from '@/components/GlobalModals';
 import { motion } from 'framer-motion';
-import { FiChevronDown, FiShield, FiGlobe } from 'react-icons/fi';
+import { FiChevronDown, FiShield, FiGlobe, FiTarget, FiEye, FiCpu } from 'react-icons/fi';
 
 export default function AboutPage() {
   const [expandedValue, setExpandedValue] = useState<number | null>(0);
@@ -45,108 +50,108 @@ export default function AboutPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#0A0F1D] text-white relative selection:bg-cyan-500 selection:text-black">
+    <main className="min-h-screen bg-gelwo-ivory dark:bg-gelwo-midnight text-gelwo-midnight dark:text-gelwo-ivory relative selection:bg-gelwo-purple selection:text-gelwo-ivory transition-colors duration-300">
       <Header />
 
       {/* Hero Section */}
-      <section className="pt-36 pb-20 relative overflow-hidden bg-gradient-to-b from-[#070B19] via-[#0A0F1D] to-[#0A0F1D]">
+      <section className="pt-36 pb-16 relative overflow-hidden bg-hero-atmosphere">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center space-x-2 text-xs uppercase tracking-[0.3em] font-mono text-cyan-400 bg-cyan-500/10 px-4 py-1.5 rounded-full border border-cyan-500/30"
+            className="inline-flex items-center space-x-2 text-xs uppercase tracking-[0.3em] font-mono text-gelwo-purple bg-gelwo-blush dark:bg-gelwo-royal px-4 py-1.5 rounded-full border border-gelwo-purple/30 font-bold"
           >
-            <FiShield className="text-cyan-400" />
-            <span>Corporate Identity & Philosophy</span>
+            <FiShield className="text-gelwo-purple" />
+            <span>Corporate Identity &amp; Philosophy</span>
           </motion.span>
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-6xl font-extrabold text-white mt-6 font-heading tracking-tight"
+            className="text-4xl sm:text-6xl lg:text-7xl font-extrabold font-heading tracking-tight uppercase mt-6"
           >
-            ABOUT <span className="text-gradient-cyan">GELWO</span>
+            ABOUT <span className="text-gradient-purple dark:text-gradient-light">GELWO</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="mt-4 text-slate-300 text-base sm:text-xl max-w-3xl mx-auto leading-relaxed"
+            className="mt-4 text-gelwo-midnight/70 dark:text-gelwo-gray text-base sm:text-lg max-w-3xl mx-auto leading-relaxed"
           >
             We build digital and physical solutions designed around the way ambitious organizations actually work.
           </motion.p>
         </div>
       </section>
 
-      {/* Structured Sections matching txt Section 23 */}
-      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
+      {/* Structured Sections */}
+      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-20">
         {/* Our Story */}
-        <div className="glass-card p-8 sm:p-12 rounded-3xl border border-cyan-500/30 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="glass-card p-6 sm:p-10 md:p-12 rounded-3xl border border-gelwo-purple/30 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-7 space-y-4">
-            <span className="text-xs font-mono text-cyan-400 font-bold uppercase tracking-widest">01 • OUR STORY</span>
-            <h2 className="text-3xl font-extrabold text-white font-heading">From Vision to Multi-Sector Powerhouse</h2>
-            <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
+            <span className="text-xs font-mono text-gelwo-purple font-bold uppercase tracking-widest">01 • OUR STORY</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold font-heading">From Vision to Multi-Sector Powerhouse</h2>
+            <p className="text-gelwo-midnight/70 dark:text-gelwo-gray leading-relaxed text-sm sm:text-base">
               GELWO Technologies was founded with a singular objective: to bridge the gap between technological innovation and practical enterprise execution. Over the years, GELWO has evolved from a specialized engineering firm into an East African multi-sector corporate leader managing ICT installations, solar microgrids, civil projects, and enterprise ERP systems.
             </p>
           </div>
-          <div className="lg:col-span-5 bg-slate-900/80 p-6 rounded-2xl border border-slate-800 space-y-4">
-            <div className="flex items-center space-x-3 text-cyan-400">
+          <div className="lg:col-span-5 bg-gelwo-blush dark:bg-gelwo-royal p-6 rounded-2xl border border-gelwo-gray dark:border-gelwo-purple/20 space-y-3">
+            <div className="flex items-center space-x-3 text-gelwo-purple">
               <FiGlobe className="text-2xl" />
-              <span className="font-bold text-white text-lg">East African Reach</span>
+              <span className="font-bold text-base sm:text-lg">East African Reach</span>
             </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-gelwo-midnight/60 dark:text-gelwo-gray leading-relaxed">
               Operating across Nairobi HQ, Kakamega, Nakuru, and Mombasa hubs, providing end-to-end service delivery for institutional and enterprise clients.
             </p>
           </div>
         </div>
 
         {/* Our Mission & Vision */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="glass-card p-8 rounded-3xl border border-cyan-500/20">
-            <span className="text-xs font-mono text-cyan-400 font-bold uppercase tracking-widest">02 • OUR MISSION</span>
-            <h3 className="text-2xl font-bold text-white font-heading mt-2 mb-4">Empowering Institutional Progress</h3>
-            <p className="text-slate-300 text-sm leading-relaxed">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          <div className="glass-card p-6 sm:p-8 rounded-3xl border border-gelwo-purple/20">
+            <span className="text-xs font-mono text-gelwo-purple font-bold uppercase tracking-widest">02 • OUR MISSION</span>
+            <h3 className="text-xl sm:text-2xl font-bold font-heading mt-2 mb-3">Empowering Institutional Progress</h3>
+            <p className="text-gelwo-midnight/70 dark:text-gelwo-gray text-xs sm:text-sm leading-relaxed">
               To empower institutions and commercial enterprises by engineering resilient software platforms, clean solar microgrids, and reliable physical supply chains executed with absolute precision and integrity.
             </p>
           </div>
 
-          <div className="glass-card p-8 rounded-3xl border border-cyan-500/20">
-            <span className="text-xs font-mono text-purple-400 font-bold uppercase tracking-widest">03 • OUR VISION</span>
-            <h3 className="text-2xl font-bold text-white font-heading mt-2 mb-4">Africa’s Premier Digital Partner</h3>
-            <p className="text-slate-300 text-sm leading-relaxed">
+          <div className="glass-card p-6 sm:p-8 rounded-3xl border border-gelwo-sage/20">
+            <span className="text-xs font-mono text-gelwo-sage font-bold uppercase tracking-widest">03 • OUR VISION</span>
+            <h3 className="text-xl sm:text-2xl font-bold font-heading mt-2 mb-3">Africa’s Premier Digital Partner</h3>
+            <p className="text-gelwo-midnight/70 dark:text-gelwo-gray text-xs sm:text-sm leading-relaxed">
               To be Africa’s most trusted technology ecosystem, defining standards in AI integration, clean energy infrastructure, and digital business automation.
             </p>
           </div>
         </div>
 
-        {/* Our Values (Section 24 in txt) */}
+        {/* Our Values */}
         <div>
-          <div className="text-center mb-10">
-            <span className="text-xs font-mono text-cyan-400 font-bold uppercase tracking-widest">04 • OUR VALUES</span>
-            <h2 className="text-3xl font-extrabold text-white font-heading mt-2">The Principles That Drive GELWO</h2>
+          <div className="text-center mb-8 sm:mb-10">
+            <span className="text-xs font-mono text-gelwo-purple font-bold uppercase tracking-widest">04 • OUR VALUES</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold font-heading mt-2">The Principles That Drive GELWO</h2>
           </div>
 
-          <div className="space-y-4 max-w-4xl mx-auto">
+          <div className="space-y-3.5 max-w-4xl mx-auto">
             {values.map((v, index) => (
               <div
                 key={v.id}
                 onClick={() => setExpandedValue(expandedValue === index ? null : index)}
-                className="glass-card rounded-2xl p-6 border border-cyan-500/30 cursor-pointer transition-all hover:border-cyan-400"
+                className="glass-card rounded-2xl p-5 sm:p-6 border border-gelwo-purple/25 cursor-pointer transition-all hover:border-gelwo-purple"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <span className="text-2xl font-black text-cyan-400 font-mono">{v.id}</span>
-                    <h3 className="text-xl font-bold text-white font-heading tracking-wide">{v.title}</h3>
+                  <div className="flex items-center space-x-3 sm:space-x-4">
+                    <span className="text-xl sm:text-2xl font-black text-gelwo-purple font-mono">{v.id}</span>
+                    <h3 className="text-base sm:text-xl font-bold font-heading tracking-wide">{v.title}</h3>
                   </div>
                   <FiChevronDown
-                    className={`text-cyan-400 text-xl transition-transform ${expandedValue === index ? 'rotate-180' : ''}`}
+                    className={`text-gelwo-purple text-lg sm:text-xl transition-transform ${expandedValue === index ? 'rotate-180' : ''}`}
                   />
                 </div>
-                <p className="text-slate-300 text-sm mt-2 font-medium">{v.summary}</p>
+                <p className="text-gelwo-midnight/70 dark:text-gelwo-gray text-xs sm:text-sm mt-2 font-medium">{v.summary}</p>
                 {expandedValue === index && (
-                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-4 pt-4 border-t border-slate-800 text-xs text-slate-400 leading-relaxed">
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-3.5 pt-3.5 border-t border-gelwo-gray dark:border-gelwo-royal text-xs text-gelwo-midnight/60 dark:text-gelwo-gray leading-relaxed">
                     {v.detail}
                   </motion.div>
                 )}
@@ -156,29 +161,29 @@ export default function AboutPage() {
         </div>
 
         {/* Our Approach, Technology, People & Future */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="p-6 bg-slate-900/80 rounded-2xl border border-slate-800 text-center">
-            <span className="text-3xl text-cyan-400 mb-2 block font-mono">05</span>
-            <h4 className="font-bold text-white text-base font-heading mb-2">Our Approach</h4>
-            <p className="text-xs text-slate-400">Human-centered engineering combined with agile, data-driven execution.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="p-6 bg-gelwo-blush dark:bg-gelwo-royal rounded-2xl border border-gelwo-gray dark:border-gelwo-purple/20 text-center">
+            <span className="text-2xl sm:text-3xl text-gelwo-purple mb-2 block font-mono font-bold">05</span>
+            <h4 className="font-bold text-sm sm:text-base font-heading mb-1.5">Our Approach</h4>
+            <p className="text-xs text-gelwo-midnight/60 dark:text-gelwo-gray">Human-centered engineering combined with agile, data-driven execution.</p>
           </div>
 
-          <div className="p-6 bg-slate-900/80 rounded-2xl border border-slate-800 text-center">
-            <span className="text-3xl text-purple-400 mb-2 block font-mono">06</span>
-            <h4 className="font-bold text-white text-base font-heading mb-2">Our Technology</h4>
-            <p className="text-xs text-slate-400">Modern Next.js stack, AI engine, NestJS microservices & high-efficiency hardware.</p>
+          <div className="p-6 bg-gelwo-blush dark:bg-gelwo-royal rounded-2xl border border-gelwo-gray dark:border-gelwo-purple/20 text-center">
+            <span className="text-2xl sm:text-3xl text-gelwo-sage mb-2 block font-mono font-bold">06</span>
+            <h4 className="font-bold text-sm sm:text-base font-heading mb-1.5">Our Technology</h4>
+            <p className="text-xs text-gelwo-midnight/60 dark:text-gelwo-gray">Modern Next.js stack, AI engine, and high-efficiency hardware.</p>
           </div>
 
-          <div className="p-6 bg-slate-900/80 rounded-2xl border border-slate-800 text-center">
-            <span className="text-3xl text-blue-400 mb-2 block font-mono">07</span>
-            <h4 className="font-bold text-white text-base font-heading mb-2">Our People</h4>
-            <p className="text-xs text-slate-400">Certified engineers, software architects, energy consultants & project directors.</p>
+          <div className="p-6 bg-gelwo-blush dark:bg-gelwo-royal rounded-2xl border border-gelwo-gray dark:border-gelwo-purple/20 text-center">
+            <span className="text-2xl sm:text-3xl text-gelwo-purple mb-2 block font-mono font-bold">07</span>
+            <h4 className="font-bold text-sm sm:text-base font-heading mb-1.5">Our People</h4>
+            <p className="text-xs text-gelwo-midnight/60 dark:text-gelwo-gray">Certified engineers, software architects, energy specialists &amp; directors.</p>
           </div>
 
-          <div className="p-6 bg-slate-900/80 rounded-2xl border border-slate-800 text-center">
-            <span className="text-3xl text-emerald-400 mb-2 block font-mono">08</span>
-            <h4 className="font-bold text-white text-base font-heading mb-2">Our Future</h4>
-            <p className="text-xs text-slate-400">Expanding AI automation and renewable microgrids across Africa.</p>
+          <div className="p-6 bg-gelwo-blush dark:bg-gelwo-royal rounded-2xl border border-gelwo-gray dark:border-gelwo-purple/20 text-center">
+            <span className="text-2xl sm:text-3xl text-gelwo-sage mb-2 block font-mono font-bold">08</span>
+            <h4 className="font-bold text-sm sm:text-base font-heading mb-1.5">Our Future</h4>
+            <p className="text-xs text-gelwo-midnight/60 dark:text-gelwo-gray">Expanding AI automation and renewable microgrids across East Africa.</p>
           </div>
         </div>
       </section>

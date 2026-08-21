@@ -33,9 +33,9 @@ export const Footer: React.FC = () => {
     <footer id="footer" className="relative z-10 bg-gelwo-midnight text-gelwo-ivory/80 border-t border-gelwo-purple/20 pt-12 pb-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Value Proposition Bar */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 rounded-2xl bg-gelwo-royal border border-gelwo-purple/30 mb-12">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gelwo-midnight text-gelwo-purple border border-gelwo-purple/20 flex items-center justify-center text-lg">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 p-4 sm:p-6 rounded-2xl bg-gelwo-royal border border-gelwo-purple/30 mb-8 sm:mb-12">
+          <div className="flex items-center space-x-3 p-2">
+            <div className="w-10 h-10 rounded-xl bg-gelwo-midnight text-gelwo-purple border border-gelwo-purple/20 flex items-center justify-center text-lg flex-shrink-0">
               <FiShield />
             </div>
             <div>
@@ -44,8 +44,8 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gelwo-midnight text-gelwo-sage border border-gelwo-sage/20 flex items-center justify-center text-lg">
+          <div className="flex items-center space-x-3 p-2">
+            <div className="w-10 h-10 rounded-xl bg-gelwo-midnight text-gelwo-sage border border-gelwo-sage/20 flex items-center justify-center text-lg flex-shrink-0">
               <FiPhoneCall />
             </div>
             <div>
@@ -54,8 +54,8 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gelwo-midnight text-gelwo-purple border border-gelwo-purple/20 flex items-center justify-center text-lg">
+          <div className="flex items-center space-x-3 p-2">
+            <div className="w-10 h-10 rounded-xl bg-gelwo-midnight text-gelwo-purple border border-gelwo-purple/20 flex items-center justify-center text-lg flex-shrink-0">
               <FiSend />
             </div>
             <div>
@@ -64,8 +64,8 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gelwo-midnight text-gelwo-sage border border-gelwo-sage/20 flex items-center justify-center text-lg">
+          <div className="flex items-center space-x-3 p-2">
+            <div className="w-10 h-10 rounded-xl bg-gelwo-midnight text-gelwo-sage border border-gelwo-sage/20 flex items-center justify-center text-lg flex-shrink-0">
               <FiCpu />
             </div>
             <div>
@@ -76,62 +76,62 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Stats Band */}
-        <div className="p-8 rounded-2xl bg-gelwo-royal border border-gelwo-purple/30 mb-16 grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
+        <div className="p-6 sm:p-8 rounded-2xl bg-gelwo-royal border border-gelwo-purple/30 mb-12 sm:mb-16 grid grid-cols-2 md:grid-cols-5 gap-4 sm:gap-6 text-center">
           <div>
             <span className="text-2xl sm:text-4xl font-extrabold text-gelwo-purple font-heading block">500+</span>
-            <span className="text-xs text-gelwo-ivory/60 font-medium">Projects Delivered</span>
+            <span className="text-[10px] sm:text-xs text-gelwo-ivory/60 font-medium">Projects Delivered</span>
           </div>
           <div>
             <span className="text-2xl sm:text-4xl font-extrabold text-gelwo-sage font-heading block">200+</span>
-            <span className="text-xs text-gelwo-ivory/60 font-medium">Enterprise Clients</span>
+            <span className="text-[10px] sm:text-xs text-gelwo-ivory/60 font-medium">Enterprise Clients</span>
           </div>
           <div>
             <span className="text-2xl sm:text-4xl font-extrabold text-gelwo-purple font-heading block">50+</span>
-            <span className="text-xs text-gelwo-ivory/60 font-medium">Engineers &amp; Specialists</span>
+            <span className="text-[10px] sm:text-xs text-gelwo-ivory/60 font-medium">Engineers &amp; Staff</span>
           </div>
           <div>
             <span className="text-2xl sm:text-4xl font-extrabold text-gelwo-sage font-heading block">3+</span>
-            <span className="text-xs text-gelwo-ivory/60 font-medium">East African Nations</span>
+            <span className="text-[10px] sm:text-xs text-gelwo-ivory/60 font-medium">Regional Hubs</span>
           </div>
           <div className="col-span-2 md:col-span-1">
             <span className="text-2xl sm:text-4xl font-extrabold text-gelwo-purple font-heading block">100%</span>
-            <span className="text-xs text-gelwo-ivory/60 font-medium">NCA &amp; AGPO Certified</span>
+            <span className="text-[10px] sm:text-xs text-gelwo-ivory/60 font-medium">NCA &amp; AGPO Certified</span>
           </div>
         </div>
 
         {/* Emergency & Hotline Bar */}
-        <div className="p-6 rounded-3xl border border-gelwo-purple/30 mb-16 grid grid-cols-1 md:grid-cols-3 gap-6 items-center bg-gelwo-royal">
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-2xl bg-gelwo-midnight text-gelwo-purple flex items-center justify-center text-2xl border border-gelwo-purple/30">
+        <div className="p-5 sm:p-6 rounded-3xl border border-gelwo-purple/30 mb-12 sm:mb-16 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 items-center bg-gelwo-royal">
+          <div className="flex items-center space-x-3 sm:space-x-4">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gelwo-midnight text-gelwo-purple flex items-center justify-center text-xl sm:text-2xl border border-gelwo-purple/30 flex-shrink-0">
               <FiPhoneCall />
             </div>
-            <div>
-              <span className="text-[11px] uppercase tracking-wider text-gelwo-ivory/60 font-mono">Technical Support Hotline</span>
-              <a href="tel:+254797829911" className="block text-base font-bold font-mono text-gelwo-purple hover:text-gelwo-ivory transition-colors">
+            <div className="min-w-0">
+              <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-gelwo-ivory/60 font-mono block truncate">Technical Support</span>
+              <a href="tel:+254797829911" className="block text-sm sm:text-base font-bold font-mono text-gelwo-purple hover:text-gelwo-ivory transition-colors truncate">
                 +254 797 829 911
               </a>
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-2xl bg-gelwo-midnight text-gelwo-sage flex items-center justify-center text-2xl border border-gelwo-sage/30">
+          <div className="flex items-center space-x-3 sm:space-x-4">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gelwo-midnight text-gelwo-sage flex items-center justify-center text-xl sm:text-2xl border border-gelwo-sage/30 flex-shrink-0">
               <FaWhatsapp />
             </div>
-            <div>
-              <span className="text-[11px] uppercase tracking-wider text-gelwo-ivory/60 font-mono">WhatsApp Support</span>
-              <a href="https://wa.me/254797829911" target="_blank" rel="noopener noreferrer" className="block text-base font-bold text-gelwo-sage hover:text-gelwo-ivory transition-colors">
-                Chat With Technical Desk
+            <div className="min-w-0">
+              <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-gelwo-ivory/60 font-mono block truncate">WhatsApp Desk</span>
+              <a href="https://wa.me/254797829911" target="_blank" rel="noopener noreferrer" className="block text-sm sm:text-base font-bold text-gelwo-sage hover:text-gelwo-ivory transition-colors truncate">
+                Chat With Engineers
               </a>
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-2xl bg-gelwo-midnight text-gelwo-ivory/80 flex items-center justify-center text-2xl border border-gelwo-ivory/20">
+          <div className="flex items-center space-x-3 sm:space-x-4">
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gelwo-midnight text-gelwo-ivory/80 flex items-center justify-center text-xl sm:text-2xl border border-gelwo-ivory/20 flex-shrink-0">
               <FiMail />
             </div>
-            <div>
-              <span className="text-[11px] uppercase tracking-wider text-gelwo-ivory/60 font-mono">Procurement Email</span>
-              <a href="mailto:info@gelwo.co.ke" className="block text-base font-bold text-gelwo-ivory hover:text-gelwo-purple transition-colors">
+            <div className="min-w-0">
+              <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-gelwo-ivory/60 font-mono block truncate">Official Inquiries</span>
+              <a href="mailto:info@gelwo.co.ke" className="block text-sm sm:text-base font-bold text-gelwo-ivory hover:text-gelwo-purple transition-colors truncate">
                 info@gelwo.co.ke
               </a>
             </div>

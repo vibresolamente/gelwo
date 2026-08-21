@@ -30,20 +30,20 @@ export const WhoWeAre: React.FC = () => {
   ];
 
   const tabClass = (tab: string) =>
-    `px-6 py-2.5 rounded-xl text-xs font-bold font-heading uppercase transition-all ${
+    `px-3.5 sm:px-6 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs font-bold font-heading uppercase transition-all ${
       activeTab === tab
         ? 'bg-gelwo-purple text-gelwo-ivory shadow-gelwo-purple'
         : 'text-gelwo-midnight dark:text-gelwo-gray hover:text-gelwo-purple'
     }`;
 
   return (
-    <section id="about" className="py-24 relative z-10 bg-gelwo-ivory dark:bg-gelwo-midnight overflow-hidden">
+    <section id="about" className="py-16 sm:py-24 relative z-10 bg-gelwo-ivory dark:bg-gelwo-midnight overflow-hidden">
       {/* Background Purple Glow */}
       <div className="absolute top-1/2 left-0 w-96 h-96 bg-gelwo-purple/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
           <span className="text-xs uppercase tracking-[0.3em] font-bold text-gelwo-purple font-mono">
             WHO WE ARE
           </span>
@@ -55,7 +55,7 @@ export const WhoWeAre: React.FC = () => {
           </p>
 
           {/* 01-04 Stat Blocks */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mt-8">
             <div className="p-4 rounded-2xl bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-gray dark:border-gelwo-purple/20 text-center">
               <span className="text-2xl font-black text-gelwo-purple font-mono block">01</span>
               <span className="text-xs font-bold uppercase tracking-wider text-gelwo-midnight dark:text-gelwo-ivory mt-1 block">Technology</span>
@@ -76,8 +76,8 @@ export const WhoWeAre: React.FC = () => {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex p-1.5 rounded-2xl bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-gray dark:border-gelwo-purple/20">
+        <div className="flex justify-center mb-10 sm:mb-12">
+          <div className="flex flex-wrap justify-center gap-1 p-1 sm:p-1.5 rounded-2xl bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-gray dark:border-gelwo-purple/20">
             <button onClick={() => setActiveTab('mission')} className={tabClass('mission')}>Mission</button>
             <button onClick={() => setActiveTab('vision')} className={tabClass('vision')}>Vision</button>
             <button onClick={() => setActiveTab('values')} className={tabClass('values')}>Core Values</button>

@@ -152,7 +152,7 @@ export const AIAssistantWidget: React.FC = () => {
   };
 
   return (
-    <div id="ai-assistant" className="fixed bottom-6 right-6 z-[6000]">
+    <div id="ai-assistant" className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[6000]">
       {/* Floating AI Button */}
       {!isOpen && (
         <motion.button
@@ -160,9 +160,9 @@ export const AIAssistantWidget: React.FC = () => {
           animate={{ scale: 1 }}
           whileHover={{ scale: 1.05 }}
           onClick={() => setIsOpen(true)}
-          className="px-5 py-3.5 rounded-2xl bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-purple/40 text-gelwo-midnight dark:text-gelwo-ivory shadow-2xl flex items-center space-x-3 glow-purple"
+          className="p-3 sm:px-5 sm:py-3.5 rounded-2xl bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-purple/40 text-gelwo-midnight dark:text-gelwo-ivory shadow-2xl flex items-center space-x-2.5 sm:space-x-3 glow-purple"
         >
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-gelwo-sage to-gelwo-purple flex items-center justify-center text-gelwo-ivory font-bold">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-gelwo-sage to-gelwo-purple flex items-center justify-center text-gelwo-ivory font-bold flex-shrink-0">
             <FiCpu className="text-lg" />
           </div>
           <div className="text-left hidden sm:block">
@@ -181,7 +181,7 @@ export const AIAssistantWidget: React.FC = () => {
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
-            className="w-[92vw] sm:w-[420px] bg-gelwo-ivory dark:bg-gelwo-midnight border border-gelwo-purple/30 rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[580px]"
+            className="w-[calc(100vw-2rem)] sm:w-[420px] max-w-[420px] bg-gelwo-ivory dark:bg-gelwo-midnight border border-gelwo-purple/30 rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[520px] sm:h-[580px] max-h-[85vh]"
           >
             {/* Top Header Bar */}
             <div className="p-4 bg-gelwo-blush dark:bg-gelwo-royal border-b border-gelwo-gray dark:border-gelwo-purple/20 flex justify-between items-center">

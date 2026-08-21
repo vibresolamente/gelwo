@@ -49,11 +49,11 @@ export const Header: React.FC = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-[5000] glass-nav transition-all duration-300">
       {/* Top Status Bar */}
-      <div className="bg-gelwo-midnight/95 dark:bg-gelwo-midnight/90 border-b border-gelwo-purple/10 py-1.5 px-4 md:px-8 text-xs flex justify-between items-center text-gelwo-gray">
-        <div className="flex items-center space-x-4">
-          <span className="flex items-center text-gelwo-sage font-mono text-[11px]">
-            <span className="w-2 h-2 rounded-full bg-gelwo-sage animate-ping mr-2" />
-            GELWO ERP System Live: All Hubs Operational
+      <div className="bg-gelwo-midnight/95 dark:bg-gelwo-midnight/90 border-b border-gelwo-purple/10 py-1.5 px-3 sm:px-6 lg:px-8 text-xs flex justify-between items-center text-gelwo-gray">
+        <div className="flex items-center space-x-2 sm:space-x-4 overflow-hidden">
+          <span className="flex items-center text-gelwo-sage font-mono text-[10px] sm:text-[11px] truncate">
+            <span className="w-2 h-2 rounded-full bg-gelwo-sage animate-ping mr-1.5 sm:mr-2 flex-shrink-0" />
+            <span className="truncate">GELWO Live: All Hubs Active</span>
           </span>
           <span className="hidden lg:inline text-gelwo-royal">|</span>
           <span className="hidden lg:flex items-center space-x-1 hover:text-gelwo-ivory transition-colors">
@@ -62,27 +62,28 @@ export const Header: React.FC = () => {
           </span>
         </div>
 
-        <div className="flex items-center space-x-4">
-          <a href="tel:+254700000000" className="flex items-center space-x-1 hover:text-gelwo-purple text-gelwo-blush transition-colors">
+        <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
+          <a href="tel:+254797829911" className="flex items-center space-x-1 hover:text-gelwo-purple text-gelwo-blush transition-colors text-[10px] sm:text-xs">
             <FiPhoneCall className="text-xs" />
-            <span className="font-mono">+254 700 000 000</span>
+            <span className="font-mono hidden sm:inline">+254 797 829 911</span>
+            <span className="font-mono sm:hidden">Call</span>
           </a>
-          <a href="mailto:info@gelwo.co.ke" className="hidden sm:flex items-center space-x-1 hover:text-gelwo-purple text-gelwo-blush transition-colors">
+          <a href="mailto:info@gelwo.co.ke" className="hidden md:flex items-center space-x-1 hover:text-gelwo-purple text-gelwo-blush transition-colors text-xs">
             <FiMail className="text-xs" />
             <span>info@gelwo.co.ke</span>
           </a>
-          <div className="flex items-center space-x-1 border-l border-gelwo-royal pl-3">
+          <div className="flex items-center space-x-1 border-l border-gelwo-royal pl-2 sm:pl-3">
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleTheme}
-              className="flex items-center space-x-1 px-2 py-0.5 rounded bg-gelwo-royal hover:bg-gelwo-purple text-gelwo-ivory font-semibold mr-2 transition-colors"
+              className="flex items-center space-x-1 px-1.5 sm:px-2 py-0.5 rounded bg-gelwo-royal hover:bg-gelwo-purple text-gelwo-ivory font-semibold transition-colors text-xs"
               title="Toggle dark mode"
             >
               {theme === 'dark' ? <FiSun className="text-gelwo-sage" /> : <FiMoon />}
             </button>
             <button
               onClick={() => setLanguage(language === 'EN' ? 'SW' : 'EN')}
-              className="flex items-center space-x-1 px-2 py-0.5 rounded bg-gelwo-royal hover:bg-gelwo-purple text-gelwo-ivory font-semibold transition-colors"
+              className="flex items-center space-x-1 px-1.5 sm:px-2 py-0.5 rounded bg-gelwo-royal hover:bg-gelwo-purple text-gelwo-ivory font-semibold transition-colors text-xs"
             >
               <FiGlobe />
               <span>{language}</span>
@@ -92,10 +93,10 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
         {/* Brand Logo */}
-        <a href="/" className="flex items-center space-x-3 group">
-          <div className="w-12 h-12 rounded-xl overflow-hidden shadow-gelwo-purple group-hover:scale-105 transition-transform">
+        <a href="/" className="flex items-center space-x-2.5 sm:space-x-3 group">
+          <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl overflow-hidden shadow-gelwo-purple group-hover:scale-105 transition-transform flex-shrink-0">
             <Image
               src="/logo.png"
               alt="GELWO Technologies"
@@ -106,22 +107,22 @@ export const Header: React.FC = () => {
             />
           </div>
           <div>
-            <span className="text-2xl font-extrabold tracking-tight text-gelwo-midnight dark:text-gelwo-ivory font-heading block leading-none">
+            <span className="text-xl sm:text-2xl font-extrabold tracking-tight text-gelwo-midnight dark:text-gelwo-ivory font-heading block leading-none">
               GELWO
             </span>
-            <span className="text-[10px] tracking-[0.25em] text-gelwo-purple uppercase font-semibold block mt-0.5">
+            <span className="text-[8px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.25em] text-gelwo-purple uppercase font-semibold block mt-0.5">
               Technologies
             </span>
           </div>
         </a>
 
         {/* Desktop Nav Links */}
-        <nav className="hidden xl:flex items-center space-x-6 text-sm font-medium text-gelwo-midnight dark:text-gelwo-gray">
+        <nav className="hidden xl:flex items-center space-x-5 2xl:space-x-6 text-sm font-medium text-gelwo-midnight dark:text-gelwo-gray">
           {navLinks.map((link, idx) => (
             <a
               key={idx}
               href={link.href}
-              className="hover:text-gelwo-purple transition-colors relative py-1 hover:border-b-2 border-gelwo-purple"
+              className="hover:text-gelwo-purple transition-colors relative py-1 hover:border-b-2 border-gelwo-purple whitespace-nowrap"
             >
               {link.name}
             </a>
@@ -129,7 +130,7 @@ export const Header: React.FC = () => {
         </nav>
 
         {/* Action Buttons */}
-        <div className="flex items-center space-x-2 sm:space-x-3">
+        <div className="flex items-center space-x-1.5 sm:space-x-3">
           {/* Smart Search */}
           <button
             onClick={() => setIsSearchOpen(true)}

@@ -123,31 +123,31 @@ export const AIQuotationCenter: React.FC = () => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[7000] flex items-center justify-center p-4 bg-gelwo-midnight/85 backdrop-blur-xl">
+      <div className="fixed inset-0 z-[7000] flex items-center justify-center p-2.5 sm:p-4 bg-gelwo-midnight/85 backdrop-blur-xl">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="bg-gelwo-ivory dark:bg-gelwo-midnight border border-gelwo-purple/40 rounded-3xl p-6 sm:p-10 max-w-3xl w-full text-left space-y-6 relative max-h-[90vh] overflow-y-auto shadow-2xl"
+          className="bg-gelwo-ivory dark:bg-gelwo-midnight border border-gelwo-purple/40 rounded-3xl p-4 sm:p-8 md:p-10 max-w-3xl w-full text-left space-y-5 sm:space-y-6 relative max-h-[92vh] overflow-y-auto shadow-2xl"
         >
           {/* Close Trigger */}
           <button
             onClick={resetForm}
-            className="absolute top-6 right-6 p-2 text-gelwo-midnight/50 dark:text-gelwo-gray hover:text-gelwo-purple rounded-xl bg-gelwo-blush dark:bg-gelwo-royal"
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 text-gelwo-midnight/50 dark:text-gelwo-gray hover:text-gelwo-purple rounded-xl bg-gelwo-blush dark:bg-gelwo-royal transition-colors"
           >
-            <FiX className="text-xl" />
+            <FiX className="text-lg sm:text-xl" />
           </button>
 
           {/* Header */}
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-gelwo-purple to-gelwo-sage flex items-center justify-center text-gelwo-ivory text-2xl font-bold shadow-gelwo-purple">
+          <div className="flex items-center space-x-3 pr-8">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-gelwo-purple to-gelwo-sage flex items-center justify-center text-gelwo-ivory text-xl sm:text-2xl font-bold shadow-gelwo-purple flex-shrink-0">
               {currentDivision.icon}
             </div>
             <div>
-              <span className="text-xs font-mono font-bold text-gelwo-purple uppercase tracking-widest block">
+              <span className="text-[10px] sm:text-xs font-mono font-bold text-gelwo-purple uppercase tracking-widest block">
                 GELWO 15-DIVISION AI QUOTATION ENGINE
               </span>
-              <h3 className="text-xl sm:text-2xl font-extrabold font-heading uppercase leading-none">
+              <h3 className="text-base sm:text-xl md:text-2xl font-extrabold font-heading uppercase leading-tight">
                 INSTANT ENTERPRISE COST CALCULATOR
               </h3>
             </div>
@@ -155,17 +155,17 @@ export const AIQuotationCenter: React.FC = () => {
 
           {/* Stepper Indicator */}
           {!isSubmitted && (
-            <div className="flex items-center justify-between border-y border-gelwo-gray dark:border-gelwo-royal py-3 text-xs font-mono">
-              <span className={step === 1 ? 'text-gelwo-purple font-bold' : 'text-gelwo-midnight/40 dark:text-gelwo-gray'}>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 border-y border-gelwo-gray dark:border-gelwo-royal py-2.5 text-[11px] sm:text-xs font-mono text-center">
+              <span className={step === 1 ? 'text-gelwo-purple font-bold bg-gelwo-purple/10 sm:bg-transparent rounded py-1 sm:py-0' : 'text-gelwo-midnight/40 dark:text-gelwo-gray py-1 sm:py-0'}>
                 01. Division ({currentDivision.code})
               </span>
-              <span className={step === 2 ? 'text-gelwo-purple font-bold' : 'text-gelwo-midnight/40 dark:text-gelwo-gray'}>
+              <span className={step === 2 ? 'text-gelwo-purple font-bold bg-gelwo-purple/10 sm:bg-transparent rounded py-1 sm:py-0' : 'text-gelwo-midnight/40 dark:text-gelwo-gray py-1 sm:py-0'}>
                 02. Scope &amp; Scale
               </span>
-              <span className={step === 3 ? 'text-gelwo-purple font-bold' : 'text-gelwo-midnight/40 dark:text-gelwo-gray'}>
+              <span className={step === 3 ? 'text-gelwo-purple font-bold bg-gelwo-purple/10 sm:bg-transparent rounded py-1 sm:py-0' : 'text-gelwo-midnight/40 dark:text-gelwo-gray py-1 sm:py-0'}>
                 03. AI Estimate
               </span>
-              <span className={step === 4 ? 'text-gelwo-purple font-bold' : 'text-gelwo-midnight/40 dark:text-gelwo-gray'}>
+              <span className={step === 4 ? 'text-gelwo-purple font-bold bg-gelwo-purple/10 sm:bg-transparent rounded py-1 sm:py-0' : 'text-gelwo-midnight/40 dark:text-gelwo-gray py-1 sm:py-0'}>
                 04. Submit Quote
               </span>
             </div>

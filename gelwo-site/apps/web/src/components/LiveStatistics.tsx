@@ -43,8 +43,8 @@ const Counter: React.FC<CounterProps> = ({ label, target, suffix = '+', color = 
 
 export const LiveStatistics: React.FC = () => {
   return (
-    <section className="w-full py-12 bg-gelwo-blush dark:bg-gelwo-royal border-y border-gelwo-gray dark:border-gelwo-purple/20">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-around items-center gap-8">
+    <section className="w-full py-10 sm:py-12 bg-gelwo-blush dark:bg-gelwo-royal border-y border-gelwo-gray dark:border-gelwo-purple/20">
+      <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 items-center text-center">
         <Counter label="Projects Completed" target={500} color="text-gelwo-purple" />
         <Counter label="Enterprise Clients" target={200} color="text-gelwo-sage" />
         <Counter label="Regional Hubs" target={12} suffix="" color="text-gelwo-purple" />
