@@ -1,22 +1,29 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { createClient } from '@supabase/supabase-js';
+
+export const dynamic = 'force-dynamic';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://swdpcefbvfxgrmwcoefl.supabase.co',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+);
 
 export async function GET() {
   try {
-    const users = await prisma.$queryRaw`
-      SELECT id, account_no as "accountNo", first_name as "firstName", last_name as "lastName", 
-             full_name as "fullName", email, phone, company, role, created_at as "createdAt"
-      FROM users
-      ORDER BY id DESC
-    `;
+    const { data: users, error } = await supabase
+      .from('profiles')
+      .select('id, account_no, full_name, email, phone, company_name, role, created_at')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
     return NextResponse.json({ success: true, data: users });
   } catch (error: any) {
     console.error('Error fetching users from database:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: error.message, 
+    return NextResponse.json({
+      success: false,
+      error: error.message,
       fallback: true,
-      message: 'Database connection failed. Falling back to LocalStorage.'
+      message: 'Database connection failed. Falling back to LocalStorage.',
     });
   }
 }
@@ -32,58 +39,62 @@ export async function POST(request: Request) {
       }
 
       // Check if user already exists
-      const existing: any[] = await prisma.$queryRaw`
-        SELECT id FROM users WHERE email = ${email} LIMIT 1
-      `;
-      if (existing.length > 0) {
+      const { data: existing } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('email', email)
+        .limit(1);
+
+      if (existing && existing.length > 0) {
         return NextResponse.json({ success: false, error: 'User with this email already exists' }, { status: 400 });
       }
 
-      // Insert user
       const finalAccountNo = accountNo || 'GEL-' + Math.floor(10000 + Math.random() * 90000);
       const finalFullName = fullName || `${firstName} ${lastName}`;
 
-      await prisma.$executeRaw`
-        INSERT INTO users (account_no, first_name, last_name, full_name, email, password, phone, company, role)
-        VALUES (${finalAccountNo}, ${firstName}, ${lastName}, ${finalFullName}, ${email}, ${password}, ${phone}, ${company}, 'customer')
-      `;
+      const { data: newUser, error } = await supabase
+        .from('profiles')
+        .insert([{
+          account_no: finalAccountNo,
+          full_name: finalFullName,
+          email,
+          phone: phone || null,
+          company_name: company || null,
+          role: 'customer',
+        }])
+        .select()
+        .single();
 
-      // Retrieve inserted user
-      const users: any[] = await prisma.$queryRaw`
-        SELECT id, account_no as "accountNo", first_name as "firstName", last_name as "lastName", 
-               full_name as "fullName", email, phone, company, role 
-        FROM users WHERE email = ${email} LIMIT 1
-      `;
-
-      return NextResponse.json({ success: true, data: users[0] });
+      if (error) throw error;
+      return NextResponse.json({ success: true, data: newUser });
 
     } else if (action === 'login') {
-      if (!email || !password) {
-        return NextResponse.json({ success: false, error: 'Email and password are required' }, { status: 400 });
+      if (!email) {
+        return NextResponse.json({ success: false, error: 'Email is required' }, { status: 400 });
       }
 
-      const users: any[] = await prisma.$queryRaw`
-        SELECT id, account_no as "accountNo", first_name as "firstName", last_name as "lastName", 
-               full_name as "fullName", email, password, phone, company, role
-        FROM users WHERE email = ${email} LIMIT 1
-      `;
+      const { data: users, error } = await supabase
+        .from('profiles')
+        .select('id, account_no, full_name, email, phone, company_name, role')
+        .eq('email', email)
+        .limit(1);
 
-      if (users.length === 0 || users[0].password !== password) {
-        return NextResponse.json({ success: false, error: 'Invalid email or password' }, { status: 401 });
+      if (error) throw error;
+      if (!users || users.length === 0) {
+        return NextResponse.json({ success: false, error: 'User not found' }, { status: 401 });
       }
 
-      const { password: _, ...userWithoutPassword } = users[0];
-      return NextResponse.json({ success: true, data: userWithoutPassword });
+      return NextResponse.json({ success: true, data: users[0] });
     }
 
     return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 });
   } catch (error: any) {
     console.error('Auth API Error:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: error.message, 
+    return NextResponse.json({
+      success: false,
+      error: error.message,
       fallback: true,
-      message: 'Database connection failed. Falling back to LocalStorage.'
+      message: 'Database connection failed. Falling back to LocalStorage.',
     });
   }
 }

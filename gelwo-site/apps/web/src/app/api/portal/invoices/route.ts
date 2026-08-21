@@ -1,42 +1,38 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://swdpcefbvfxgrmwcoefl.supabase.co',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+);
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const userIdStr = searchParams.get('userId');
+    const userId = searchParams.get('userId');
 
-    let invoices;
-    if (userIdStr) {
-      const userId = parseInt(userIdStr, 10);
-      invoices = await prisma.$queryRaw`
-        SELECT id, invoice_no as "invoiceNo", user_id as "userId", description, 
-               amount, status, due_date as "dueDate", created_at as "createdAt"
-        FROM invoices
-        WHERE user_id = ${userId}
-        ORDER BY id DESC
-      `;
-    } else {
-      invoices = await prisma.$queryRaw`
-        SELECT i.id, i.invoice_no as "invoiceNo", i.user_id as "userId", i.description, 
-               i.amount, i.status, i.due_date as "dueDate", i.created_at as "createdAt",
-               u.full_name as "customerName"
-        FROM invoices i
-        LEFT JOIN users u ON i.user_id = u.id
-        ORDER BY i.id DESC
-      `;
+    let query = supabase
+      .from('documents')
+      .select('id, doc_number, doc_type, customer_name, customer_email, organization, total_amount, status, issue_date, created_at')
+      .order('created_at', { ascending: false });
+
+    if (userId) {
+      query = query.eq('user_id', userId);
     }
 
-    return NextResponse.json({ success: true, data: invoices });
+    const { data, error } = await query;
+    if (error) throw error;
+
+    return NextResponse.json({ success: true, data });
   } catch (error: any) {
     console.error('Invoices GET error:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: error.message, 
+    return NextResponse.json({
+      success: false,
+      error: error.message,
       fallback: true,
-      message: 'Database connection failed. Falling back to LocalStorage.'
+      message: 'Database connection failed. Falling back to LocalStorage.',
     });
   }
 }
@@ -44,52 +40,55 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { id, invoiceNo, userId, description, amount, status, dueDate } = body;
-
-    const parsedUserId = userId ? parseInt(userId, 10) : null;
-    const parsedAmount = amount ? parseFloat(amount) : 0.00;
+    const { id, docNumber, userId, customerName, customerEmail, organization, items, subtotal, vatAmount, totalAmount, status, dueDate, docType, notes } = body;
 
     if (id) {
-      // Update existing invoice status
-      await prisma.$executeRaw`
-        UPDATE invoices
-        SET status = ${status}
-        WHERE id = ${parseInt(id, 10)}
-      `;
+      // Update existing document status
+      const { data, error } = await supabase
+        .from('documents')
+        .update({ status })
+        .eq('id', id)
+        .select()
+        .single();
 
-      const invoice: any[] = await prisma.$queryRaw`
-        SELECT id, invoice_no as "invoiceNo", user_id as "userId", description, 
-               amount, status, due_date as "dueDate", created_at as "createdAt"
-        FROM invoices WHERE id = ${parseInt(id, 10)} LIMIT 1
-      `;
-      return NextResponse.json({ success: true, data: invoice[0] });
+      if (error) throw error;
+      return NextResponse.json({ success: true, data });
     } else {
-      // Create new invoice
-      if (!invoiceNo || !description) {
-        return NextResponse.json({ success: false, error: 'invoiceNo and description are required for creation' }, { status: 400 });
+      // Create new document
+      if (!docNumber || !customerName) {
+        return NextResponse.json({ success: false, error: 'docNumber and customerName are required' }, { status: 400 });
       }
 
-      const finalDueDate = dueDate ? new Date(dueDate) : new Date(Date.now() + 14 * 24 * 60 * 60 * 1000); // 14 days default
+      const { data, error } = await supabase
+        .from('documents')
+        .insert([{
+          doc_number: docNumber,
+          doc_type: docType || 'invoice',
+          user_id: userId || null,
+          customer_name: customerName,
+          customer_email: customerEmail || null,
+          organization: organization || null,
+          items: items || [],
+          subtotal: subtotal || 0,
+          vat_amount: vatAmount || 0,
+          total_amount: totalAmount || 0,
+          status: status || 'Issued',
+          due_date: dueDate || null,
+          notes: notes || null,
+        }])
+        .select()
+        .single();
 
-      await prisma.$executeRaw`
-        INSERT INTO invoices (invoice_no, user_id, description, amount, status, due_date)
-        VALUES (${invoiceNo}, ${parsedUserId}, ${description}, ${parsedAmount}, ${status || 'pending'}, ${finalDueDate})
-      `;
-
-      const invoice: any[] = await prisma.$queryRaw`
-        SELECT id, invoice_no as "invoiceNo", user_id as "userId", description, 
-               amount, status, due_date as "dueDate", created_at as "createdAt"
-        FROM invoices WHERE invoice_no = ${invoiceNo} LIMIT 1
-      `;
-      return NextResponse.json({ success: true, data: invoice[0] });
+      if (error) throw error;
+      return NextResponse.json({ success: true, data });
     }
   } catch (error: any) {
     console.error('Invoices POST error:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: error.message, 
+    return NextResponse.json({
+      success: false,
+      error: error.message,
       fallback: true,
-      message: 'Database connection failed. Falling back to LocalStorage.'
+      message: 'Database connection failed. Falling back to LocalStorage.',
     });
   }
 }
