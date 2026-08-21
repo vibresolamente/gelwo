@@ -1,11 +1,22 @@
 'use client';
 
-import React, { useState } from 'react';
+/**
+ * AIAssistantWidget — GELWO AI Presenter Component
+ *
+ * Blueprint & Spec Section 12 & 15:
+ *  - AI Identity palette: Sage (#566944) + Purple (#4A346A)
+ *  - 6 Presenter Personas (Host, Technology, Business, Product, Support, Quotation)
+ *  - Dynamic route detection (changes presenter title & system prompt based on current URL)
+ *  - Interactive chat panel linked to /api/ai/chat
+ */
+
+import React, { useState, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
+import { getPersonaForRoute, AI_PERSONAS, AIPersonaType } from '@/lib/ai-prompts';
 import {
-  FiCpu, FiX, FiSend, FiCheckCircle, FiCalendar, FiSearch,
-  FiFileText, FiHelpCircle, FiChevronUp, FiMic
+  FiCpu, FiX, FiSend, FiFileText, FiLoader
 } from 'react-icons/fi';
 
 interface ChatMessage {
@@ -13,6 +24,7 @@ interface ChatMessage {
   sender: 'bot' | 'user';
   text: string;
   time: string;
+  personaName?: string;
   actionButton?: {
     label: string;
     action: string;
@@ -20,24 +32,42 @@ interface ChatMessage {
 }
 
 export const AIAssistantWidget: React.FC = () => {
-  const { triggerQuotationModal, setIsLoginOpen } = useApp();
+  const pathname = usePathname();
+  const { triggerQuotationModal } = useApp();
+
   const [isOpen, setIsOpen] = useState(false);
   const [inputMsg, setInputMsg] = useState('');
+  const [loading, setLoading] = useState(false);
   const [trackingId, setTrackingId] = useState('');
   const [trackingResult, setTrackingResult] = useState<string | null>(null);
 
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: 'm1',
-      sender: 'bot',
-      text: "👋 Welcome to GELWO Technologies.\nI'm GELWO AI.\n\nI can:\n✓ Recommend services\n✓ Calculate quotations\n✓ Explain our portfolio\n✓ Book consultations\n✓ Track projects\n\nHow may I help you today?",
-      time: 'Just now',
-    },
-  ]);
+  const activePersonaType: AIPersonaType = getPersonaForRoute(pathname || '/');
+  const personaConfig = AI_PERSONAS[activePersonaType];
 
-  const handleSend = (textToSend?: string) => {
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+
+  useEffect(() => {
+    setMessages([
+      {
+        id: 'init',
+        sender: 'bot',
+        text: personaConfig.greetingMessage,
+        time: 'Just now',
+        personaName: personaConfig.name,
+      },
+    ]);
+  }, [activePersonaType]);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages, loading]);
+
+  const handleSend = async (textToSend?: string) => {
     const query = textToSend || inputMsg;
-    if (!query.trim()) return;
+    if (!query.trim() || loading) return;
 
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
@@ -48,54 +78,74 @@ export const AIAssistantWidget: React.FC = () => {
 
     setMessages((prev) => [...prev, userMsg]);
     if (!textToSend) setInputMsg('');
+    setLoading(true);
 
-    // AI Intelligent Response Logic
-    setTimeout(() => {
-      let botResponse = "I can definitely assist you with that! GELWO offers comprehensive multi-sector services including ICT, Solar, Construction, and Supplies.";
+    try {
+      const historyPayload = messages.map((m) => ({
+        role: m.sender === 'user' ? 'user' : 'assistant',
+        content: m.text,
+      }));
+
+      const res = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: query,
+          persona: activePersonaType,
+          history: historyPayload,
+        }),
+      });
+
+      const data = await res.json();
+      setLoading(false);
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to get AI response');
+      }
+
       let actionBtn: ChatMessage['actionButton'] = undefined;
-
       const lower = query.toLowerCase();
-
       if (lower.includes('quote') || lower.includes('cost') || lower.includes('price')) {
-        botResponse = "I have calibrated our AI Quotation Engine for you. You can calculate instant cost estimates, risk metrics, and timelines.";
         actionBtn = { label: 'Open AI Quotation Center', action: 'quotation' };
-      } else if (lower.includes('solar') || lower.includes('power') || lower.includes('energy')) {
-        botResponse = "GELWO Solar Division installs commercial PV microgrids (100kW to 2MW+), hybrid lithium battery banks, and solar water pumps across East Africa.";
-        actionBtn = { label: 'Explore Solar Division', action: 'solar' };
-      } else if (lower.includes('track') || lower.includes('status') || lower.includes('project')) {
-        botResponse = "Please enter your Project Tracking ID (e.g. GLW-8891) below to fetch real-time ERP progress.";
-      } else if (lower.includes('ict') || lower.includes('cctv') || lower.includes('network')) {
-        botResponse = "Our ICT Security Division builds enterprise server racks, fiber optic grids, and biometric access controls certified for institutional use.";
-        actionBtn = { label: 'View ICT Services', action: 'ict' };
-      } else if (lower.includes('book') || lower.includes('consult')) {
-        botResponse = "Our lead engineers and consultants are available for site surveys and technical consultations. Would you like to schedule a session?";
-        actionBtn = { label: 'Book Expert Consultation', action: 'consult' };
+      } else if (lower.includes('solar') || lower.includes('power')) {
+        actionBtn = { label: 'Explore Solar Solutions', action: 'solar' };
       }
 
       const botMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
         sender: 'bot',
-        text: botResponse,
+        text: data.reply,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        personaName: data.persona || personaConfig.name,
         actionButton: actionBtn,
       };
 
       setMessages((prev) => [...prev, botMsg]);
-    }, 700);
+    } catch (err) {
+      setLoading(false);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: (Date.now() + 1).toString(),
+          sender: 'bot',
+          text: 'Thank you for reaching out. A GELWO representative will be glad to assist you. You can also click below to request an instant quotation.',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          personaName: personaConfig.name,
+          actionButton: { label: 'Request Quotation', action: 'quotation' },
+        },
+      ]);
+    }
   };
 
   const handleActionClick = (action: string) => {
-    if (action === 'quotation' || action === 'solar' || action === 'ict') {
-      triggerQuotationModal(action === 'solar' ? 'Solar Energy' : action === 'ict' ? 'ICT & Security' : undefined);
-    } else if (action === 'consult') {
-      alert('Consultation Booking: Opening direct calendar booking...');
+    if (action === 'quotation' || action === 'solar') {
+      triggerQuotationModal(action === 'solar' ? 'Solar Energy' : undefined);
     }
   };
 
   const handleTrackSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!trackingId.trim()) return;
-
     setTrackingResult(
       `Status for #${trackingId.toUpperCase()}: Project at 85% completion. Commissioning scheduled for Nakuru Hub.`
     );
@@ -103,21 +153,23 @@ export const AIAssistantWidget: React.FC = () => {
 
   return (
     <div id="ai-assistant" className="fixed bottom-6 right-6 z-[6000]">
-      {/* Floating Trigger Button */}
+      {/* Floating AI Button */}
       {!isOpen && (
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          whileHover={{ scale: 1.08 }}
+          whileHover={{ scale: 1.05 }}
           onClick={() => setIsOpen(true)}
-          className="px-5 py-4 rounded-3xl bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-600 text-white shadow-2xl flex items-center space-x-3 glow-cyan border border-cyan-300/40"
+          className="px-5 py-3.5 rounded-2xl bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-purple/40 text-gelwo-midnight dark:text-gelwo-ivory shadow-2xl flex items-center space-x-3 glow-purple"
         >
-          <div className="w-9 h-9 rounded-2xl bg-black/40 flex items-center justify-center text-cyan-300">
-            <FiCpu className="text-xl animate-spin" />
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-gelwo-sage to-gelwo-purple flex items-center justify-center text-gelwo-ivory font-bold">
+            <FiCpu className="text-lg" />
           </div>
           <div className="text-left hidden sm:block">
-            <span className="text-xs font-extrabold tracking-wide block font-heading">GELWO AI</span>
-            <span className="text-[10px] text-cyan-200 block font-mono">Assistant Active</span>
+            <span className="text-xs font-extrabold tracking-wide block font-heading text-gelwo-sage">
+              ◉ {personaConfig.name}
+            </span>
+            <span className="text-[10px] text-gelwo-purple block font-mono">AI Active</span>
           </div>
         </motion.button>
       )}
@@ -129,54 +181,45 @@ export const AIAssistantWidget: React.FC = () => {
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
-            className="w-[92vw] sm:w-[420px] bg-[#0A0F1D] border border-cyan-500/40 rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[560px]"
+            className="w-[92vw] sm:w-[420px] bg-gelwo-ivory dark:bg-gelwo-midnight border border-gelwo-purple/30 rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[580px]"
           >
             {/* Top Header Bar */}
-            <div className="p-4 bg-slate-900 border-b border-slate-800 flex justify-between items-center">
+            <div className="p-4 bg-gelwo-blush dark:bg-gelwo-royal border-b border-gelwo-gray dark:border-gelwo-purple/20 flex justify-between items-center">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-black font-bold text-lg shadow-md">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-gelwo-sage to-gelwo-purple flex items-center justify-center text-gelwo-ivory font-bold text-lg">
                   <FiCpu />
                 </div>
                 <div>
-                  <h4 className="font-bold text-white font-heading text-sm">GELWO AI Assistant</h4>
-                  <span className="text-[10px] text-emerald-400 font-mono flex items-center">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping mr-1.5" />
-                    Online • Corporate Engine v2.0
+                  <h4 className="font-bold text-gelwo-midnight dark:text-gelwo-ivory font-heading text-sm">{personaConfig.name}</h4>
+                  <span className="text-[10px] text-gelwo-sage font-mono flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-gelwo-sage animate-ping" />
+                    {personaConfig.role} • GELWO AI
                   </span>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800"
+                className="p-2 text-gelwo-midnight/50 dark:text-gelwo-gray hover:text-gelwo-purple rounded-xl hover:bg-gelwo-gray dark:hover:bg-gelwo-purple/20 transition-colors"
               >
                 <FiX className="text-xl" />
               </button>
             </div>
 
             {/* Quick Action Chips */}
-            <div className="p-2.5 bg-slate-950/80 border-b border-slate-800 flex space-x-2 overflow-x-auto text-[11px] scrollbar-none">
-              <button
-                onClick={() => handleSend('Recommend Solar Solution')}
-                className="px-3 py-1.5 rounded-full bg-slate-900 text-cyan-300 border border-slate-800 hover:border-cyan-500 flex-shrink-0"
-              >
-                ⚡ Solar Solution
-              </button>
-              <button
-                onClick={() => handleSend('Calculate Quotation')}
-                className="px-3 py-1.5 rounded-full bg-slate-900 text-cyan-300 border border-slate-800 hover:border-cyan-500 flex-shrink-0"
-              >
-                📄 Instant Quote
-              </button>
-              <button
-                onClick={() => handleSend('Track Project Status')}
-                className="px-3 py-1.5 rounded-full bg-slate-900 text-cyan-300 border border-slate-800 hover:border-cyan-500 flex-shrink-0"
-              >
-                🔍 Track ERP
-              </button>
+            <div className="p-2.5 bg-gelwo-blush/80 dark:bg-gelwo-royal/80 border-b border-gelwo-gray dark:border-gelwo-purple/20 flex space-x-2 overflow-x-auto text-[11px] scrollbar-none">
+              {personaConfig.suggestedQuestions.map((q, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleSend(q)}
+                  className="px-3 py-1 rounded-full bg-gelwo-ivory dark:bg-gelwo-midnight text-gelwo-sage border border-gelwo-sage/20 hover:border-gelwo-sage flex-shrink-0 transition-colors whitespace-nowrap shadow-sm"
+                >
+                  💬 {q}
+                </button>
+              ))}
             </div>
 
             {/* Chat Body */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-4">
+            <div ref={chatContainerRef} className="flex-1 p-4 overflow-y-auto space-y-4 bg-gelwo-ivory dark:bg-gelwo-midnight">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
@@ -185,62 +228,79 @@ export const AIAssistantWidget: React.FC = () => {
                   <div
                     className={`max-w-[85%] p-3.5 rounded-2xl text-xs leading-relaxed whitespace-pre-wrap ${
                       msg.sender === 'user'
-                        ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-tr-none'
-                        : 'bg-slate-900/90 border border-slate-800 text-slate-200 rounded-tl-none'
+                        ? 'bg-gradient-to-r from-gelwo-sage to-gelwo-purple text-gelwo-ivory font-medium rounded-tr-none'
+                        : 'bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-gray dark:border-gelwo-purple/20 text-gelwo-midnight dark:text-gelwo-gray rounded-tl-none'
                     }`}
                   >
+                    {msg.sender === 'bot' && msg.personaName && (
+                      <span className="block text-[10px] font-mono text-gelwo-sage font-bold mb-1">
+                        {msg.personaName}
+                      </span>
+                    )}
                     {msg.text}
+
                     {msg.actionButton && (
                       <button
                         onClick={() => handleActionClick(msg.actionButton!.action)}
-                        className="mt-3 w-full py-2 px-3 rounded-xl bg-cyan-500 text-black font-bold text-xs hover:bg-cyan-400 transition-colors flex items-center justify-center space-x-1"
+                        className="mt-3 w-full py-2 px-3 rounded-xl bg-gelwo-sage text-gelwo-ivory font-bold text-xs hover:bg-gelwo-purple transition-colors flex items-center justify-center space-x-1"
                       >
+                        <FiFileText />
                         <span>{msg.actionButton.label}</span>
                       </button>
                     )}
-                    <span className="block text-[9px] text-slate-400 text-right mt-1 font-mono">
+                    <span className={`block text-[9px] text-right mt-1 font-mono ${msg.sender === 'user' ? 'text-gelwo-ivory/80' : 'text-gelwo-midnight/40 dark:text-gelwo-gray'}`}>
                       {msg.time}
                     </span>
                   </div>
                 </div>
               ))}
 
-              {/* Project ERP Tracker Box */}
-              <div className="p-3 rounded-2xl bg-slate-900/60 border border-slate-800">
+              {loading && (
+                <div className="flex justify-start">
+                  <div className="p-3.5 bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-gray dark:border-gelwo-purple/20 rounded-2xl text-xs text-gelwo-sage flex items-center space-x-2">
+                    <FiLoader className="animate-spin text-sm" />
+                    <span>GELWO AI is processing...</span>
+                  </div>
+                </div>
+              )}
+
+              {/* ERP Project Tracker */}
+              <div className="p-3 rounded-2xl bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-gray dark:border-gelwo-purple/20 mt-2">
                 <form onSubmit={handleTrackSubmit} className="flex space-x-2">
                   <input
                     type="text"
                     placeholder="Enter Tracking ID (e.g. GLW-889)"
                     value={trackingId}
                     onChange={(e) => setTrackingId(e.target.value)}
-                    className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400"
+                    className="flex-1 bg-gelwo-ivory dark:bg-gelwo-midnight border border-gelwo-gray dark:border-gelwo-purple/30 rounded-xl px-3 py-1.5 text-xs text-gelwo-midnight dark:text-gelwo-ivory focus:outline-none focus:border-gelwo-sage focus:ring-1 focus:ring-gelwo-sage"
                   />
                   <button
                     type="submit"
-                    className="px-3 py-1.5 bg-cyan-500 text-black font-bold rounded-xl text-xs"
+                    className="px-3 py-1.5 bg-gelwo-sage hover:bg-gelwo-purple transition-colors text-gelwo-ivory font-bold rounded-xl text-xs"
                   >
                     Track
                   </button>
                 </form>
                 {trackingResult && (
-                  <p className="text-[11px] text-emerald-400 mt-2 font-mono">{trackingResult}</p>
+                  <p className="text-[11px] text-gelwo-sage mt-2 font-mono">{trackingResult}</p>
                 )}
               </div>
             </div>
 
             {/* Input Bar */}
-            <div className="p-3 bg-slate-900 border-t border-slate-800 flex items-center space-x-2">
+            <div className="p-3 bg-gelwo-blush dark:bg-gelwo-royal border-t border-gelwo-gray dark:border-gelwo-purple/20 flex items-center space-x-2">
               <input
                 type="text"
                 value={inputMsg}
                 onChange={(e) => setInputMsg(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                placeholder="Ask GELWO AI anything..."
-                className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-400"
+                placeholder={`Ask ${personaConfig.name}...`}
+                className="flex-1 bg-gelwo-ivory dark:bg-gelwo-midnight border border-gelwo-gray dark:border-gelwo-purple/30 rounded-xl px-4 py-2.5 text-xs text-gelwo-midnight dark:text-gelwo-ivory focus:outline-none focus:border-gelwo-sage focus:ring-1 focus:ring-gelwo-sage"
               />
               <button
                 onClick={() => handleSend()}
-                className="p-2.5 bg-cyan-500 text-black rounded-xl hover:bg-cyan-400 transition-colors font-bold"
+                disabled={loading}
+                className="p-2.5 bg-gelwo-sage text-gelwo-ivory rounded-xl hover:bg-gelwo-purple transition-colors font-bold disabled:opacity-50"
               >
                 <FiSend />
               </button>

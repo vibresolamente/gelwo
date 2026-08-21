@@ -1,5 +1,10 @@
 'use client';
 
+/**
+ * GlobalModals Component — GELWO Futuristic Color System
+ * Palette: Warm Ivory, Midnight, Deep Purple, Sage Green
+ */
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
@@ -37,9 +42,8 @@ export const GlobalModals: React.FC = () => {
   const [isListening, setIsListening] = useState(false);
   const [voiceText, setVoiceText] = useState('Click microphone to speak your request...');
 
-  // Sample searchable catalog across GELWO 12 services
   const searchCatalog = [
-    { title: 'ICT & Security Infrastructure', category: 'Services', link: '#services' },
+    { title: 'Software Development & Systems', category: 'Services', link: '#services' },
     { title: 'Solar Energy & Microgrids', category: 'Services', link: '#services' },
     { title: 'CCTV & Surveillance Installation', category: 'ICT', link: '#services' },
     { title: 'AI Quotation Center', category: 'Tools', link: '#quotation' },
@@ -108,7 +112,7 @@ export const GlobalModals: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9900] bg-black/75 backdrop-blur-md flex items-start justify-center pt-20 px-4"
+            className="fixed inset-0 z-[9900] bg-gelwo-midnight/75 backdrop-blur-md flex items-start justify-center pt-20 px-4"
             onClick={() => setIsSearchOpen(false)}
           >
             <motion.div
@@ -116,21 +120,21 @@ export const GlobalModals: React.FC = () => {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: -20 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-2xl bg-[#0A0F1D] border border-cyan-500/30 rounded-2xl p-6 shadow-2xl text-white"
+              className="w-full max-w-2xl bg-gelwo-ivory dark:bg-gelwo-midnight border border-gelwo-purple/30 rounded-2xl p-6 shadow-2xl text-gelwo-midnight dark:text-gelwo-ivory"
             >
-              <div className="flex items-center space-x-3 border-b border-slate-800 pb-4">
-                <FiSearch className="text-cyan-400 text-2xl" />
+              <div className="flex items-center space-x-3 border-b border-gelwo-gray dark:border-gelwo-purple/20 pb-4">
+                <FiSearch className="text-gelwo-purple text-2xl" />
                 <input
                   type="text"
                   placeholder="Search GELWO services, products, tenders, or AI tools..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   autoFocus
-                  className="w-full bg-transparent text-lg text-white placeholder-slate-500 focus:outline-none"
+                  className="w-full bg-transparent text-lg text-gelwo-midnight dark:text-gelwo-ivory placeholder-gelwo-midnight/50 dark:placeholder-gelwo-gray focus:outline-none"
                 />
                 <button
                   onClick={() => setIsSearchOpen(false)}
-                  className="p-2 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white"
+                  className="p-2 hover:bg-gelwo-blush dark:hover:bg-gelwo-royal rounded-lg text-gelwo-midnight/50 dark:text-gelwo-gray hover:text-gelwo-purple transition-colors"
                 >
                   <FiX className="text-xl" />
                 </button>
@@ -142,10 +146,10 @@ export const GlobalModals: React.FC = () => {
                     key={idx}
                     href={item.link}
                     onClick={() => setIsSearchOpen(false)}
-                    className="flex items-center justify-between p-3 rounded-xl hover:bg-cyan-500/10 border border-transparent hover:border-cyan-500/30 transition-all"
+                    className="flex items-center justify-between p-3 rounded-xl hover:bg-gelwo-blush dark:hover:bg-gelwo-royal border border-transparent hover:border-gelwo-purple/30 transition-all"
                   >
-                    <span className="font-medium text-slate-200">{item.title}</span>
-                    <span className="text-xs uppercase px-2.5 py-1 rounded-full bg-slate-800 text-cyan-400 border border-slate-700">
+                    <span className="font-medium text-gelwo-midnight/80 dark:text-gelwo-gray">{item.title}</span>
+                    <span className="text-xs uppercase px-2.5 py-1 rounded-full bg-gelwo-ivory dark:bg-gelwo-midnight text-gelwo-sage border border-gelwo-gray dark:border-gelwo-royal">
                       {item.category}
                     </span>
                   </a>
@@ -163,7 +167,7 @@ export const GlobalModals: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9900] bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
+            className="fixed inset-0 z-[9900] bg-gelwo-midnight/80 backdrop-blur-md flex items-center justify-center p-4"
             onClick={() => setIsVoiceSearchOpen(false)}
           >
             <motion.div
@@ -171,32 +175,32 @@ export const GlobalModals: React.FC = () => {
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md bg-[#0A0F1D] border border-cyan-400/40 rounded-3xl p-8 shadow-2xl text-center text-white relative"
+              className="w-full max-w-md bg-gelwo-ivory dark:bg-gelwo-midnight border border-gelwo-purple/40 rounded-3xl p-8 shadow-2xl text-center text-gelwo-midnight dark:text-gelwo-ivory relative"
             >
               <button
                 onClick={() => setIsVoiceSearchOpen(false)}
-                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white"
+                className="absolute top-4 right-4 p-2 text-gelwo-midnight/50 dark:text-gelwo-gray hover:text-gelwo-purple transition-colors"
               >
                 <FiX className="text-xl" />
               </button>
 
-              <h3 className="text-2xl font-bold font-heading mb-2 text-cyan-400">GELWO Voice Search</h3>
-              <p className="text-slate-400 text-sm mb-6">{voiceText}</p>
+              <h3 className="text-2xl font-bold font-heading mb-2 text-gelwo-sage">GELWO Voice Search</h3>
+              <p className="text-gelwo-midnight/70 dark:text-gelwo-gray text-sm mb-6">{voiceText}</p>
 
               <div className="flex justify-center my-6">
                 <button
                   onClick={startVoiceRecognition}
                   className={`w-24 h-24 rounded-full flex items-center justify-center transition-all shadow-xl ${
                     isListening
-                      ? 'bg-red-500 animate-pulse glow-red'
-                      : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:scale-105 glow-cyan'
+                      ? 'bg-red-500 animate-pulse text-white'
+                      : 'bg-gradient-to-r from-gelwo-sage to-gelwo-purple hover:scale-105 text-gelwo-ivory'
                   }`}
                 >
-                  <FiMic className="text-4xl text-white" />
+                  <FiMic className="text-4xl" />
                 </button>
               </div>
 
-              <p className="text-xs text-slate-500 uppercase tracking-widest">
+              <p className="text-xs text-gelwo-midnight/50 dark:text-gelwo-gray uppercase tracking-widest">
                 {isListening ? 'Listening...' : 'Tap Mic to Start'}
               </p>
             </motion.div>
@@ -204,14 +208,14 @@ export const GlobalModals: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* 👤 CLIENT LOGIN / PORTAL MODAL */}
+      {/* 👤 CLIENT LOGIN / REGISTRATION MODAL */}
       <AnimatePresence>
         {isLoginOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9900] bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
+            className="fixed inset-0 z-[9900] bg-gelwo-midnight/80 backdrop-blur-md flex items-center justify-center p-4"
             onClick={() => setIsLoginOpen(false)}
           >
             <motion.div
@@ -219,60 +223,38 @@ export const GlobalModals: React.FC = () => {
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md bg-[#0A0F1D] border border-cyan-500/30 rounded-3xl p-8 shadow-2xl text-white relative"
+              className="w-full max-w-md bg-gelwo-ivory dark:bg-gelwo-midnight border border-gelwo-purple/30 rounded-3xl p-8 shadow-2xl text-gelwo-midnight dark:text-gelwo-ivory relative"
             >
               <button
                 onClick={() => setIsLoginOpen(false)}
-                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white"
+                className="absolute top-4 right-4 p-2 text-gelwo-midnight/50 dark:text-gelwo-gray hover:text-gelwo-purple transition-colors"
               >
                 <FiX className="text-xl" />
               </button>
 
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="p-3 bg-cyan-500/20 rounded-2xl text-cyan-400">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="p-3 bg-gelwo-blush dark:bg-gelwo-royal rounded-2xl text-gelwo-purple border border-gelwo-purple/20">
                   <FiUser className="text-2xl" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold font-heading">GELWO Client Portal</h3>
-                  <p className="text-xs text-slate-400">Access tenders, invoices & project tracking</p>
+                  <p className="text-xs text-gelwo-midnight/70 dark:text-gelwo-gray">Access quotations, invoices &amp; project tracking</p>
                 </div>
               </div>
 
-              <form onSubmit={(e) => { e.preventDefault(); alert('Login successful. Redirecting to Client Dashboard...'); setIsLoginOpen(false); }} className="space-y-4">
-                <div>
-                  <label className="block text-xs uppercase font-semibold text-slate-400 mb-1">Corporate Email / Client ID</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="client@institution.go.ke"
-                    className="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs uppercase font-semibold text-slate-400 mb-1">Password</label>
-                  <input
-                    type="password"
-                    required
-                    placeholder="••••••••"
-                    className="w-full bg-slate-900/80 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyan-400"
-                  />
-                </div>
+              <div className="space-y-4">
+                <p className="text-xs text-gelwo-midnight/70 dark:text-gelwo-gray">
+                  You can log in or register your institutional account directly on the <strong>Customer Portal</strong> page.
+                </p>
 
-                <div className="flex justify-between items-center text-xs text-slate-400">
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" className="rounded bg-slate-900 border-slate-800 text-cyan-500" />
-                    <span>Remember Me</span>
-                  </label>
-                  <a href="#forgot" className="text-cyan-400 hover:underline">Forgot Password?</a>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-3.5 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-700 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-500/30 transition-all mt-4"
+                <a
+                  href="/portal"
+                  onClick={() => setIsLoginOpen(false)}
+                  className="w-full py-3.5 btn-primary rounded-xl text-xs uppercase font-extrabold flex items-center justify-center space-x-2 block text-center"
                 >
-                  Access Secure Portal
-                </button>
-              </form>
+                  <span>Open Customer Portal Gateway</span>
+                </a>
+              </div>
             </motion.div>
           </motion.div>
         )}
@@ -285,7 +267,7 @@ export const GlobalModals: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9900] bg-black/60 backdrop-blur-sm flex justify-end"
+            className="fixed inset-0 z-[9900] bg-gelwo-midnight/60 backdrop-blur-sm flex justify-end"
             onClick={() => setIsCartOpen(false)}
           >
             <motion.div
@@ -294,35 +276,35 @@ export const GlobalModals: React.FC = () => {
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md bg-[#0A0F1D] h-full border-l border-cyan-500/30 p-6 flex flex-col justify-between text-white shadow-2xl"
+              className="w-full max-w-md bg-gelwo-ivory dark:bg-gelwo-midnight h-full border-l border-gelwo-purple/30 p-6 flex flex-col justify-between text-gelwo-midnight dark:text-gelwo-ivory shadow-2xl"
             >
               <div>
-                <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                <div className="flex items-center justify-between border-b border-gelwo-gray dark:border-gelwo-purple/20 pb-4 mb-6">
                   <div className="flex items-center space-x-3">
-                    <FiShoppingBag className="text-2xl text-cyan-400" />
+                    <FiShoppingBag className="text-2xl text-gelwo-purple" />
                     <h3 className="text-xl font-bold font-heading">Quotation Basket</h3>
                   </div>
-                  <button onClick={() => setIsCartOpen(false)} className="p-2 text-slate-400 hover:text-white">
+                  <button onClick={() => setIsCartOpen(false)} className="p-2 text-gelwo-midnight/50 dark:text-gelwo-gray hover:text-gelwo-purple transition-colors">
                     <FiX className="text-xl" />
                   </button>
                 </div>
 
                 {inquiryCart.length === 0 ? (
-                  <p className="text-slate-400 text-center py-12">Your quotation basket is empty.</p>
+                  <p className="text-gelwo-midnight/70 dark:text-gelwo-gray text-center py-12">Your quotation basket is empty.</p>
                 ) : (
                   <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
                     {inquiryCart.map((item) => (
-                      <div key={item.id} className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between items-start">
+                      <div key={item.id} className="p-4 rounded-xl bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-gray dark:border-gelwo-purple/20 flex justify-between items-start">
                         <div>
-                          <h4 className="font-semibold text-cyan-300">{item.service}</h4>
-                          <p className="text-xs text-slate-400 mt-1">{item.details}</p>
+                          <h4 className="font-semibold text-gelwo-purple">{item.service}</h4>
+                          <p className="text-xs text-gelwo-midnight/70 dark:text-gelwo-gray mt-1">{item.details}</p>
                           {item.estimatedCost && (
-                            <p className="text-xs font-bold text-emerald-400 mt-2">Est: {item.estimatedCost}</p>
+                            <p className="text-xs font-bold text-gelwo-sage mt-2">Est: {item.estimatedCost}</p>
                           )}
                         </div>
                         <button
                           onClick={() => removeFromCart(item.id)}
-                          className="text-slate-500 hover:text-red-400 p-1"
+                          className="text-gelwo-midnight/50 dark:text-gelwo-gray hover:text-red-500 p-1 transition-colors"
                         >
                           <FiTrash2 />
                         </button>
@@ -332,13 +314,13 @@ export const GlobalModals: React.FC = () => {
                 )}
               </div>
 
-              <div className="border-t border-slate-800 pt-4 space-y-3">
+              <div className="border-t border-gelwo-gray dark:border-gelwo-purple/20 pt-4 space-y-3">
                 <button
                   onClick={() => {
                     setIsCartOpen(false);
                     triggerQuotationModal();
                   }}
-                  className="w-full py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 font-semibold rounded-xl text-white hover:opacity-95 shadow-lg shadow-cyan-500/20"
+                  className="w-full py-3.5 btn-primary rounded-xl text-xs uppercase"
                 >
                   Generate Official Proposal
                 </button>
@@ -355,7 +337,7 @@ export const GlobalModals: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9900] bg-black/60 backdrop-blur-sm flex justify-end"
+            className="fixed inset-0 z-[9900] bg-gelwo-midnight/60 backdrop-blur-sm flex justify-end"
             onClick={() => setIsSettingsOpen(false)}
           >
             <motion.div
@@ -364,15 +346,15 @@ export const GlobalModals: React.FC = () => {
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md bg-[#0A0F1D] h-full border-l border-cyan-500/30 p-6 flex flex-col justify-between text-white shadow-2xl"
+              className="w-full max-w-md bg-gelwo-ivory dark:bg-gelwo-midnight h-full border-l border-gelwo-purple/30 p-6 flex flex-col justify-between text-gelwo-midnight dark:text-gelwo-ivory shadow-2xl"
             >
               <div>
-                <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                <div className="flex items-center justify-between border-b border-gelwo-gray dark:border-gelwo-purple/20 pb-4 mb-6">
                   <div className="flex items-center space-x-3">
-                    <FiSettings className="text-2xl text-cyan-400" />
+                    <FiSettings className="text-2xl text-gelwo-purple" />
                     <h3 className="text-xl font-bold font-heading">Settings & Accessibility</h3>
                   </div>
-                  <button onClick={() => setIsSettingsOpen(false)} className="p-2 text-slate-400 hover:text-white">
+                  <button onClick={() => setIsSettingsOpen(false)} className="p-2 text-gelwo-midnight/50 dark:text-gelwo-gray hover:text-gelwo-purple transition-colors">
                     <FiX className="text-xl" />
                   </button>
                 </div>
@@ -380,14 +362,14 @@ export const GlobalModals: React.FC = () => {
                 <div className="space-y-6">
                   {/* Theme Selector */}
                   <div>
-                    <label className="block text-xs uppercase font-semibold text-slate-400 mb-2">Display Theme</label>
+                    <label className="block text-xs uppercase font-semibold text-gelwo-midnight/70 dark:text-gelwo-gray mb-2">Display Theme</label>
                     <div className="grid grid-cols-2 gap-3">
                       <button
                         onClick={() => toggleTheme()}
-                        className={`p-3 rounded-xl border flex items-center justify-center space-x-2 text-sm ${
+                        className={`p-3 rounded-xl border flex items-center justify-center space-x-2 text-sm transition-colors ${
                           theme === 'dark'
-                            ? 'border-cyan-400 bg-cyan-500/10 text-cyan-400'
-                            : 'border-slate-800 bg-slate-900 text-slate-400'
+                            ? 'border-gelwo-purple bg-gelwo-blush dark:bg-gelwo-royal text-gelwo-purple'
+                            : 'border-gelwo-gray dark:border-gelwo-royal bg-gelwo-blush dark:bg-gelwo-royal text-gelwo-midnight/70 dark:text-gelwo-gray hover:border-gelwo-purple/50'
                         }`}
                       >
                         <FiMoon />
@@ -395,10 +377,10 @@ export const GlobalModals: React.FC = () => {
                       </button>
                       <button
                         onClick={() => toggleTheme()}
-                        className={`p-3 rounded-xl border flex items-center justify-center space-x-2 text-sm ${
+                        className={`p-3 rounded-xl border flex items-center justify-center space-x-2 text-sm transition-colors ${
                           theme === 'light'
-                            ? 'border-cyan-400 bg-cyan-500/10 text-cyan-400'
-                            : 'border-slate-800 bg-slate-900 text-slate-400'
+                            ? 'border-gelwo-purple bg-gelwo-blush dark:bg-gelwo-royal text-gelwo-purple'
+                            : 'border-gelwo-gray dark:border-gelwo-royal bg-gelwo-blush dark:bg-gelwo-royal text-gelwo-midnight/70 dark:text-gelwo-gray hover:border-gelwo-purple/50'
                         }`}
                       >
                         <FiSun />
@@ -409,14 +391,14 @@ export const GlobalModals: React.FC = () => {
 
                   {/* Language Selector */}
                   <div>
-                    <label className="block text-xs uppercase font-semibold text-slate-400 mb-2">System Language</label>
+                    <label className="block text-xs uppercase font-semibold text-gelwo-midnight/70 dark:text-gelwo-gray mb-2">System Language</label>
                     <div className="grid grid-cols-2 gap-3">
                       <button
                         onClick={() => setLanguage('EN')}
-                        className={`p-3 rounded-xl border flex items-center justify-center space-x-2 text-sm ${
+                        className={`p-3 rounded-xl border flex items-center justify-center space-x-2 text-sm transition-colors ${
                           language === 'EN'
-                            ? 'border-cyan-400 bg-cyan-500/10 text-cyan-400'
-                            : 'border-slate-800 bg-slate-900 text-slate-400'
+                            ? 'border-gelwo-sage bg-gelwo-blush dark:bg-gelwo-royal text-gelwo-sage'
+                            : 'border-gelwo-gray dark:border-gelwo-royal bg-gelwo-blush dark:bg-gelwo-royal text-gelwo-midnight/70 dark:text-gelwo-gray hover:border-gelwo-sage/50'
                         }`}
                       >
                         <FiGlobe />
@@ -424,10 +406,10 @@ export const GlobalModals: React.FC = () => {
                       </button>
                       <button
                         onClick={() => setLanguage('SW')}
-                        className={`p-3 rounded-xl border flex items-center justify-center space-x-2 text-sm ${
+                        className={`p-3 rounded-xl border flex items-center justify-center space-x-2 text-sm transition-colors ${
                           language === 'SW'
-                            ? 'border-cyan-400 bg-cyan-500/10 text-cyan-400'
-                            : 'border-slate-800 bg-slate-900 text-slate-400'
+                            ? 'border-gelwo-sage bg-gelwo-blush dark:bg-gelwo-royal text-gelwo-sage'
+                            : 'border-gelwo-gray dark:border-gelwo-royal bg-gelwo-blush dark:bg-gelwo-royal text-gelwo-midnight/70 dark:text-gelwo-gray hover:border-gelwo-sage/50'
                         }`}
                       >
                         <FiGlobe />
@@ -437,39 +419,39 @@ export const GlobalModals: React.FC = () => {
                   </div>
 
                   {/* Accessibility Options */}
-                  <div className="space-y-3 pt-4 border-t border-slate-800">
-                    <h4 className="text-sm font-semibold text-slate-300">Accessibility Preferences</h4>
+                  <div className="space-y-3 pt-4 border-t border-gelwo-gray dark:border-gelwo-purple/20">
+                    <h4 className="text-sm font-semibold text-gelwo-midnight/90 dark:text-gelwo-gray">Accessibility Preferences</h4>
 
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900/60">
-                      <span className="text-sm text-slate-300">High Contrast Mode</span>
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-gelwo-blush dark:bg-gelwo-royal border border-transparent">
+                      <span className="text-sm text-gelwo-midnight/80 dark:text-gelwo-gray">High Contrast Mode</span>
                       <button
                         onClick={() => updateAccessibility('highContrast')}
                         className={`w-12 h-6 rounded-full p-1 transition-colors ${
-                          accessibility.highContrast ? 'bg-cyan-500' : 'bg-slate-700'
+                          accessibility.highContrast ? 'bg-gelwo-purple' : 'bg-gelwo-gray dark:bg-gelwo-midnight'
                         }`}
                       >
                         <div className={`w-4 h-4 rounded-full bg-white transition-transform ${accessibility.highContrast ? 'translate-x-6' : ''}`} />
                       </button>
                     </div>
 
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900/60">
-                      <span className="text-sm text-slate-300">Large Text Scaling</span>
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-gelwo-blush dark:bg-gelwo-royal border border-transparent">
+                      <span className="text-sm text-gelwo-midnight/80 dark:text-gelwo-gray">Large Text Scaling</span>
                       <button
                         onClick={() => updateAccessibility('textScale')}
                         className={`w-12 h-6 rounded-full p-1 transition-colors ${
-                          accessibility.textScale ? 'bg-cyan-500' : 'bg-slate-700'
+                          accessibility.textScale ? 'bg-gelwo-purple' : 'bg-gelwo-gray dark:bg-gelwo-midnight'
                         }`}
                       >
                         <div className={`w-4 h-4 rounded-full bg-white transition-transform ${accessibility.textScale ? 'translate-x-6' : ''}`} />
                       </button>
                     </div>
 
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900/60">
-                      <span className="text-sm text-slate-300">Reduce Motion & Animations</span>
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-gelwo-blush dark:bg-gelwo-royal border border-transparent">
+                      <span className="text-sm text-gelwo-midnight/80 dark:text-gelwo-gray">Reduce Motion & Animations</span>
                       <button
                         onClick={() => updateAccessibility('reduceMotion')}
                         className={`w-12 h-6 rounded-full p-1 transition-colors ${
-                          accessibility.reduceMotion ? 'bg-cyan-500' : 'bg-slate-700'
+                          accessibility.reduceMotion ? 'bg-gelwo-purple' : 'bg-gelwo-gray dark:bg-gelwo-midnight'
                         }`}
                       >
                         <div className={`w-4 h-4 rounded-full bg-white transition-transform ${accessibility.reduceMotion ? 'translate-x-6' : ''}`} />
@@ -479,7 +461,7 @@ export const GlobalModals: React.FC = () => {
                 </div>
               </div>
 
-              <div className="text-center text-xs text-slate-500 pt-6">
+              <div className="text-center text-xs text-gelwo-midnight/50 dark:text-gelwo-gray pt-6 font-mono">
                 GELWO Core Web Engine v1.0 • Government Compliant
               </div>
             </motion.div>

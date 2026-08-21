@@ -20,7 +20,7 @@ export default function Home() {
   const [loaderComplete, setLoaderComplete] = useState(false);
 
   return (
-    <main className="min-h-screen bg-[#0A0F1D] text-white relative selection:bg-cyan-500 selection:text-black">
+    <main className="min-h-screen bg-gelwo-ivory text-gelwo-midnight relative selection:bg-gelwo-purple selection:text-gelwo-ivory dark:bg-gelwo-midnight dark:text-gelwo-ivory">
       {/* Cinematic Loader Intro Sequence */}
       {!loaderComplete && (
         <CinematicLoader onComplete={() => setLoaderComplete(true)} />

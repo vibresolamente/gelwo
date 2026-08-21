@@ -1,54 +1,67 @@
 'use client';
 
+/**
+ * WhyChooseUs Component — GELWO Poster Color System
+ * Palette: Warm Ivory (#FCF9F5), Deep Purple (#4A346A), Sage (#566944), Midnight (#131322)
+ */
+
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FiUsers, FiCheckCircle, FiHeart, FiClock, FiArrowRight } from 'react-icons/fi';
+import { FiUsers, FiCheckCircle, FiShield, FiClock, FiArrowRight } from 'react-icons/fi';
+import { useApp } from '@/context/AppContext';
 
 export const WhyChooseUs: React.FC = () => {
+  const { triggerQuotationModal } = useApp();
+
   const points = [
     {
-      title: 'Experienced Team',
-      desc: 'Skilled professionals with past industry experience.',
+      title: 'Certified Engineering Team',
+      desc: 'NCA certified structural engineers, full-stack software architects, and solar SCADA specialists.',
       icon: FiUsers,
-      iconBg: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
     },
     {
-      title: 'Quality Guaranteed',
-      desc: 'We deliver top-quality solutions that last.',
+      title: 'Uncompromising Quality',
+      desc: 'SLA-backed systems, Tier-1 solar equipment, and high-concurrency software architectures.',
       icon: FiCheckCircle,
-      iconBg: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
     },
     {
-      title: 'Customer Focused',
-      desc: 'We put our clients at the heart of everything.',
-      icon: FiHeart,
-      iconBg: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
+      title: 'Full Regulatory Compliance',
+      desc: 'AGPO certified, KRA tax compliant, and registered with IFMIS for seamless government tenders.',
+      icon: FiShield,
     },
     {
-      title: 'Timely Delivery',
-      desc: 'We deliver on time, every time.',
+      title: 'Timely Execution',
+      desc: 'Rigorous project management guaranteeing on-time handover across all 12 regional county hubs.',
       icon: FiClock,
-      iconBg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
     },
   ];
 
   return (
-    <section className="py-20 relative z-10 bg-[#070B19] border-t border-slate-800/60">
+    <section className="py-24 relative z-10 bg-gelwo-ivory dark:bg-gelwo-midnight border-t border-gelwo-gray dark:border-gelwo-royal">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Left Column: Text & Features Grid */}
+          {/* Left Column */}
           <div className="lg:col-span-7">
-            <motion.h2 
+            <motion.span
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-xs uppercase tracking-[0.3em] font-bold text-gelwo-purple font-mono block mb-2"
+            >
+              ENGINEERING EXCELLENCE
+            </motion.span>
+
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-3xl sm:text-5xl font-extrabold text-white font-heading tracking-tight"
+              className="text-3xl sm:text-5xl font-extrabold text-gelwo-midnight dark:text-gelwo-ivory font-heading uppercase"
             >
-              Why Choose <span className="text-cyan-400">GELWO</span>?
+              Why Partner With <span className="text-gradient-champagne">GELWO</span>?
             </motion.h2>
-            
-            <p className="mt-4 text-slate-400 text-sm sm:text-base max-w-xl">
-              We combine expertise, innovation and integrity to deliver value that exceeds expectations.
+
+            <p className="mt-4 text-gelwo-midnight/70 dark:text-gelwo-gray text-sm sm:text-base max-w-xl leading-relaxed">
+              We unite software engineering, clean energy, ICT security, and structural construction under one roof — offering institutional clarity and unified SLA support.
             </p>
 
             {/* 2x2 Feature Grid */}
@@ -62,60 +75,47 @@ export const WhyChooseUs: React.FC = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
-                    className="p-5 rounded-2xl bg-[#0E1528] border border-slate-800 hover:border-cyan-500/40 transition-all group"
+                    className="glass-card p-6 rounded-2xl border border-gelwo-gray dark:border-gelwo-purple/20"
                   >
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4 border ${pt.iconBg}`}>
+                    <div className="w-10 h-10 rounded-xl bg-gelwo-blush dark:bg-gelwo-midnight text-gelwo-purple border border-gelwo-purple/20 flex items-center justify-center text-lg mb-4">
                       <Icon />
                     </div>
-                    <h3 className="text-base font-bold text-white font-heading mb-1">{pt.title}</h3>
-                    <p className="text-xs text-slate-400 leading-relaxed">{pt.desc}</p>
+                    <h4 className="text-sm font-bold text-gelwo-midnight dark:text-gelwo-ivory font-heading mb-1">{pt.title}</h4>
+                    <p className="text-xs text-gelwo-midnight/60 dark:text-gelwo-gray leading-relaxed">{pt.desc}</p>
                   </motion.div>
                 );
               })}
             </div>
-
-            {/* CTA Button */}
-            <div className="mt-8">
-              <a
-                href="#services"
-                className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/30 transition-all hover:scale-105"
-              >
-                <span>Discover More</span>
-                <FiArrowRight />
-              </a>
-            </div>
           </div>
 
-          {/* Right Column: Engineer/Technician Banner */}
-          <div className="lg:col-span-5 relative">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="relative rounded-3xl overflow-hidden border border-cyan-500/30 shadow-2xl bg-gradient-to-tr from-cyan-900/40 to-slate-900"
+          {/* Right Highlight Banner */}
+          <div className="lg:col-span-5">
+            <div className="glass-card p-8 sm:p-10 rounded-3xl border border-gelwo-purple/30 space-y-6"
+              style={{ background: 'linear-gradient(to bottom, rgba(237,230,229,0.8), rgba(252,249,245,0.9))' }}
             >
-              <img
-                src="/gelwo_technician.jpg"
-                alt="GELWO Technician Engineer"
-                className="w-full h-[450px] object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#070B19] via-transparent to-transparent opacity-80" />
-              <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-[#0A0F1D]/90 backdrop-blur-md border border-cyan-500/30 text-white">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] text-cyan-400 uppercase tracking-widest font-mono font-bold">GELWO Certified Field Team</span>
-                    <h4 className="text-sm font-bold font-heading">Engineered for Excellence</h4>
-                  </div>
-                  <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold border border-emerald-500/30">
-                    100% On-Time
-                  </span>
-                </div>
-              </div>
-            </motion.div>
+              <span className="px-3 py-1 rounded-full bg-gelwo-purple/10 text-gelwo-purple text-xs font-mono font-bold uppercase">
+                INSTITUTIONAL SLA GUARANTEE
+              </span>
+
+              <h3 className="text-2xl font-extrabold text-gelwo-midnight font-heading uppercase leading-tight">
+                Single Point of Contact for All Engineering &amp; Software Needs
+              </h3>
+
+              <p className="text-xs text-gelwo-midnight/70 leading-relaxed">
+                Eliminate vendor friction. GELWO handles everything from software architecture to physical CCTV deployment, solar installation, and civil works.
+              </p>
+
+              <button
+                onClick={() => triggerQuotationModal()}
+                className="w-full py-4 btn-primary rounded-xl text-xs uppercase flex items-center justify-center space-x-2"
+              >
+                <span>[ CONSULT WITH OUR SPECIALISTS ]</span>
+                <FiArrowRight />
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
 };
-

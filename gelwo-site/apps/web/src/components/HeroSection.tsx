@@ -1,10 +1,20 @@
 'use client';
 
+/**
+ * HeroSection Component — GELWO Poster Color System
+ * Palette:
+ *  - Primary Background: Warm Ivory (#FCF9F5) with subtle Soft Blush (#EDE6E5) gradient
+ *  - Primary Text: Deep Midnight (#131322)
+ *  - Primary Accent: Deep Purple (#4A346A) -> Royal Purple (#261E3D)
+ *  - Secondary Accent: Sage Green (#566944)
+ *  - Particle Canvas: Purple and Sage particles
+ */
+
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
 import {
-  FiArrowRight, FiPlay, FiFileText, FiPhoneCall, FiChevronDown, FiShield, FiZap, FiCheckCircle
+  FiArrowRight, FiPlay, FiFileText, FiPhoneCall, FiChevronDown, FiShield, FiZap
 } from 'react-icons/fi';
 
 export const HeroSection: React.FC = () => {
@@ -12,18 +22,12 @@ export const HeroSection: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const servicesList = [
-    'ICT & Security Solutions',
-    'Solar Energy & Microgrids',
-    'Electrical Infrastructure',
-    'General Supplies & Procurement',
-    'Branding & Media Production',
-    'Corporate Consultancy & Strategy',
-    'Environmental Services',
-    'Cereals & Agri-Commodities',
-    'Poultry Infrastructure & Feeds',
-    'Commercial & Industrial Cleaning',
+    'Software Development & Systems',
+    'Business Systems & ERP',
+    'AI Solutions & Automation',
+    'ICT & Security Infrastructure',
+    'Solar Microgrids & Clean Energy',
     'Civil Construction & Engineering',
-    'Community Development & Empowerment',
   ];
 
   const [currentServiceIdx, setCurrentServiceIdx] = useState(0);
@@ -36,7 +40,7 @@ export const HeroSection: React.FC = () => {
     return () => clearInterval(timer);
   }, [servicesList.length]);
 
-  // Background Interactive 3D Mesh Particle Simulation
+  // Background Particle Mesh Simulation — Purple & Sage Green Node Colors
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -54,27 +58,27 @@ export const HeroSection: React.FC = () => {
     };
     window.addEventListener('resize', onResize);
 
-    // Nodes representing tech, solar grids & connectivity
-    const nodes = Array.from({ length: 45 }).map(() => ({
+    const nodes = Array.from({ length: 40 }).map(() => ({
       x: Math.random() * w,
       y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.8,
-      vy: (Math.random() - 0.5) * 0.8,
-      radius: Math.random() * 3 + 2,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: (Math.random() - 0.5) * 0.6,
+      radius: Math.random() * 2.5 + 1.5,
+      color: Math.random() > 0.45 ? '#4A346A' : '#566944',
     }));
 
     const render = () => {
       ctx.clearRect(0, 0, w, h);
 
-      // Draw subtle background gradient mesh
-      const bgGrad = ctx.createRadialGradient(w / 2, h / 3, 100, w / 2, h / 2, w);
-      bgGrad.addColorStop(0, 'rgba(15, 76, 129, 0.25)');
-      bgGrad.addColorStop(0.5, 'rgba(10, 15, 29, 0.8)');
-      bgGrad.addColorStop(1, '#0A0F1D');
+      // Radial background subtle ambient glow
+      const bgGrad = ctx.createRadialGradient(w * 0.6, h * 0.3, 50, w / 2, h / 2, w);
+      bgGrad.addColorStop(0, 'rgba(74, 52, 106, 0.05)');
+      bgGrad.addColorStop(0.5, 'rgba(237, 230, 229, 0.2)');
+      bgGrad.addColorStop(1, 'rgba(252, 249, 245, 0)');
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, w, h);
 
-      // Update & Draw nodes
+      // Nodes & connecting lines
       nodes.forEach((node, i) => {
         node.x += node.vx;
         node.y += node.vy;
@@ -84,22 +88,21 @@ export const HeroSection: React.FC = () => {
 
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = '#00F0FF';
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = '#00F0FF';
+        ctx.fillStyle = node.color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = node.color;
         ctx.fill();
 
-        // Connect nearby nodes
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[j].x - node.x;
           const dy = nodes[j].y - node.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 160) {
+          if (dist < 140) {
             ctx.beginPath();
             ctx.moveTo(node.x, node.y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(0, 240, 255, ${0.2 - dist / 800})`;
+            ctx.strokeStyle = `rgba(74, 52, 106, ${0.12 * (1 - dist / 140)})`;
             ctx.lineWidth = 0.8;
             ctx.stroke();
           }
@@ -118,200 +121,204 @@ export const HeroSection: React.FC = () => {
   }, []);
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-28 pb-16 overflow-hidden">
-      {/* Real Vivid Futuristic Technology Image Background */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-70 scale-100 transition-transform duration-1000"
-        style={{ backgroundImage: `url('/futuristic_bg.jpg')` }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#070B19]/80 via-[#070B19]/50 to-[#070B19] z-0 pointer-events-none" />
+    <section id="hero" className="relative min-h-screen flex items-center pt-28 pb-16 overflow-hidden bg-hero-atmosphere">
+      {/* Canvas particle mesh */}
+      <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none" />
 
-      {/* Dynamic 3D Particle Canvas Overlay */}
-      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-0" />
+      {/* Hero Content Container */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
-      {/* Decorative Glow Orbs */}
-      <div className="absolute top-1/4 left-10 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none animate-pulse" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-        {/* Top Institutional Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-card border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-semibold mb-8 shadow-xl"
-        >
-          <FiShield className="text-cyan-400 text-base" />
-          <span>Kenya & East Africa’s Premier Multi-Sector Corporate Leader</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-        </motion.div>
-
-        {/* Main Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight font-heading max-w-5xl mx-auto leading-[1.15]"
-        >
-          Transforming Businesses, Institutions & Communities Through{' '}
-          <span className="text-gradient-cyan">Technology, Innovation</span> & Excellence.
-        </motion.h1>
-
-        {/* Rotating Animated Service Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-6 h-14 flex items-center justify-center"
-        >
-          <div className="text-lg sm:text-2xl text-slate-300 font-medium flex items-center space-x-3">
-            <span className="text-slate-400 hidden sm:inline">Specialized Expertise In:</span>
-            <div className="relative overflow-hidden h-10 w-72 sm:w-96 text-left border-b-2 border-cyan-400">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentServiceIdx}
-                  initial={{ y: 25, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -25, opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="absolute inset-0 font-bold text-cyan-400 font-heading flex items-center"
-                >
-                  <FiZap className="mr-2 text-yellow-400" />
-                  {servicesList[currentServiceIdx]}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Action Button Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-10 flex flex-wrap items-center justify-center gap-4 max-w-3xl mx-auto"
-        >
-          {/* Explore Services */}
-          <a
-            href="#services"
-            className="px-7 py-4 rounded-2xl bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-700 text-white font-bold text-base hover:scale-105 shadow-xl shadow-cyan-500/25 transition-all flex items-center space-x-2"
-          >
-            <span>🚀 Explore Services</span>
-            <FiArrowRight />
-          </a>
-
-          {/* Get Instant Quotation */}
-          <button
-            onClick={() => triggerQuotationModal()}
-            className="px-7 py-4 rounded-2xl glass-card border border-cyan-400/40 text-cyan-300 font-bold text-base hover:bg-cyan-500/10 hover:border-cyan-400 transition-all flex items-center space-x-2 shadow-lg"
-          >
-            <FiFileText className="text-cyan-400" />
-            <span>📄 Get Instant Quotation</span>
-          </button>
-
-          {/* Contact Experts */}
-          <a
-            href="#footer"
-            className="px-6 py-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-slate-200 font-semibold text-sm hover:text-white hover:border-slate-700 transition-all flex items-center space-x-2"
-          >
-            <FiPhoneCall className="text-cyan-400" />
-            <span>📞 Contact Experts</span>
-          </a>
-
-          {/* Watch Story Video Modal */}
-          <button
-            onClick={() => setIsVideoModalOpen(true)}
-            className="px-6 py-4 rounded-2xl glass-card text-white font-semibold text-sm hover:bg-white/10 transition-all flex items-center space-x-2"
-          >
-            <div className="w-8 h-8 rounded-full bg-cyan-500 flex items-center justify-center text-black font-bold">
-              <FiPlay className="ml-0.5" />
-            </div>
-            <span>▶ Watch Company Story</span>
-          </button>
-        </motion.div>
-
-        {/* Key Operational Highlights */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.8 }}
-          className="mt-14 pt-8 border-t border-slate-800/80 max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-left text-xs sm:text-sm text-slate-300"
-        >
-          <div className="flex items-center space-x-2">
-            <FiCheckCircle className="text-cyan-400 text-lg flex-shrink-0" />
-            <span>Government Certified (NCA & AGPO)</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <FiCheckCircle className="text-emerald-400 text-lg flex-shrink-0" />
-            <span>Integrated AI Quotation Engine</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <FiCheckCircle className="text-yellow-400 text-lg flex-shrink-0" />
-            <span>24/7 Dedicated Technical Support</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <FiCheckCircle className="text-purple-400 text-lg flex-shrink-0" />
-            <span>Countrywide Service Logistics</span>
-          </div>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="mt-16 inline-flex flex-col items-center cursor-pointer text-slate-400 hover:text-cyan-400"
-        >
-          <a href="#about" className="text-xs uppercase tracking-widest font-semibold mb-2">
-            Scroll To Discover
-          </a>
-          <FiChevronDown className="text-2xl text-cyan-400" />
-        </motion.div>
-      </div>
-
-      {/* Video Modal Simulation */}
-      <AnimatePresence>
-        {isVideoModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9900] bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
-            onClick={() => setIsVideoModalOpen(false)}
-          >
+          {/* Left Column: Heading & CTAs */}
+          <div className="lg:col-span-7 space-y-8 text-left">
+            {/* Status Pill */}
             <motion.div
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.9 }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-4xl bg-[#0A0F1D] border border-cyan-500/40 rounded-3xl overflow-hidden shadow-2xl relative"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center space-x-3 px-4 py-2 rounded-full bg-gelwo-blush/80 dark:bg-gelwo-royal border border-gelwo-purple/30 shadow-md"
             >
-              <div className="p-4 bg-slate-900 flex justify-between items-center border-b border-slate-800">
-                <span className="font-bold text-white font-heading">GELWO Corporate Journey & Infrastructure</span>
-                <button
-                  onClick={() => setIsVideoModalOpen(false)}
-                  className="text-slate-400 hover:text-white px-3 py-1 bg-slate-800 rounded-lg text-sm"
-                >
-                  Close ✕
-                </button>
-              </div>
+              <span className="w-2 h-2 rounded-full bg-gelwo-purple animate-pulse" />
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-gelwo-purple dark:text-gelwo-blush">
+                EST. 2022 • KENYA • NCA &amp; AGPO ACCREDITED
+              </span>
+            </motion.div>
 
-              {/* Simulated Cinematic Video Player */}
-              <div className="relative aspect-video bg-slate-950 flex flex-col items-center justify-center p-8 text-center">
-                <div className="w-20 h-20 rounded-full bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-400 text-3xl mb-4 animate-pulse">
-                  <FiPlay className="ml-1" />
-                </div>
-                <h3 className="text-2xl font-bold text-white font-heading mb-2">
-                  Building Africa's Digital & Physical Infrastructure
-                </h3>
-                <p className="text-slate-400 max-w-lg text-sm">
-                  Documentary highlighting GELWO's solar microgrid projects, ICT data center installations, high-capacity general supplies, and community empowerment initiatives.
-                </p>
-                <div className="mt-6 px-6 py-2 bg-cyan-500 text-black font-bold rounded-xl text-xs uppercase tracking-wider">
-                  Playing Cinematic 4K Reel
-                </div>
+            {/* Main Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-4xl sm:text-6xl xl:text-7xl font-extrabold text-gelwo-midnight dark:text-gelwo-ivory font-heading leading-tight tracking-tight uppercase"
+            >
+              BUILDING WHAT'S <br />
+              <span className="text-gradient-purple dark:text-gradient-light">NEXT.</span>
+            </motion.h1>
+
+            {/* Animated Rotating Service Subhead */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex items-center space-x-3 text-lg sm:text-2xl text-gelwo-midnight/80 dark:text-gelwo-gray font-medium"
+            >
+              <span className="text-gelwo-purple font-semibold">Division:</span>
+              <div className="h-9 overflow-hidden relative inline-block min-w-[280px]">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={currentServiceIdx}
+                    initial={{ y: 24, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -24, opacity: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="absolute font-bold text-gelwo-purple dark:text-gelwo-ivory font-heading block"
+                  >
+                    {servicesList[currentServiceIdx]}
+                  </motion.span>
+                </AnimatePresence>
               </div>
             </motion.div>
+
+            {/* Subtitle Body Text */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-gelwo-midnight/70 dark:text-gelwo-gray text-base sm:text-lg leading-relaxed max-w-2xl"
+            >
+              Technology • Energy • Security • Supplies • Consultancy • Innovation. GELWO Technologies engineers custom enterprise software, clean energy microgrids, and security infrastructure designed around how African businesses actually work.
+            </motion.p>
+
+            {/* CTA Buttons (Gradient 01: Purple -> Dark Royal Purple) */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex flex-wrap gap-4 pt-2"
+            >
+              <button
+                onClick={() => triggerQuotationModal()}
+                className="btn-primary px-8 py-4 rounded-2xl text-sm uppercase flex items-center space-x-3"
+              >
+                <FiFileText className="text-lg" />
+                <span>[ REQUEST A QUOTE ]</span>
+                <FiArrowRight className="text-lg" />
+              </button>
+
+              <button
+                onClick={() => setIsVideoModalOpen(true)}
+                className="btn-secondary px-6 py-4 rounded-2xl text-sm uppercase flex items-center space-x-2"
+              >
+                <FiPlay className="text-sm text-gelwo-purple" />
+                <span>Watch Reel</span>
+              </button>
+            </motion.div>
+
+            {/* Quick Metrics Bar */}
+            <div className="pt-6 grid grid-cols-3 gap-6 border-t border-gelwo-gray dark:border-gelwo-royal max-w-lg">
+              <div>
+                <span className="text-2xl font-extrabold text-gelwo-purple font-heading block">500+</span>
+                <span className="text-xs text-gelwo-midnight/60 dark:text-gelwo-gray font-mono">Projects Delivered</span>
+              </div>
+              <div>
+                <span className="text-2xl font-extrabold text-gelwo-sage font-heading block">100%</span>
+                <span className="text-xs text-gelwo-midnight/60 dark:text-gelwo-gray font-mono">Compliance SLA</span>
+              </div>
+              <div>
+                <span className="text-2xl font-extrabold text-gelwo-royal dark:text-gelwo-ivory font-heading block">12</span>
+                <span className="text-xs text-gelwo-midnight/60 dark:text-gelwo-gray font-mono">County Hubs</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Card with GELWO Signature Style */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="lg:col-span-5"
+          >
+            <div className="glass-card p-8 rounded-3xl relative overflow-hidden shadow-gelwo-purple border border-gelwo-gray dark:border-gelwo-purple/30">
+              <div className="flex justify-between items-center mb-6">
+                <span className="text-xs font-mono text-gelwo-purple dark:text-gelwo-blush font-bold uppercase tracking-wider">
+                  GELWO ECOSYSTEM
+                </span>
+                <span className="px-3 py-1 rounded-full bg-gelwo-sage/15 text-gelwo-sage text-xs font-mono font-bold">
+                  ● Enterprise Active
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                <div className="p-4 rounded-2xl bg-gelwo-ivory dark:bg-gelwo-midnight border border-gelwo-gray dark:border-gelwo-royal">
+                  <h4 className="text-sm font-bold text-gelwo-midnight dark:text-gelwo-ivory font-heading mb-1 flex items-center gap-2">
+                    <FiZap className="text-gelwo-purple" />
+                    <span>Software &amp; ERP Systems</span>
+                  </h4>
+                  <p className="text-xs text-gelwo-midnight/70 dark:text-gelwo-gray leading-relaxed">
+                    Custom web apps, multi-branch ERP, automated M-Pesa billing &amp; inventory telemetry.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-gelwo-ivory dark:bg-gelwo-midnight border border-gelwo-gray dark:border-gelwo-royal">
+                  <h4 className="text-sm font-bold text-gelwo-midnight dark:text-gelwo-ivory font-heading mb-1 flex items-center gap-2">
+                    <FiShield className="text-gelwo-sage" />
+                    <span>ICT Security &amp; Infrastructure</span>
+                  </h4>
+                  <p className="text-xs text-gelwo-midnight/70 dark:text-gelwo-gray leading-relaxed">
+                    4K CCTV surveillance, biometric access turnstiles, fiber backbones &amp; server racks.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-gelwo-ivory dark:bg-gelwo-midnight border border-gelwo-gray dark:border-gelwo-royal">
+                  <h4 className="text-sm font-bold text-gelwo-midnight dark:text-gelwo-ivory font-heading mb-1 flex items-center gap-2">
+                    <FiZap className="text-gelwo-purple" />
+                    <span>Clean Energy Microgrids</span>
+                  </h4>
+                  <p className="text-xs text-gelwo-midnight/70 dark:text-gelwo-gray leading-relaxed">
+                    10kW to 1MW commercial solar plants, lithium BESS battery banks &amp; SCADA telemetry.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-gelwo-gray dark:border-gelwo-royal flex items-center justify-between">
+                <span className="text-xs text-gelwo-midnight/60 dark:text-gelwo-gray font-mono">Ready to engineer?</span>
+                <button
+                  onClick={() => triggerQuotationModal()}
+                  className="text-xs font-bold text-gelwo-purple hover:underline flex items-center gap-1 font-heading"
+                >
+                  <span>Explore Quotation Engine</span>
+                  <FiArrowRight />
+                </button>
+              </div>
+            </div>
           </motion.div>
+
+        </div>
+      </div>
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {isVideoModalOpen && (
+          <div className="fixed inset-0 z-[7000] flex items-center justify-center p-4 bg-gelwo-midnight/80 backdrop-blur-md">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-gelwo-ivory dark:bg-gelwo-royal border border-gelwo-purple/30 rounded-3xl p-6 max-w-3xl w-full text-center space-y-4 shadow-2xl"
+            >
+              <h3 className="text-xl font-bold text-gelwo-midnight dark:text-gelwo-ivory font-heading">GELWO Showreel</h3>
+              <p className="text-xs text-gelwo-midnight/70 dark:text-gelwo-gray">Showing engineering operations across Kenya.</p>
+              <div className="aspect-video bg-gelwo-midnight rounded-2xl flex items-center justify-center border border-gelwo-royal">
+                <span className="text-xs font-mono text-gelwo-ivory">[ VIDEO REEL STREAMING ]</span>
+              </div>
+              <button
+                onClick={() => setIsVideoModalOpen(false)}
+                className="btn-primary px-6 py-2 rounded-xl text-xs"
+              >
+                Close Showreel
+              </button>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </section>

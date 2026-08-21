@@ -1,8 +1,14 @@
 'use client';
 
+/**
+ * Header Component — GELWO Poster Color System
+ * Palette: Warm Ivory (#FCF9F5), Midnight (#131322), Deep Purple (#4A346A), Sage (#566944)
+ */
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '@/context/AppContext';
+import Image from 'next/image';
 import {
   FiSearch, FiMic, FiUser, FiShoppingBag, FiSettings,
   FiBell, FiMoon, FiSun, FiGlobe, FiMenu, FiX, FiMail, FiPhoneCall, FiMapPin, FiCpu
@@ -30,45 +36,53 @@ export const Header: React.FC = () => {
   const [showNotificationsPopover, setShowNotificationsPopover] = useState(false);
 
   const navLinks = [
-    { name: language === 'SW' ? 'Nyumbani' : 'Home', href: '#hero' },
-    { name: language === 'SW' ? 'Kuhusu GELWO' : 'About GELWO', href: '#about' },
-    { name: language === 'SW' ? 'Huduma' : 'Services', href: '#services' },
-    { name: language === 'SW' ? 'Sekta' : 'Industries', href: '#industries' },
-    { name: language === 'SW' ? 'Miradi' : 'Portfolio', href: '#portfolio' },
-    { name: language === 'SW' ? 'Nukuu ya AI' : 'AI Quotation', href: '#quotation' },
-    { name: language === 'SW' ? 'Msaidizi wa AI' : 'AI Assistant', href: '#ai-assistant' },
-    { name: language === 'SW' ? 'Wasiliana' : 'Contact', href: '#footer' },
+    { name: language === 'SW' ? 'Kuhusu' : 'About', href: '/about' },
+    { name: language === 'SW' ? 'Huduma' : 'Services', href: '/services' },
+    { name: language === 'SW' ? 'Bidhaa' : 'Products', href: '/products' },
+    { name: language === 'SW' ? 'Suluhisho' : 'Solutions', href: '/solutions' },
+    { name: language === 'SW' ? 'Miradi' : 'Projects', href: '/projects' },
+    { name: language === 'SW' ? 'Sekta' : 'Industries', href: '/industries' },
+    { name: language === 'SW' ? 'Teknolojia' : 'Technology', href: '/technology' },
+    { name: language === 'SW' ? 'Wasiliana' : 'Contact', href: '/contact' },
   ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[5000] glass-nav transition-all duration-300">
-      {/* Top Corporate Status Bar */}
-      <div className="bg-[#0A0F1D]/90 border-b border-cyan-500/10 py-1.5 px-4 md:px-8 text-xs flex justify-between items-center text-slate-400">
+      {/* Top Status Bar */}
+      <div className="bg-gelwo-midnight/95 dark:bg-gelwo-midnight/90 border-b border-gelwo-purple/10 py-1.5 px-4 md:px-8 text-xs flex justify-between items-center text-gelwo-gray">
         <div className="flex items-center space-x-4">
-          <span className="flex items-center text-cyan-400 font-medium">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-2" />
-            GELWO ERP System Live: All Kenya Hubs Operational
+          <span className="flex items-center text-gelwo-sage font-mono text-[11px]">
+            <span className="w-2 h-2 rounded-full bg-gelwo-sage animate-ping mr-2" />
+            GELWO ERP System Live: All Hubs Operational
           </span>
-          <span className="hidden lg:inline text-slate-500">|</span>
-          <span className="hidden lg:flex items-center space-x-1 hover:text-white transition-colors">
-            <FiMapPin className="text-cyan-400" />
-            <span>Nairobi HQ • Nakuru • Mombasa</span>
+          <span className="hidden lg:inline text-gelwo-royal">|</span>
+          <span className="hidden lg:flex items-center space-x-1 hover:text-gelwo-ivory transition-colors">
+            <FiMapPin className="text-gelwo-purple" />
+            <span className="text-gelwo-blush">Nairobi HQ • Nakuru • Mombasa</span>
           </span>
         </div>
 
         <div className="flex items-center space-x-4">
-          <a href="tel:+254700000000" className="flex items-center space-x-1 hover:text-cyan-400 transition-colors">
+          <a href="tel:+254700000000" className="flex items-center space-x-1 hover:text-gelwo-purple text-gelwo-blush transition-colors">
             <FiPhoneCall className="text-xs" />
             <span className="font-mono">+254 700 000 000</span>
           </a>
-          <a href="mailto:info@gelwo.co.ke" className="hidden sm:flex items-center space-x-1 hover:text-cyan-400 transition-colors">
+          <a href="mailto:info@gelwo.co.ke" className="hidden sm:flex items-center space-x-1 hover:text-gelwo-purple text-gelwo-blush transition-colors">
             <FiMail className="text-xs" />
             <span>info@gelwo.co.ke</span>
           </a>
-          <div className="flex items-center space-x-1 border-l border-slate-800 pl-3">
+          <div className="flex items-center space-x-1 border-l border-gelwo-royal pl-3">
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="flex items-center space-x-1 px-2 py-0.5 rounded bg-gelwo-royal hover:bg-gelwo-purple text-gelwo-ivory font-semibold mr-2 transition-colors"
+              title="Toggle dark mode"
+            >
+              {theme === 'dark' ? <FiSun className="text-gelwo-sage" /> : <FiMoon />}
+            </button>
             <button
               onClick={() => setLanguage(language === 'EN' ? 'SW' : 'EN')}
-              className="flex items-center space-x-1 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 font-semibold"
+              className="flex items-center space-x-1 px-2 py-0.5 rounded bg-gelwo-royal hover:bg-gelwo-purple text-gelwo-ivory font-semibold transition-colors"
             >
               <FiGlobe />
               <span>{language}</span>
@@ -77,45 +91,50 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Glass Navigation Bar */}
+      {/* Main Navigation Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Brand Logo */}
-        <a href="#hero" className="flex items-center space-x-3 group">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#0F4C81] via-[#00F0FF] to-[#7C3AED] p-[2px] shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
-            <div className="w-full h-full bg-[#0A0F1D] rounded-[14px] flex items-center justify-center font-bold text-white text-xl font-heading">
-              G<span className="text-cyan-400">E</span>
-            </div>
+        <a href="/" className="flex items-center space-x-3 group">
+          <div className="w-12 h-12 rounded-xl overflow-hidden shadow-gelwo-purple group-hover:scale-105 transition-transform">
+            <Image
+              src="/logo.png"
+              alt="GELWO Technologies"
+              width={48}
+              height={48}
+              className="w-full h-full object-contain"
+              priority
+            />
           </div>
           <div>
-            <span className="text-2xl font-extrabold tracking-tight text-white font-heading block leading-none">
+            <span className="text-2xl font-extrabold tracking-tight text-gelwo-midnight dark:text-gelwo-ivory font-heading block leading-none">
               GELWO
             </span>
-            <span className="text-[10px] tracking-[0.25em] text-cyan-400 uppercase font-semibold block mt-0.5">
+            <span className="text-[10px] tracking-[0.25em] text-gelwo-purple uppercase font-semibold block mt-0.5">
               Technologies
             </span>
           </div>
         </a>
 
-        {/* Desktop Nav Items */}
-        <nav className="hidden xl:flex items-center space-x-6 text-sm font-medium text-slate-300">
+        {/* Desktop Nav Links */}
+        <nav className="hidden xl:flex items-center space-x-6 text-sm font-medium text-gelwo-midnight dark:text-gelwo-gray">
           {navLinks.map((link, idx) => (
             <a
               key={idx}
               href={link.href}
-              className="hover:text-cyan-400 transition-colors relative py-1 hover:border-b-2 border-cyan-400"
+              className="hover:text-gelwo-purple transition-colors relative py-1 hover:border-b-2 border-gelwo-purple"
             >
               {link.name}
             </a>
           ))}
         </nav>
 
-        {/* Global Website Feature Action Buttons */}
+        {/* Action Buttons */}
         <div className="flex items-center space-x-2 sm:space-x-3">
           {/* Smart Search */}
           <button
             onClick={() => setIsSearchOpen(true)}
             title="Smart Search"
-            className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/40 transition-all"
+            className="p-2.5 rounded-xl bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-gray dark:border-gelwo-purple/30 text-gelwo-midnight dark:text-gelwo-gray hover:text-gelwo-purple hover:border-gelwo-purple/40 transition-all"
           >
             <FiSearch className="text-lg" />
           </button>
@@ -124,30 +143,21 @@ export const Header: React.FC = () => {
           <button
             onClick={() => setIsVoiceSearchOpen(true)}
             title="Voice Search"
-            className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/40 transition-all hidden sm:block"
+            className="p-2.5 rounded-xl bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-gray dark:border-gelwo-purple/30 text-gelwo-midnight dark:text-gelwo-gray hover:text-gelwo-purple hover:border-gelwo-purple/40 transition-all hidden sm:block"
           >
             <FiMic className="text-lg" />
           </button>
 
-          {/* Theme Switcher */}
-          <button
-            onClick={toggleTheme}
-            title="Toggle Light / Dark Mode"
-            className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/40 transition-all"
-          >
-            {theme === 'dark' ? <FiSun className="text-lg text-amber-400" /> : <FiMoon className="text-lg text-cyan-400" />}
-          </button>
-
-          {/* Live ERP Notifications */}
+          {/* ERP Notifications */}
           <div className="relative">
             <button
               onClick={() => setShowNotificationsPopover(!showNotificationsPopover)}
               title="ERP Notifications"
-              className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/40 transition-all relative"
+              className="p-2.5 rounded-xl bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-gray dark:border-gelwo-purple/30 text-gelwo-midnight dark:text-gelwo-gray hover:text-gelwo-purple hover:border-gelwo-purple/40 transition-all relative"
             >
               <FiBell className="text-lg" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center animate-pulse">
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-gelwo-purple text-gelwo-ivory text-[10px] font-bold flex items-center justify-center">
                   {unreadCount}
                 </span>
               )}
@@ -160,11 +170,11 @@ export const Header: React.FC = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
-                  className="absolute right-0 mt-3 w-80 bg-[#0A0F1D] border border-cyan-500/30 rounded-2xl p-4 shadow-2xl z-[6000]"
+                  className="absolute right-0 mt-3 w-80 bg-gelwo-ivory dark:bg-gelwo-royal border border-gelwo-purple/30 rounded-2xl p-4 shadow-gelwo-purple z-[6000]"
                 >
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
-                    <span className="font-bold text-sm text-cyan-400">ERP System Feed</span>
-                    <span className="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded">Live</span>
+                  <div className="flex items-center justify-between border-b border-gelwo-gray dark:border-gelwo-purple/20 pb-2 mb-3">
+                    <span className="font-bold text-sm text-gelwo-purple">ERP System Feed</span>
+                    <span className="text-[10px] bg-gelwo-sage/20 text-gelwo-sage px-2 py-0.5 rounded font-mono">Live</span>
                   </div>
 
                   <div className="space-y-2.5 max-h-64 overflow-y-auto">
@@ -174,13 +184,13 @@ export const Header: React.FC = () => {
                         onClick={() => markNotificationRead(item.id)}
                         className={`p-2.5 rounded-xl text-xs cursor-pointer border transition-colors ${
                           item.read
-                            ? 'bg-slate-900/40 border-slate-800/60 text-slate-400'
-                            : 'bg-cyan-500/10 border-cyan-500/30 text-white'
+                            ? 'bg-gelwo-blush dark:bg-gelwo-midnight border-gelwo-gray dark:border-gelwo-royal text-gelwo-midnight/60 dark:text-gelwo-gray'
+                            : 'bg-gelwo-purple/10 border-gelwo-purple/30 text-gelwo-midnight dark:text-gelwo-ivory'
                         }`}
                       >
-                        <div className="flex justify-between font-semibold text-cyan-300 mb-1">
+                        <div className="flex justify-between font-semibold text-gelwo-purple mb-1">
                           <span>{item.title}</span>
-                          <span className="text-[10px] text-slate-400">{item.time}</span>
+                          <span className="text-[10px] text-gelwo-midnight/40 dark:text-gelwo-gray">{item.time}</span>
                         </div>
                         <p>{item.message}</p>
                       </div>
@@ -195,59 +205,38 @@ export const Header: React.FC = () => {
           <button
             onClick={() => setIsCartOpen(true)}
             title="Quotation Basket"
-            className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/40 transition-all relative"
+            className="p-2.5 rounded-xl bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-gray dark:border-gelwo-purple/30 text-gelwo-midnight dark:text-gelwo-gray hover:text-gelwo-purple hover:border-gelwo-purple/40 transition-all relative"
           >
             <FiShoppingBag className="text-lg" />
             {inquiryCart.length > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-cyan-500 text-black text-[10px] font-extrabold flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-gelwo-sage text-gelwo-ivory text-[10px] font-extrabold flex items-center justify-center">
                 {inquiryCart.length}
               </span>
             )}
           </button>
 
-          {/* Settings Trigger */}
-          <button
-            onClick={() => setIsSettingsOpen(true)}
-            title="Settings & Accessibility"
-            className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/40 transition-all hidden md:block"
-          >
-            <FiSettings className="text-lg" />
-          </button>
-
           {/* Client Portal Button */}
           <a
-            href="/customer-portal.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold text-xs hover:shadow-lg hover:shadow-cyan-500/20 transition-all"
+            href="/portal"
+            className="hidden sm:flex items-center space-x-2 px-4 py-2.5 rounded-xl btn-secondary text-xs"
           >
             <FiUser />
             <span>Customer Portal</span>
           </a>
 
-          {/* Admin ERP Portal Button */}
-          <a
-            href="/admin-portal.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden xl:flex items-center space-x-1.5 px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-cyan-300 font-semibold text-xs hover:border-cyan-500/40 transition-all"
-          >
-            <span>Admin ERP</span>
-          </a>
-
-          {/* Instant Quote Action */}
+          {/* Primary CTA — Signature GELWO Gradient */}
           <button
             onClick={() => triggerQuotationModal()}
-            className="hidden md:flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold text-xs hover:scale-105 transition-all shadow-md"
+            className="hidden md:flex items-center space-x-1.5 px-5 py-2.5 rounded-xl btn-primary text-xs"
           >
-            <FiCpu className="text-sm text-cyan-300" />
-            <span>AI Quotation</span>
+            <FiCpu className="text-sm" />
+            <span>[ START A PROJECT ]</span>
           </button>
 
           {/* Mobile Menu Trigger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="xl:hidden p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
+            className="xl:hidden p-2.5 rounded-xl bg-gelwo-blush dark:bg-gelwo-royal border border-gelwo-gray dark:border-gelwo-purple/30 text-gelwo-midnight dark:text-gelwo-gray hover:text-gelwo-purple"
           >
             {mobileMenuOpen ? <FiX className="text-2xl" /> : <FiMenu className="text-2xl" />}
           </button>
@@ -261,14 +250,14 @@ export const Header: React.FC = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="xl:hidden bg-[#0A0F1D] border-b border-cyan-500/20 px-6 py-6 space-y-4"
+            className="xl:hidden bg-gelwo-ivory dark:bg-gelwo-midnight border-b border-gelwo-purple/20 px-6 py-6 space-y-4"
           >
             {navLinks.map((link, idx) => (
               <a
                 key={idx}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-slate-200 hover:text-cyan-400 font-medium py-2 border-b border-slate-800/50"
+                className="block text-gelwo-midnight dark:text-gelwo-gray hover:text-gelwo-purple font-medium py-2 border-b border-gelwo-gray dark:border-gelwo-royal"
               >
                 {link.name}
               </a>
@@ -280,27 +269,16 @@ export const Header: React.FC = () => {
                   setMobileMenuOpen(false);
                   triggerQuotationModal();
                 }}
-                className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-xl text-center shadow-lg"
+                className="w-full py-3 btn-primary text-center rounded-xl"
               >
-                Instant AI Quotation Engine
+                [ START A PROJECT ]
               </button>
               <a
-                href="/customer-portal.html"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/portal"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 bg-slate-800 text-cyan-400 border border-cyan-500/30 font-semibold rounded-xl text-center block"
+                className="w-full py-3 btn-secondary text-center rounded-xl block"
               >
-                👤 Client Portal (Register / Sign In)
-              </a>
-              <a
-                href="/admin-portal.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 bg-slate-900 text-slate-200 border border-slate-700 font-semibold rounded-xl text-center block"
-              >
-                🛠️ Admin ERP Portal
+                👤 Customer Portal
               </a>
             </div>
           </motion.div>

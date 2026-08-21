@@ -1,6 +1,13 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import {
+  UserProfile,
+  getCurrentLocalUser,
+  signInUser,
+  signUpUser,
+  signOutLocalUser,
+} from '@/lib/supabase';
 
 export type Language = 'EN' | 'SW';
 export type Theme = 'dark' | 'light';
@@ -54,6 +61,18 @@ interface AppContextType {
   triggerQuotationModal: (serviceName?: string) => void;
   isQuotationOpen: boolean;
   setIsQuotationOpen: (o: boolean) => void;
+  currentUser: UserProfile | null;
+  setCurrentUser: (u: UserProfile | null) => void;
+  loginUser: (email: string, password?: string) => Promise<{ user: UserProfile | null; error: string | null }>;
+  registerUser: (data: {
+    email: string;
+    password?: string;
+    fullName: string;
+    companyName?: string;
+    phone?: string;
+    role?: 'customer' | 'admin';
+  }) => Promise<{ user: UserProfile | null; error: string | null }>;
+  logoutUser: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -95,10 +114,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isQuotationOpen, setIsQuotationOpen] = useState(false);
   const [activeQuotationCategory, setActiveQuotationCategory] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
 
   const [notifications, setNotifications] = useState<ERPNotification[]>(initialNotifications);
   const [inquiryCart, setInquiryCart] = useState<InquiryItem[]>([
-    { id: 'i1', service: 'ICT & Security', details: 'Enterprise Fiber & CCTV System', estimatedCost: 'KSh 450,000' }
+    { id: 'i1', service: 'ICT & Security', details: 'Enterprise Fiber & CCTV System', estimatedCost: 'KSh 450,000' },
   ]);
 
   const [accessibility, setAccessibility] = useState({
@@ -106,6 +126,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     textScale: false,
     reduceMotion: false,
   });
+
+  useEffect(() => {
+    const user = getCurrentLocalUser();
+    if (user) {
+      setCurrentUser(user);
+    }
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -162,6 +189,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setIsQuotationOpen(true);
   };
 
+  const loginUser = async (email: string, password?: string) => {
+    const res = await signInUser(email, password);
+    if (res.user) {
+      setCurrentUser(res.user);
+    }
+    return res;
+  };
+
+  const registerUser = async (data: {
+    email: string;
+    password?: string;
+    fullName: string;
+    companyName?: string;
+    phone?: string;
+    role?: 'customer' | 'admin';
+  }) => {
+    const res = await signUpUser(data);
+    if (res.user) {
+      setCurrentUser(res.user);
+    }
+    return res;
+  };
+
+  const logoutUser = () => {
+    signOutLocalUser();
+    setCurrentUser(null);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -193,6 +248,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         triggerQuotationModal,
         isQuotationOpen,
         setIsQuotationOpen,
+        currentUser,
+        setCurrentUser,
+        loginUser,
+        registerUser,
+        logoutUser,
       }}
     >
       {children}

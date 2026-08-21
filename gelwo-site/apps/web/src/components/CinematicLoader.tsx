@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 interface CinematicLoaderProps {
   onComplete: () => void;
@@ -9,8 +10,10 @@ interface CinematicLoaderProps {
 
 export const CinematicLoader: React.FC<CinematicLoaderProps> = ({ onComplete }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [stage, setStage] = useState<'particles' | 'assembling' | 'slogan' | 'complete'>('particles');
+  const [stage, setStage] = useState<'loading' | 'environment' | 'ai-presenter' | 'complete'>('loading');
   const [progress, setProgress] = useState(0);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [presenterPersona, setPresenterPersona] = useState<'host' | 'tech' | 'business' | 'product'>('host');
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -29,176 +32,238 @@ export const CinematicLoader: React.FC<CinematicLoaderProps> = ({ onComplete }) 
     };
     window.addEventListener('resize', handleResize);
 
-    // Particle / Cube physics
-    const numCubes = 60;
+    const numCubes = 70;
     const cubes = Array.from({ length: numCubes }).map(() => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      targetX: width / 2 + (Math.random() - 0.5) * 160,
-      targetY: height / 2 - 20 + (Math.random() - 0.5) * 160,
-      size: Math.random() * 8 + 4,
-      speedX: (Math.random() - 0.5) * 4,
-      speedY: (Math.random() - 0.5) * 4,
-      color: Math.random() > 0.3 ? '#00F0FF' : '#0F4C81',
-      spark: Math.random() > 0.5,
+      targetX: width / 2 + (Math.random() - 0.5) * 200,
+      targetY: height / 2 - 20 + (Math.random() - 0.5) * 200,
+      size: Math.random() * 8 + 3,
+      speedX: (Math.random() - 0.5) * 3,
+      speedY: (Math.random() - 0.5) * 3,
+      color: Math.random() > 0.4 ? '#4A346A' : '#566944',
       alpha: Math.random() * 0.8 + 0.2,
     }));
 
-    let startTime = Date.now();
+    const startTime = Date.now();
 
     const render = () => {
       const elapsed = Date.now() - startTime;
-      const pct = Math.min(100, Math.floor((elapsed / 3200) * 100));
+      const pct = Math.min(100, Math.floor((elapsed / 2500) * 100));
       setProgress(pct);
 
-      ctx.fillStyle = 'rgba(10, 15, 29, 0.35)';
+      ctx.fillStyle = 'rgba(19, 19, 34, 0.4)';
       ctx.fillRect(0, 0, width, height);
 
-      // Draw particle cubes flying together
       cubes.forEach((cube) => {
-        if (elapsed > 1000) {
-          // Assembling motion towards center logo
-          cube.x += (cube.targetX - cube.x) * 0.08;
-          cube.y += (cube.targetY - cube.y) * 0.08;
+        if (stage === 'environment' || stage === 'ai-presenter') {
+          cube.x += (cube.targetX - cube.x) * 0.05;
+          cube.y += (cube.targetY - cube.y) * 0.05;
         } else {
-          // Floating free sparks
           cube.x += cube.speedX;
           cube.y += cube.speedY;
-
           if (cube.x < 0 || cube.x > width) cube.speedX *= -1;
           if (cube.y < 0 || cube.y > height) cube.speedY *= -1;
         }
 
         ctx.save();
-        ctx.shadowBlur = cube.spark ? 15 : 5;
+        ctx.shadowBlur = 10;
         ctx.shadowColor = cube.color;
         ctx.fillStyle = cube.color;
         ctx.globalAlpha = cube.alpha;
-
-        // Draw rotated mini-cubes
         ctx.translate(cube.x, cube.y);
-        ctx.rotate((elapsed * 0.002) % (Math.PI * 2));
+        ctx.rotate((elapsed * 0.0015) % (Math.PI * 2));
         ctx.fillRect(-cube.size / 2, -cube.size / 2, cube.size, cube.size);
         ctx.restore();
       });
 
-      // Connecting spark lines
-      if (elapsed > 800 && elapsed < 2500) {
-        ctx.strokeStyle = 'rgba(0, 240, 255, 0.25)';
-        ctx.lineWidth = 1;
-        for (let i = 0; i < cubes.length; i += 4) {
-          ctx.beginPath();
-          ctx.moveTo(cubes[i].x, cubes[i].y);
-          const next = cubes[(i + 3) % cubes.length];
-          ctx.lineTo(next.x, next.y);
-          ctx.stroke();
-        }
-      }
-
-      if (elapsed < 3500) {
+      if (stage !== 'complete') {
         animationFrameId = requestAnimationFrame(render);
       }
     };
 
     render();
 
-    // Stage timelines
-    const t1 = setTimeout(() => setStage('assembling'), 1000);
-    const t2 = setTimeout(() => setStage('slogan'), 2200);
-    const t3 = setTimeout(() => {
-      setStage('complete');
-      onComplete();
-    }, 3800);
+    const t1 = setTimeout(() => setStage('environment'), 1200);
+    const t2 = setTimeout(() => setStage('ai-presenter'), 2600);
 
     return () => {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
       clearTimeout(t1);
       clearTimeout(t2);
-      clearTimeout(t3);
     };
-  }, [onComplete]);
+  }, [stage]);
+
+  const handleFinish = () => {
+    setStage('complete');
+    onComplete();
+  };
 
   return (
     <AnimatePresence>
       {stage !== 'complete' && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.05 }}
+          exit={{ opacity: 0, scale: 1.03 }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0A0F1D] overflow-hidden select-none"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden select-none px-4"
+          style={{ background: 'linear-gradient(135deg, #131322 0%, #261E3D 55%, #4A346A 100%)' }}
         >
-          {/* Background Canvas for Electric Sparks & Flying Cubes */}
+          {/* Background Canvas Particles */}
           <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none" />
 
-          {/* Central Logo Assembly Container */}
-          <div className="relative z-10 flex flex-col items-center justify-center p-6 text-center">
-            {/* Animated Logo Shield & Glow Beam */}
-            <motion.div
-              initial={{ scale: 0.4, opacity: 0 }}
-              animate={{ scale: stage !== 'particles' ? 1 : 0.6, opacity: 1 }}
-              transition={{ duration: 1, ease: 'easeOut' }}
-              className="relative mb-6"
+          {/* Quick Skip Control Top Right */}
+          <div className="absolute top-6 right-6 z-20 flex items-center space-x-3">
+            <button
+              onClick={() => setSoundEnabled(!soundEnabled)}
+              className="px-3 py-1.5 rounded-xl bg-gelwo-royal/80 border border-gelwo-purple/40 text-xs text-gelwo-gray hover:text-gelwo-ivory flex items-center space-x-1 backdrop-blur-md transition-colors"
             >
-              {/* Outer Beam Flare */}
-              <motion.div
-                animate={{
-                  boxShadow: [
-                    '0 0 20px rgba(0,240,255,0.2)',
-                    '0 0 70px rgba(0,240,255,0.8)',
-                    '0 0 30px rgba(124,58,237,0.4)',
-                  ],
-                }}
-                transition={{ repeat: Infinity, duration: 2 }}
-                className="w-28 h-28 md:w-36 md:h-36 rounded-3xl bg-gradient-to-br from-[#0F4C81] via-[#00F0FF] to-[#7C3AED] p-[2px] flex items-center justify-center shadow-2xl"
-              >
-                <div className="w-full h-full bg-[#0A0F1D] rounded-[22px] flex flex-col items-center justify-center relative overflow-hidden backdrop-blur-md">
-                  {/* Light beam pass-through */}
-                  <motion.div
-                    initial={{ x: '-100%' }}
-                    animate={{ x: stage === 'slogan' ? '200%' : '-100%' }}
-                    transition={{ duration: 1.2, ease: 'easeInOut' }}
-                    className="absolute inset-y-0 w-12 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12"
-                  />
-                  
-                  <span className="font-extrabold text-4xl md:text-5xl tracking-tighter text-white font-heading">
-                    G<span className="text-[#00F0FF]">E</span>LWO
-                  </span>
-                  <span className="text-[9px] md:text-[10px] tracking-[0.3em] text-cyan-300 font-semibold uppercase mt-1">
-                    Technologies
-                  </span>
-                </div>
-              </motion.div>
-            </motion.div>
+              <span>{soundEnabled ? '🔊 Sound On' : '🔇 Muted'}</span>
+            </button>
+            <button
+              onClick={handleFinish}
+              className="px-4 py-1.5 rounded-xl bg-gelwo-purple/30 border border-gelwo-purple/60 text-xs font-semibold text-gelwo-blush hover:bg-gelwo-purple/50 flex items-center space-x-1.5 backdrop-blur-md transition-colors"
+            >
+              <span>⏭ Skip Intro</span>
+            </button>
+          </div>
 
-            {/* Title & Slogan Animation */}
+          {/* STAGE 1 — Minimal Symbol Loading */}
+          {stage === 'loading' && (
             <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: stage === 'slogan' ? 0 : 10, opacity: stage === 'slogan' ? 1 : 0 }}
-              transition={{ duration: 0.8 }}
-              className="space-y-2"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              className="relative z-10 flex flex-col items-center justify-center text-center"
             >
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white font-heading">
-                GELWO TECHNOLOGIES
+              <div className="w-24 h-24 rounded-3xl overflow-hidden shadow-gelwo-purple mb-6 border-2 border-gelwo-purple/40">
+                <Image
+                  src="/logo.png"
+                  alt="GELWO"
+                  width={96}
+                  height={96}
+                  className="w-full h-full object-contain"
+                  priority
+                />
+              </div>
+              <h2 className="text-2xl font-extrabold tracking-tight text-gelwo-ivory font-heading">GELWO</h2>
+              <div className="mt-6 w-56 h-1.5 bg-gelwo-royal rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-300"
+                  style={{
+                    width: `${progress}%`,
+                    background: 'linear-gradient(90deg, #4A346A, #566944)',
+                  }}
+                />
+              </div>
+              <span className="text-xs text-gelwo-gray font-mono mt-2">Initializing GELWO Digital Environment... {progress}%</span>
+            </motion.div>
+          )}
+
+          {/* STAGE 2 — Environment Reveal */}
+          {stage === 'environment' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="relative z-10 flex flex-col items-center justify-center text-center"
+            >
+              <div className="px-6 py-2 rounded-full bg-gelwo-purple/20 border border-gelwo-purple/40 text-gelwo-blush text-xs font-mono mb-4 uppercase tracking-widest">
+                STAGE 2 • DIGITAL ENVIRONMENT INITIALIZATION
+              </div>
+              <h1 className="text-3xl md:text-5xl font-extrabold text-gelwo-ivory font-heading max-w-2xl leading-tight">
+                Entering <span className="text-gradient-light">GELWO Digital Realm</span>
               </h1>
-              <p className="text-cyan-400 font-medium text-sm md:text-base tracking-wider italic">
-                “Building Tomorrow’s Solutions Today”
+              <p className="text-gelwo-gray mt-3 text-sm max-w-md">
+                Constructing cinematic architecture, product catalogs & AI layer...
               </p>
             </motion.div>
+          )}
 
-            {/* Progress Bar & Counter */}
-            <div className="mt-8 w-64 md:w-80 h-1.5 bg-slate-800 rounded-full overflow-hidden relative shadow-inner">
-              <motion.div
-                className="h-full bg-gradient-to-r from-[#0F4C81] via-[#00F0FF] to-[#7C3AED]"
-                style={{ width: `${progress}%` }}
-                transition={{ ease: 'linear' }}
-              />
-            </div>
+          {/* STAGE 3 — AI Presenter System */}
+          {stage === 'ai-presenter' && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              className="relative z-10 flex flex-col items-center justify-center text-center max-w-2xl w-full"
+            >
+              {/* Presenter Card Box */}
+              <div className="w-full border border-gelwo-purple/40 rounded-3xl p-6 sm:p-8 shadow-gelwo-purple relative overflow-hidden backdrop-blur-xl"
+                style={{ background: 'rgba(38, 30, 61, 0.65)' }}
+              >
+                {/* AI Presenter Visual Avatar */}
+                <div className="relative mb-6 inline-block">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden p-1 mx-auto shadow-gelwo-purple border-2 border-gelwo-purple/50"
+                    style={{ background: 'linear-gradient(135deg, #4A346A, #566944)' }}
+                  >
+                    <div className="w-full h-full bg-gelwo-midnight rounded-full flex items-center justify-center relative overflow-hidden">
+                      <Image
+                        src="/logo.png"
+                        alt="GELWO AI"
+                        width={64}
+                        height={64}
+                        className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
+                      />
+                      <span className="absolute bottom-1 right-1 w-3.5 h-3.5 bg-gelwo-sage rounded-full border-2 border-gelwo-midnight animate-pulse" />
+                    </div>
+                  </div>
+                  <span className="inline-block mt-2 text-[11px] font-mono font-bold uppercase tracking-wider text-gelwo-blush bg-gelwo-purple/30 px-3 py-0.5 rounded-full border border-gelwo-purple/50">
+                    AI Host Presenter
+                  </span>
+                </div>
 
-            <p className="text-slate-400 text-xs mt-3 tracking-widest uppercase font-mono">
-              Initializing Core Systems... {progress}%
-            </p>
-          </div>
+                {/* Direct Dialogue Text */}
+                <h3 className="text-xl sm:text-2xl font-bold text-gelwo-ivory font-heading mb-3">
+                  "Welcome to GELWO."
+                </h3>
+                <p className="text-gelwo-gray text-sm sm:text-base leading-relaxed max-w-lg mx-auto font-sans">
+                  We create technology, digital experiences, and business solutions designed around the way people actually work. Explore what we're building.
+                </p>
+
+                {/* Persona Switcher Chips */}
+                <div className="mt-6 flex flex-wrap justify-center gap-2 text-xs">
+                  {(['host', 'tech', 'business', 'product'] as const).map((p) => (
+                    <button
+                      key={p}
+                      onClick={() => setPresenterPersona(p)}
+                      className={`px-3 py-1 rounded-full font-semibold transition-all ${
+                        presenterPersona === p
+                          ? 'bg-gelwo-purple text-gelwo-ivory'
+                          : 'bg-gelwo-midnight text-gelwo-gray border border-gelwo-royal hover:border-gelwo-purple'
+                      }`}
+                    >
+                      {p === 'host' ? 'AI Host' : p === 'tech' ? 'Tech Specialist' : p === 'business' ? 'Business Consultant' : 'Product Specialist'}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Presenter Control Bar */}
+                <div className="mt-8 pt-6 border-t border-gelwo-purple/30 flex flex-wrap items-center justify-center gap-3 text-xs sm:text-sm font-semibold">
+                  <button
+                    onClick={handleFinish}
+                    className="px-5 py-2.5 rounded-xl text-gelwo-ivory font-bold hover:scale-105 transition-transform flex items-center space-x-1.5 shadow-gelwo-purple"
+                    style={{ background: 'linear-gradient(135deg, #4A346A, #566944)' }}
+                  >
+                    <span>EXPLORE GELWO →</span>
+                  </button>
+                  <button
+                    onClick={() => setSoundEnabled(!soundEnabled)}
+                    className="px-4 py-2.5 rounded-xl bg-gelwo-midnight border border-gelwo-royal text-gelwo-gray hover:text-gelwo-ivory flex items-center space-x-1.5 transition-colors"
+                  >
+                    <span>{soundEnabled ? '🔊 Sound' : '🔇 Mute'}</span>
+                  </button>
+                  <button
+                    onClick={handleFinish}
+                    className="px-4 py-2.5 rounded-xl bg-gelwo-midnight border border-gelwo-royal text-gelwo-gray hover:text-gelwo-ivory flex items-center space-x-1.5 transition-colors"
+                  >
+                    <span>⏭ Skip Intro</span>
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>

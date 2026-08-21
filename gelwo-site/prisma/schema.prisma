@@ -40,30 +40,89 @@ model Lead {
 model ServiceCategory {
   id       String    @id @default(cuid())
   name     String    @unique
+  slug     String    @unique
   services Service[]
 }
 
+// Section 10: Full Service model matching the blueprint database spec
 model Service {
-  id            String           @id @default(cuid())
-  name          String           @unique
-  categoryId    String
-  category      ServiceCategory  @relation(fields: [categoryId], references: [id])
-  description   String?
-  pricingRules  PricingRule[]
-  formulas      PricingFormula[]
-  questionnaire Questionnaire?
-  quotations    Quotation[]
+  id               String          @id @default(cuid())
+  slug             String          @unique
+  name             String          @unique
+  shortDescription String?
+  longDescription  String?
+  categoryId       String
+  category         ServiceCategory @relation(fields: [categoryId], references: [id])
+  icon             String?         // icon name or URL
+  heroImage        String?         // hero image URL
+  gallery          ServiceGallery[]
+  video            String?         // video URL
+  features         Json?           // array of feature strings
+  benefits         Json?           // array of benefit strings
+  process          Json?           // array of process step objects
+  pricingType      String?         // e.g. "fixed", "custom", "contact"
+  active           Boolean         @default(true)
+  featured         Boolean         @default(false)
+  seoTitle         String?
+  seoDescription   String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  pricingRules     PricingRule[]
+  formulas         PricingFormula[]
+  questionnaire    Questionnaire?
+  quotations       Quotation[]
 }
 
-model Product {
-  id            String                 @id @default(cuid())
-  name          String                 @unique
-  sku           String?
-  price         Float
-  stockQuantity Int                    @default(0)
-  quotations    QuotationItem[]
-  reservations  InventoryReservation[]
+model ServiceGallery {
+  id        String   @id @default(cuid())
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id])
+  url       String
+  altText   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
 }
+
+// Section 14: Full Product model matching the blueprint database spec
+model Product {
+  id               String                 @id @default(cuid())
+  sku              String?                @unique
+  name             String                 @unique
+  slug             String                 @unique
+  category         String?
+  shortDescription String?
+  description      String?
+  price            Float
+  currency         String                 @default("KES")
+  pricingType      String?                // e.g. "fixed", "quote", "contact"
+  mainImage        String?
+  gallery          ProductGallery[]
+  videos           Json?                  // array of video URLs
+  features         Json?                  // array of feature strings
+  specifications   Json?                  // key-value pairs
+  availability     String?                @default("available")
+  stock            Int                    @default(0)
+  featured         Boolean                @default(false)
+  active           Boolean                @default(true)
+  seoTitle         String?
+  seoDescription   String?
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  quotations       QuotationItem[]
+  reservations     InventoryReservation[]
+}
+
+model ProductGallery {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  url       String
+  altText   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+
 
 model PricingRule {
   id        String  @id @default(cuid())
