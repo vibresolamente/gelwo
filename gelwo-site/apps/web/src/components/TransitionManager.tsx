@@ -60,69 +60,23 @@ function PageTransitionOverlay({ active }: PageTransitionOverlayProps) {
   );
 }
 
-// ─── Main TransitionManager ───────────────────────────────────────────────────
-interface TransitionManagerProps {
-  children: React.ReactNode;
-}
-
 export function TransitionManager({ children }: TransitionManagerProps) {
   const pathname = usePathname();
   const prefersReducedMotion = useReducedMotion();
-  const prevPathname = useRef<string>(pathname);
-  const isFirstRender = useRef(true);
-  const [overlayActive, setOverlayActive] = React.useState(false);
-
-  // Detect page change and trigger the overlay
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      prevPathname.current = pathname;
-      return;
-    }
-
-    if (prevPathname.current !== pathname) {
-      prevPathname.current = pathname;
-      if (!prefersReducedMotion) {
-        setOverlayActive(true);
-        const timer = setTimeout(() => setOverlayActive(false), 800);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, [pathname, prefersReducedMotion]);
-
-  // Pick the right animation variant for this route
-  const transitionType = getTransitionForRoute(pathname);
-  const config = prefersReducedMotion
-    ? {
-        variants: {
-          initial: { opacity: 0 },
-          enter: { opacity: 1 },
-          exit: { opacity: 0 },
-        },
-        transition: { duration: 0.15 },
-      }
-    : transitionMap[transitionType];
 
   return (
-    <>
-      {/* Cinematic wipe overlay */}
-      {!prefersReducedMotion && <PageTransitionOverlay active={overlayActive} />}
-
-      {/* Page content wrapper with enter/exit animations */}
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={pathname}
-          initial="initial"
-          animate="enter"
-          exit="exit"
-          variants={config.variants}
-          transition={config.transition}
-          style={{ minHeight: '100vh' }}
-        >
-          {children}
-        </motion.div>
-      </AnimatePresence>
-    </>
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={pathname}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: prefersReducedMotion ? 0.05 : 0.18, ease: 'easeOut' }}
+        style={{ minHeight: '100vh' }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
   );
 }
 

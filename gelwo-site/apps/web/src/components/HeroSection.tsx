@@ -19,7 +19,6 @@ import {
 
 export const HeroSection: React.FC = () => {
   const { triggerQuotationModal, language } = useApp();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const servicesList = [
     'Software Development & Systems',
@@ -40,90 +39,12 @@ export const HeroSection: React.FC = () => {
     return () => clearInterval(timer);
   }, [servicesList.length]);
 
-  // Background Particle Mesh Simulation — Purple & Sage Green Node Colors
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animId: number;
-    let w = (canvas.width = window.innerWidth);
-    let h = (canvas.height = window.innerHeight);
-
-    const onResize = () => {
-      if (!canvas) return;
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-    };
-    window.addEventListener('resize', onResize);
-
-    const nodes = Array.from({ length: 40 }).map(() => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.6,
-      vy: (Math.random() - 0.5) * 0.6,
-      radius: Math.random() * 2.5 + 1.5,
-      color: Math.random() > 0.45 ? '#4A346A' : '#566944',
-    }));
-
-    const render = () => {
-      ctx.clearRect(0, 0, w, h);
-
-      // Radial background subtle ambient glow
-      const bgGrad = ctx.createRadialGradient(w * 0.6, h * 0.3, 50, w / 2, h / 2, w);
-      bgGrad.addColorStop(0, 'rgba(74, 52, 106, 0.05)');
-      bgGrad.addColorStop(0.5, 'rgba(237, 230, 229, 0.2)');
-      bgGrad.addColorStop(1, 'rgba(252, 249, 245, 0)');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, w, h);
-
-      // Nodes & connecting lines
-      nodes.forEach((node, i) => {
-        node.x += node.vx;
-        node.y += node.vy;
-
-        if (node.x < 0 || node.x > w) node.vx *= -1;
-        if (node.y < 0 || node.y > h) node.vy *= -1;
-
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = node.color;
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = node.color;
-        ctx.fill();
-
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[j].x - node.x;
-          const dy = nodes[j].y - node.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 140) {
-            ctx.beginPath();
-            ctx.moveTo(node.x, node.y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(74, 52, 106, ${0.12 * (1 - dist / 140)})`;
-            ctx.lineWidth = 0.8;
-            ctx.stroke();
-          }
-        }
-      });
-
-      animId = requestAnimationFrame(render);
-    };
-
-    render();
-
-    return () => {
-      window.removeEventListener('resize', onResize);
-      cancelAnimationFrame(animId);
-    };
-  }, []);
-
   return (
     <section id="hero" className="relative min-h-screen flex items-center pt-28 pb-16 overflow-hidden bg-hero-atmosphere">
-      {/* Canvas particle mesh */}
-      <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none" />
+      {/* Lightweight Hardware-Accelerated Ambient Light Glows (Zero CPU Overhead) */}
+      <div className="absolute top-1/4 -left-20 w-[450px] h-[450px] rounded-full bg-gelwo-purple/10 blur-3xl pointer-events-none transform-gpu" />
+      <div className="absolute bottom-10 right-0 w-[500px] h-[500px] rounded-full bg-gelwo-sage/10 blur-3xl pointer-events-none transform-gpu" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-gelwo-blush/20 dark:bg-gelwo-royal/30 blur-3xl pointer-events-none transform-gpu" />
 
       {/* Hero Content Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
