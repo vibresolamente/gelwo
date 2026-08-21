@@ -1,16 +1,19 @@
 /**
  * GET /api/products
  * GET /api/products?featured=true
- *
- * Blueprint Section 42 & 14: Dynamic product catalog API.
  * Returns all active products. Falls back to seed data when DB unavailable.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 
-// ─── Static seed data matching blueprint Section 14 fields ───────────────────
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://swdpcefbvfxgrmwcoefl.supabase.co',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+);
+
 export const PRODUCTS_SEED = [
   {
     id: '1',
@@ -164,21 +167,26 @@ export async function GET(req: NextRequest) {
   const featuredOnly = searchParams.get('featured') === 'true';
 
   try {
-    const { prisma } = await import('@/lib/prisma');
-    const db = prisma as any;
-    const products = await db.product.findMany({
-      where: {
-        active: true,
-        ...(featuredOnly ? { featured: true } : {}),
-      },
-      include: { gallery: { orderBy: { order: 'asc' } } },
-      orderBy: [{ featured: 'desc' }, { createdAt: 'desc' }],
-    });
-    return NextResponse.json({ products });
-  } catch {
-    const data = featuredOnly
-      ? PRODUCTS_SEED.filter((p) => p.featured)
-      : PRODUCTS_SEED;
+    let query = supabase
+      .from('products')
+      .select('*')
+      .eq('active', true)
+      .order('created_at', { ascending: false });
+
+    if (featuredOnly) {
+      query = query.eq('featured', true);
+    }
+
+    const { data, error } = await query;
+
+    if (error || !data || data.length === 0) {
+      const fallback = featuredOnly ? PRODUCTS_SEED.filter((p) => p.featured) : PRODUCTS_SEED;
+      return NextResponse.json({ products: fallback });
+    }
+
     return NextResponse.json({ products: data });
+  } catch {
+    const fallback = featuredOnly ? PRODUCTS_SEED.filter((p) => p.featured) : PRODUCTS_SEED;
+    return NextResponse.json({ products: fallback });
   }
 }

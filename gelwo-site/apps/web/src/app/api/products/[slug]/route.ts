@@ -1,11 +1,16 @@
 /**
  * GET /api/products/[slug]
- *
- * Blueprint Section 42: single product detail endpoint.
+ * Returns a single product by slug.
  */
 
 import { NextResponse } from 'next/server';
 import { PRODUCTS_SEED } from '../route';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://swdpcefbvfxgrmwcoefl.supabase.co',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+);
 
 export async function GET(
   _req: Request,
@@ -14,20 +19,19 @@ export async function GET(
   const { slug } = params;
 
   try {
-    const { prisma } = await import('@/lib/prisma');
-    const db = prisma as any;
-    const product = await db.product.findUnique({
-      where: { slug },
-      include: { gallery: { orderBy: { order: 'asc' } } },
-    });
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('slug', slug)
+      .single();
 
-    if (!product) {
+    if (error || !data) {
       const seed = PRODUCTS_SEED.find((p) => p.slug === slug);
       if (!seed) return NextResponse.json({ error: 'Product not found' }, { status: 404 });
       return NextResponse.json({ product: seed });
     }
 
-    return NextResponse.json({ product });
+    return NextResponse.json({ product: data });
   } catch {
     const seed = PRODUCTS_SEED.find((p) => p.slug === slug);
     if (!seed) return NextResponse.json({ error: 'Product not found' }, { status: 404 });

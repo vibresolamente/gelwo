@@ -1,13 +1,18 @@
 /**
  * GET /api/projects
- *
- * Blueprint Section 17-20 & 42: Portfolio and case studies API.
  * Returns past projects across GELWO's divisions.
+ * Data served from Supabase when available, falls back to seed data.
  */
 
 import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://swdpcefbvfxgrmwcoefl.supabase.co',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+);
 
 export const PROJECTS_SEED = [
   {
@@ -108,12 +113,15 @@ export const PROJECTS_SEED = [
 
 export async function GET() {
   try {
-    const { prisma } = await import('@/lib/prisma');
-    const db = prisma as any;
-    const projects = await db.project.findMany({
-      orderBy: { featured: 'desc' },
-    });
-    return NextResponse.json({ projects });
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      return NextResponse.json({ projects: PROJECTS_SEED });
+    }
+    return NextResponse.json({ projects: data });
   } catch {
     return NextResponse.json({ projects: PROJECTS_SEED });
   }

@@ -1,12 +1,16 @@
 /**
  * GET /api/services/[slug]
- *
- * Blueprint Section 42: API Architecture
- * Returns a single service by slug, including full detail fields.
+ * Returns a single service by slug.
  */
 
 import { NextResponse } from 'next/server';
 import { SERVICES_SEED } from '../route';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://swdpcefbvfxgrmwcoefl.supabase.co',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+);
 
 export async function GET(
   _req: Request,
@@ -15,26 +19,20 @@ export async function GET(
   const { slug } = params;
 
   try {
-    const { prisma } = await import('@/lib/prisma');
-    const db = prisma as any;
-    const service = await db.service.findUnique({
-      where: { slug },
-      include: {
-        gallery: { orderBy: { order: 'asc' } },
-        category: true,
-      },
-    });
+    const { data, error } = await supabase
+      .from('services')
+      .select('*')
+      .eq('slug', slug)
+      .single();
 
-    if (!service) {
-      // Try seed fallback
+    if (error || !data) {
       const seed = SERVICES_SEED.find((s) => s.slug === slug);
       if (!seed) return NextResponse.json({ error: 'Service not found' }, { status: 404 });
       return NextResponse.json({ service: seed });
     }
 
-    return NextResponse.json({ service });
+    return NextResponse.json({ service: data });
   } catch {
-    // DB unavailable — use seed data
     const seed = SERVICES_SEED.find((s) => s.slug === slug);
     if (!seed) return NextResponse.json({ error: 'Service not found' }, { status: 404 });
     return NextResponse.json({ service: seed });

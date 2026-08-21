@@ -1,11 +1,16 @@
 /**
  * GET /api/projects/[slug]
- *
- * Blueprint Section 18-20: Project detail endpoint.
+ * Returns a single project by slug.
  */
 
 import { NextResponse } from 'next/server';
 import { PROJECTS_SEED } from '../route';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://swdpcefbvfxgrmwcoefl.supabase.co',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+);
 
 export async function GET(
   _req: Request,
@@ -14,19 +19,19 @@ export async function GET(
   const { slug } = params;
 
   try {
-    const { prisma } = await import('@/lib/prisma');
-    const db = prisma as any;
-    const project = await db.project.findUnique({
-      where: { slug },
-    });
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('slug', slug)
+      .single();
 
-    if (!project) {
+    if (error || !data) {
       const seed = PROJECTS_SEED.find((p) => p.slug === slug);
       if (!seed) return NextResponse.json({ error: 'Project not found' }, { status: 404 });
       return NextResponse.json({ project: seed });
     }
 
-    return NextResponse.json({ project });
+    return NextResponse.json({ project: data });
   } catch {
     const seed = PROJECTS_SEED.find((p) => p.slug === slug);
     if (!seed) return NextResponse.json({ error: 'Project not found' }, { status: 404 });
