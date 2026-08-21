@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
-import { CinematicLoader } from '@/components/CinematicLoader';
+import React from 'react';
 import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
 import { LiveStatistics } from '@/components/LiveStatistics';
@@ -17,16 +16,8 @@ import { AIAssistantWidget } from '@/components/AIAssistantWidget';
 import { GlobalModals } from '@/components/GlobalModals';
 
 export default function Home() {
-  const [loaderComplete, setLoaderComplete] = useState(false);
-
   return (
     <main className="min-h-screen bg-gelwo-ivory text-gelwo-midnight relative selection:bg-gelwo-purple selection:text-gelwo-ivory dark:bg-gelwo-midnight dark:text-gelwo-ivory">
-      {/* Cinematic Loader Intro Sequence */}
-      {!loaderComplete && (
-        <CinematicLoader onComplete={() => setLoaderComplete(true)} />
-      )}
-
-      {/* Main Website Structure */}
       <Header />
       <HeroSection />
       <LiveStatistics />
