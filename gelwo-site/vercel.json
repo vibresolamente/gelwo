@@ -1,0 +1,5 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build --workspace=@gelwo/web",
+  "outputDirectory": "apps/web/.next"
+}
