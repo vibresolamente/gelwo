@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@gelwo/shared-types": "*",
     "@headlessui/react": "^1.7.17",
     "@prisma/client": "^5.13.0",
     "@react-three/drei": "^9.100.0",
