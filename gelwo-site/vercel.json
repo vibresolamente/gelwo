@@ -1,5 +1,7 @@
 {
+  "version": 2,
   "framework": "nextjs",
-  "buildCommand": "npm run build --workspace=@gelwo/web",
-  "outputDirectory": "apps/web/.next"
+  "buildCommand": "npm install --prefix apps/web && npm run build --prefix apps/web",
+  "outputDirectory": "apps/web/.next",
+  "devCommand": "npm run dev --prefix apps/web"
 }
