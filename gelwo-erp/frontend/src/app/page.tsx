@@ -160,6 +160,8 @@ export default function AdminDashboard() {
 
         {/* Dashboard Body */}
         <main className="p-6 space-y-6 max-w-7xl mx-auto w-full">
+          {activeTab === 'Dashboard' ? (
+            <>
           {/* Welcome Header */}
           <div>
             <h2 className="text-xl sm:text-2xl font-bold font-heading text-white">Dashboard</h2>
@@ -428,6 +430,16 @@ export default function AdminDashboard() {
               </div>
             </div>
           </div>
+            </>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-[60vh] border border-dashed border-slate-800 rounded-2xl bg-[#0A0F1D]">
+              <span className="text-4xl mb-4">🚧</span>
+              <h2 className="text-xl font-bold font-heading text-white mb-2">{activeTab} Module</h2>
+              <p className="text-slate-400 text-sm text-center max-w-md">
+                This module is currently being implemented as per the GELWO Business OS specification in Phase 2.
+              </p>
+            </div>
+          )}
         </main>
       </div>
     </div>
