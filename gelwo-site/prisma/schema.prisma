@@ -322,6 +322,8 @@ model User {
   updatedAt    DateTime @updatedAt
 
   customer       Customer?
+  staffProfile   StaffProfile?
+  approvedLeaves LeaveRequest[] @relation("LeaveApprover")
   roles          UserRole[]
   sessions       Session[]
   auditLogs      AuditLog[]
@@ -373,3 +375,63 @@ model Session {
   expiresAt    DateTime
   createdAt    DateTime @default(now())
 }
+
+// ---------------------------------------------------
+// HR and Payroll Models
+// ---------------------------------------------------
+
+model StaffProfile {
+  id              String         @id @default(cuid())
+  userId          String         @unique
+  user            User           @relation(fields: [userId], references: [id])
+  department      String?
+  position        String?
+  startDate       DateTime?
+  contractType    String?
+  salary          Float?
+  nssfNumber      String?
+  shaNumber       String?
+  kraPin          String?
+  emergencyContact String?
+  leaveBalance    Int            @default(21)
+  leaveRequests   LeaveRequest[]
+  payrollRecords  PayrollRecord[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model LeaveRequest {
+  id             String       @id @default(cuid())
+  staffId        String
+  staff          StaffProfile @relation(fields: [staffId], references: [id])
+  leaveType      String       // Annual, Sick, Family, Study, Other
+  startDate      DateTime
+  endDate        DateTime
+  daysRequested  Int
+  reason         String?
+  status         String       @default("pending") // pending, approved, rejected
+  approvedById   String?
+  approvedBy     User?        @relation("LeaveApprover", fields: [approvedById], references: [id])
+  createdAt      DateTime     @default(now())
+}
+
+model PayrollRecord {
+  id             String       @id @default(cuid())
+  staffId        String
+  staff          StaffProfile @relation(fields: [staffId], references: [id])
+  periodMonth    Int
+  periodYear     Int
+  basicSalary    Float
+  allowances     Float        @default(0)
+  overtime       Float        @default(0)
+  bonuses        Float        @default(0)
+  grossPay       Float
+  paye           Float        @default(0)
+  shaDeduction   Float        @default(0)
+  nssfDeduction  Float        @default(0)
+  otherDeductions Float       @default(0)
+  netPay         Float
+  status         String       @default("draft") // draft, approved, paid
+  createdAt      DateTime     @default(now())
+}
+
