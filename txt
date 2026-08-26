@@ -1,0 +1,2013 @@
+🌍 GELWO DIGITAL ECOSYSTEM
+                         GELWO WEBSITE
+                              │
+             ┌────────────────┴────────────────┐
+             │                                 │
+       CUSTOMER PORTAL                    ADMIN BACKEND
+             │                                 │
+     ┌───────┼────────┐             ┌──────────┼──────────┐
+     │       │        │             │          │          │
+   SHOP   SERVICES  PROJECTS      ORDERS    SERVICES   FINANCE
+     │       │        │             │          │          │
+     └───────┼────────┘             └──────────┼──────────┘
+             │                                 │
+             └──────────────┬──────────────────┘
+                            │
+                     CORE GELWO API
+                            │
+        ┌───────────────────┼───────────────────┐
+        │                   │                   │
+     DATABASE            PAYMENTS          NOTIFICATIONS
+        │                   │                   │
+     STORAGE             M-PESA          SMS / EMAIL /
+     ANALYTICS           / OTHER          WHATSAPP*
+
+The key idea is:
+
+A customer shouldn't need to understand GELWO's internal departments. They simply tell GELWO what they need, and the system guides the entire process from discovery to delivery.
+
+1. 🛍️ CUSTOMER PORTAL
+
+I'd make the customer portal feel more like a premium digital marketplace than a traditional company dashboard.
+
+Main navigation
+GELWO
+────────────────────────────────────────────
+
+🏠 Home
+
+🛍️ Shop
+   ├── All Products
+   ├── ICT Equipment
+   ├── Office Stationery
+   ├── Electrical
+   ├── Solar
+   ├── Branding Materials
+   ├── General Supplies
+   └── Other Products
+
+🧰 Services
+   ├── Software Development
+   ├── ICT Solutions
+   ├── Biometrics
+   ├── Solar
+   ├── Branding
+   ├── Consultancy
+   ├── Training
+   └── All Services
+
+📦 My Orders
+
+📋 My Quotations
+
+🧾 My Invoices
+
+🚚 Track Delivery
+
+🏗️ My Projects
+
+💬 Messages
+
+❤️ Wishlist
+
+🔔 Notifications
+
+👤 My Account
+
+🆘 Help & Support
+2. 🏠 CUSTOMER DASHBOARD
+
+After logging in, the customer shouldn't just see a boring dashboard.
+
+The first screen should immediately answer:
+
+"What's happening with my GELWO activities?"
+
+Example:
+
+Good morning, Griffin 👋
+
+What would you like to do today?
+
+┌─────────────────────────────────────────────┐
+│ 🔍 Search products, services or projects... │
+└─────────────────────────────────────────────┘
+
+ QUICK ACTIONS
+
+ [🛍️ Shop] [🧰 Request Service]
+ [📋 Get Quotation] [🚚 Track Order]
+
+──────────────────────────────────────────────
+
+YOUR ACTIVITY
+
+🛒 2     📋 3       🧾 1       🏗️ 2
+Orders   Quotes     Invoices   Projects
+
+──────────────────────────────────────────────
+
+ACTIVE PROJECT
+Website & Digital Platform
+
+██████████████████░░░░ 82%
+
+Development
+       ↓
+Testing
+       ↓
+Deployment
+
+Estimated completion: 28 Aug
+
+[VIEW PROJECT]
+
+──────────────────────────────────────────────
+
+RECENT ORDERS
+
+GELWO ICT Equipment
+KSh 85,000
+🚚 Out for delivery
+
+[TRACK ORDER]
+
+──────────────────────────────────────────────
+3. 🛍️ GELWO SHOP
+
+This is where we borrow the strongest marketplace concept.
+
+Customers can browse products just like an e-commerce platform.
+
+Each product gets:
+
+Product card
+┌──────────────────────────┐
+│                          │
+│       PRODUCT IMAGE      │
+│                          │
+│      ❤️                 │
+├──────────────────────────┤
+│ HP Laptop                │
+│ ⭐ 4.8                   │
+│                          │
+│ KSh 85,000               │
+│                          │
+│ 🟢 In Stock              │
+│                          │
+│ [ADD TO CART]            │
+└──────────────────────────┘
+
+But GELWO should go further.
+
+Product detail page
+PRODUCT
+──────────────────────────────
+
+[ IMAGE GALLERY ]
+
+HP BUSINESS LAPTOP
+
+⭐ 4.8   24 Reviews
+
+KSh 85,000
+
+Availability:
+🟢 In Stock
+
+Quantity:
+[-] 1 [+]
+
+🚚 Estimated delivery:
+2–4 business days
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+DESCRIPTION
+
+SPECIFICATIONS
+
+WARRANTY
+
+DELIVERY INFORMATION
+
+REVIEWS
+
+RELATED PRODUCTS
+
+[ADD TO CART]   [BUY NOW]
+4. 🧰 SERVICES MARKETPLACE
+
+This is where GELWO becomes different from a normal e-commerce platform.
+
+Services should behave almost like products that can be configured.
+
+For example:
+
+Software Development
+SOFTWARE DEVELOPMENT
+────────────────────────────
+
+What do you need?
+
+○ Website
+○ Mobile Application
+○ E-commerce System
+○ ERP
+○ CRM
+○ Hotel Management System
+○ Custom Business System
+○ AI Solution
+○ API Integration
+○ Other
+
+Project size:
+
+○ Small
+○ Medium
+○ Large
+○ Enterprise
+
+Number of users:
+
+[ 50 ]
+
+Required deadline:
+
+[ Select date ]
+
+Additional features:
+
+☑ Payments
+☑ SMS
+☑ Email
+☑ Admin Dashboard
+☑ Customer Portal
+☑ Analytics
+
+────────────────────────
+
+Estimated project range
+
+KSh XXX,XXX – XXX,XXX
+
+[REQUEST DETAILED QUOTATION]
+
+This connects directly to the automatic quotation engine we've been designing.
+
+5. 🧠 THE QUOTATION ENGINE
+
+This should be one of GELWO's signature features.
+
+The customer doesn't simply send:
+
+"How much is a website?"
+
+Instead:
+
+CUSTOMER
+   ↓
+SELECT SERVICE
+   ↓
+DYNAMIC QUESTIONS
+   ↓
+REQUIREMENT ANALYSIS
+   ↓
+PRICING ENGINE
+   ↓
+MATERIAL / LABOUR / LOGISTICS
+   ↓
+TAX / DISCOUNT / FEES
+   ↓
+ESTIMATE
+   ↓
+CUSTOMER REVIEWS
+   ↓
+FORMAL QUOTATION
+
+The system creates a Quotation ID.
+
+Example:
+
+GELWO-QT-2026-000184
+
+Customer can then:
+
+View quotation
+Download PDF
+Accept
+Request changes
+Ask a question
+Reject
+Save for later
+6. 🧾 QUOTATION → INVOICE
+
+Once the customer accepts:
+
+QUOTATION
+     │
+     ▼
+CUSTOMER ACCEPTS
+     │
+     ▼
+ORDER CREATED
+     │
+     ▼
+INVOICE GENERATED
+     │
+     ▼
+PAYMENT
+     │
+     ▼
+PAYMENT VERIFIED
+     │
+     ▼
+FULFILLMENT STARTS
+
+The customer portal automatically changes status.
+
+Example
+
+Quotation
+
+🟡 Awaiting approval
+
+↓
+
+Accepted
+
+🟢 Approved
+
+↓
+
+Invoice
+
+🟠 Payment pending
+
+↓
+
+Payment
+
+🟢 Paid
+
+↓
+
+Order
+
+🔵 Processing
+
+↓
+
+Delivery
+
+🚚 In transit
+
+↓
+
+Completed
+
+✅ Delivered
+
+7. 🚚 ORDER TRACKING
+
+Kilimall provides parcel tracking, which is a useful concept to borrow.
+
+But GELWO should have two different tracking systems.
+
+PRODUCT ORDER
+ORDER #GL-2026-00142
+
+✅ Order placed
+     │
+     ▼
+✅ Payment confirmed
+     │
+     ▼
+✅ Processing
+     │
+     ▼
+🔵 Packed
+     │
+     ▼
+🚚 Dispatched
+     │
+     ▼
+📍 In transit
+     │
+     ▼
+🏠 Delivered
+SERVICE / PROJECT
+PROJECT #GL-PROJ-0021
+
+📋 Requirements
+      ↓
+🎨 Design
+      ↓
+💻 Development
+      ↓
+🧪 Testing
+      ↓
+🔐 Security Review
+      ↓
+🚀 Deployment
+      ↓
+✅ Handover
+      ↓
+🛠️ Maintenance
+
+That distinction is extremely important for GELWO.
+
+8. 🏗️ MY PROJECTS
+
+For large services, customers get a dedicated project workspace.
+
+Example:
+
+GELWO Business Management System
+PROJECT STATUS
+
+████████████████░░░░ 80%
+
+Overall: ON TRACK 🟢
+
+────────────────────────
+
+PROJECT TIMELINE
+
+✅ Requirements
+✅ UI/UX Design
+✅ Database
+🔵 Development
+⚪ Testing
+⚪ Deployment
+
+────────────────────────
+
+TEAM
+
+👨‍💻 Developer
+🎨 Designer
+🧪 QA
+
+────────────────────────
+
+FILES
+
+📄 Contract.pdf
+📄 Requirements.pdf
+📄 Quotation.pdf
+📄 Invoice.pdf
+📁 Project Files
+
+────────────────────────
+
+MESSAGES
+
+[Send message...]
+
+────────────────────────
+
+[VIEW FULL PROJECT]
+9. 💬 CUSTOMER COMMUNICATION
+
+Instead of forcing customers to call every time, give every order/project a communication center.
+
+GELWO SUPPORT
+
+Project: Business Management System
+
+Customer:
+"Can we add a stock management module?"
+
+GELWO:
+"Yes. We've added the request to your project."
+
+REQUEST STATUS:
+🟡 Under Review
+
+[ATTACH FILE] [SEND MESSAGE]
+
+Every conversation gets attached to the relevant:
+
+Order
+Quote
+Invoice
+Project
+Support ticket
+
+That makes the backend much easier to manage.
+
+10. 👤 CUSTOMER ACCOUNT
+
+The customer gets:
+
+Profile
+Personal information
+Company information
+Phone
+Email
+Addresses
+Password/security
+Notification preferences
+My Activity
+Orders
+Quotations
+Invoices
+Projects
+Payments
+Downloads
+Messages
+Support tickets
+Wishlist
+Reviews
+
+Kilimall similarly groups account information, orders, wishlist, messages and related customer functions under the customer account experience.
+
+11. 🔥 NOW THE ADMIN BACKEND
+
+This is where I want GELWO to become much more powerful than a simple Seller Center.
+
+Instead of:
+
+"Admin dashboard"
+
+we build:
+
+GELWO COMMAND CENTER
+
+The admin sees the entire company.
+
+12. 🧠 ADMIN DASHBOARD
+GELWO COMMAND CENTER
+
+Good morning, Admin 👋
+
+────────────────────────────────────────
+
+REVENUE
+KSh 2,840,500
+
+ORDERS
+184
+
+ACTIVE PROJECTS
+27
+
+PENDING QUOTES
+43
+
+PENDING PAYMENTS
+18
+
+LOW STOCK
+12
+
+────────────────────────────────────────
+
+TODAY
+
+🛒 14 New Orders
+📋 8 Quote Requests
+💳 6 Payments
+🎧 4 Support Tickets
+🚚 11 Deliveries
+🏗️ 7 Project Updates
+
+────────────────────────────────────────
+
+REVENUE ANALYTICS
+
+        ╭──────────────╮
+        │      ╱╲      │
+        │  ╱╲╱  ╲╱╲   │
+        │╱          ╲ │
+        ╰──────────────╯
+
+Jan Feb Mar Apr May Jun Jul Aug
+
+────────────────────────────────────────
+13. 📦 PRODUCT MANAGEMENT
+
+Admin can:
+
+Products
+
+Create
+Edit
+Delete
+Activate/deactivate
+Categories
+Brands
+SKU
+Pricing
+Stock
+Images
+Videos
+Specifications
+Warranty
+Delivery settings
+
+Kilimall's seller tooling similarly supports product management, SKU information, inventory editing, filtering and batch operations.
+
+GELWO can add:
+
+Automatic stock alerts
+⚠️ LOW STOCK
+
+USB Keyboard
+Remaining: 4
+
+[RESTOCK]
+
+and:
+
+🔴 OUT OF STOCK
+
+HP Laptop
+Available: 0
+
+[CREATE PURCHASE REQUEST]
+14. 🧰 SERVICE MANAGEMENT
+
+This is where your platform becomes special.
+
+Admin creates:
+
+SERVICE
+Software Development
+       │
+       ├── Packages
+       ├── Questions
+       ├── Pricing Rules
+       ├── Add-ons
+       ├── Required Documents
+       ├── Delivery Timeline
+       ├── Tax
+       ├── Discount
+       └── Approval Rules
+
+So every GELWO service can have its own quotation calculator.
+
+15. 💰 PRICING ENGINE
+
+Admin shouldn't manually calculate everything.
+
+Build a pricing engine:
+
+BASE PRICE
+     +
+MATERIALS
+     +
+LABOUR
+     +
+TRANSPORT
+     +
+QUANTITY
+     +
+COMPLEXITY
+     +
+URGENCY
+     -
+DISCOUNT
+     +
+TAX
+     =
+FINAL PRICE
+
+For software:
+
+Base Development
++
+Number of Modules
++
+UI/UX
++
+Database
++
+API Integration
++
+Payment Integration
++
+AI Features
++
+Mobile App
++
+Hosting
++
+Maintenance
+=
+PROJECT ESTIMATE
+
+This gives you the automatic quotation system you wanted.
+
+16. 🧾 FINANCE MODULE
+
+Admin gets:
+
+Quotations
+Draft
+Sent
+Viewed
+Accepted
+Rejected
+Expired
+Invoices
+Draft
+Issued
+Partially paid
+Paid
+Overdue
+Cancelled
+Payments
+M-PESA
+Bank
+Other configured methods
+Financial reports
+Revenue
+Expenses
+Profit
+Outstanding invoices
+Sales by service
+Sales by product
+17. 🚚 LOGISTICS
+
+Admin sees:
+
+DELIVERY CENTER
+
+Pending        14
+Processing     22
+Dispatched     18
+In Transit     11
+Delivered      47
+
+Each delivery gets:
+
+Order → Driver → Vehicle → Location → Status → Proof of delivery
+
+18. 👨‍💻 PROJECT MANAGEMENT
+
+For software and consultancy projects:
+
+PROJECT CONTROL
+
+PROJECT
+GELWO ERP System
+
+CLIENT
+ABC Company
+
+VALUE
+KSh XXX,XXX
+
+PROGRESS
+67%
+
+TASKS
+██████████████░░░░
+
+TEAM
+3 members
+
+DEADLINE
+15 Sept 2026
+
+STATUS
+🟢 On Track
+
+Admin can assign:
+
+Developers
+Designers
+Technicians
+Consultants
+Drivers
+Project managers
+19. 👥 CUSTOMER CRM
+
+Every customer gets a 360° profile.
+
+CUSTOMER 360°
+
+ABC COMPANY
+
+Orders             14
+Projects            3
+Quotes              8
+Invoices             7
+Total spent     KSh XXX
+
+──────────────────────
+
+SERVICES USED
+
+✓ ICT
+✓ Software
+✓ Branding
+✓ Supplies
+
+──────────────────────
+
+COMMUNICATION
+
+12 conversations
+
+──────────────────────
+
+SUPPORT
+
+2 open tickets
+
+──────────────────────
+
+NEXT OPPORTUNITY
+
+Solar Installation
+
+This allows GELWO to understand the entire relationship, not just individual orders.
+
+20. 🔔 NOTIFICATION ENGINE
+
+Every important event triggers notifications.
+
+EVENT
+  ↓
+NOTIFICATION ENGINE
+  ├── Email
+  ├── SMS
+  ├── In-app
+  └── WhatsApp integration
+
+Examples:
+
+Quotation created
+
+Your GELWO quotation is ready.
+
+Payment received
+
+Your payment has been successfully received.
+
+Order dispatched
+
+Your order is on the way.
+
+Project milestone
+
+Your project has entered the testing phase.
+
+21. 🔐 ADMIN ROLES
+
+Don't give every employee access to everything.
+
+SUPER ADMIN
+
+Everything.
+
+FINANCE
+Invoices
+Payments
+Financial reports
+SALES
+Customers
+Quotes
+Orders
+INVENTORY
+Products
+Stock
+Procurement
+PROJECT MANAGER
+Projects
+Tasks
+Teams
+TECHNICIAN
+Assigned jobs
+Service tickets
+Job completion
+SUPPORT
+Tickets
+Messages
+Customers
+CONTENT MANAGER
+Website
+Products
+Services
+Posters
+Announcements
+
+This is much safer than one shared administrator account.
+
+22. 📊 THE MOST IMPORTANT PART: DATA FLOW
+
+This should be the heart of the system.
+
+                   CUSTOMER
+                      │
+                      ▼
+              WEBSITE / PORTAL
+                      │
+          ┌───────────┴───────────┐
+          ▼                       ▼
+       PRODUCTS                SERVICES
+          │                       │
+          ▼                       ▼
+       CART                  REQUIREMENTS
+          │                       │
+          │                       ▼
+          │                QUOTATION ENGINE
+          │                       │
+          └───────────┬───────────┘
+                      ▼
+                  QUOTATION
+                      │
+              ┌───────┴───────┐
+              ▼               ▼
+           ACCEPT           REJECT
+              │
+              ▼
+            ORDER
+              │
+              ▼
+           INVOICE
+              │
+              ▼
+           PAYMENT
+              │
+              ▼
+       PAYMENT VERIFIED
+              │
+       ┌──────┴─────────┐
+       ▼                ▼
+   PRODUCT            SERVICE
+     ORDER             PROJECT
+       │                │
+       ▼                ▼
+   INVENTORY          ASSIGN TEAM
+       │                │
+       ▼                ▼
+   DISPATCH           EXECUTION
+       │                │
+       ▼                ▼
+   DELIVERY          MILESTONES
+       │                │
+       └───────┬────────┘
+               ▼
+            COMPLETED
+               │
+               ▼
+          CUSTOMER REVIEW
+               │
+               ▼
+        CRM + ANALYTICS
+
+That is the real GELWO concept I'd recommend.
+
+Not simply:
+
+Website + Admin Panel.
+
+But:
+
+🌐 GELWO DIGITAL BUSINESS OPERATING SYSTEM
+
+Where:
+
+Website → Customer Portal → Commerce → Services → Quotations → Finance → Inventory → Projects → Logistics → Support → CRM → Analytics
+
+all communicate with one another.
+
+And the animations should reinforce that structure: smooth page transitions, animated counters, live status changes, timeline animations, interactive quotation forms, micro-interactions on cards, progress rings, map/tracking animations, notification toasts and a futuristic but professional command-center dashboard.
+
+The next logical design stage is to turn this into the actual screen-by-screen UI/UX blueprint—including the exact pages, sidebar structure, buttons, cards, tables, modals, forms, mobile layout and the database/API relationships behind each screen.
+
+now you know gelwo operates under kra, so i also want the admin to be able to access the ETIMS, ITAX, EGP, SHA, NSSF etc from the gelwo backend through links , for example ETIMS, generate the itims report and send the report to the customer portal for the customer to download. also this applies the same to delivery note, and invoice, and reciept which is upladed in the gelwo backnd and leter send to thecustomer portal.  the gelwo admin backend should have (stock inventory, service inventory, client, service schedule and duration, staff registration and payrol(this place should also have link to SHIF and NSSF), staff offs and leaves, hiring and firing, track daily services, manage all documents and generate them)
+
+Yes — and this actually gives GELWO a much stronger ERP-style back office. What you're describing is no longer just an “admin panel”; it becomes a GELWO Business Operations & Compliance Center connecting sales, services, inventory, HR, payroll, documents, projects and customer delivery.
+
+One important distinction: I would build the government portals as secure external links and, where officially supported, authorized integrations. I would not automate logging into government portals by storing a KRA/SHA/NSSF password inside GELWO. KRA explicitly provides eTIMS system-to-system integration options, so that can be investigated for a proper authorized integration.
+
+🌍 GELWO BUSINESS OPERATIONS CENTER
+                         GELWO BACKEND
+                              │
+       ┌──────────────────────┼──────────────────────┐
+       │                      │                      │
+       ▼                      ▼                      ▼
+   BUSINESS                FINANCE &              PEOPLE
+   OPERATIONS              COMPLIANCE             & HR
+       │                      │                      │
+       ├─ Stock               ├─ Invoices           ├─ Staff
+       ├─ Services            ├─ Receipts           ├─ Payroll
+       ├─ Orders              ├─ Delivery Notes     ├─ Leave
+       ├─ Projects            ├─ Quotations         ├─ Off days
+       ├─ Scheduling          ├─ eTIMS              ├─ Hiring
+       └─ Deliveries          ├─ iTax               └─ Separation
+                              ├─ e-GP
+                              ├─ SHA/SHIF
+                              └─ NSSF
+1. 🏛️ GOVERNMENT & COMPLIANCE HUB
+
+I'd give the admin sidebar a dedicated section:
+
+Government & Compliance
+🏛️ GOVERNMENT PORTALS
+
+🇰🇪 KRA
+   ├── eTIMS
+   ├── iTax
+   └── KRA Documents
+
+🏛️ PROCUREMENT
+   └── e-GP
+
+🏥 HEALTH
+   └── SHA / SHIF Employer Portal
+
+👥 SOCIAL SECURITY
+   └── NSSF Employer Portal
+
+📁 COMPLIANCE DOCUMENTS
+   ├── Tax Documents
+   ├── Certificates
+   ├── Returns
+   ├── Receipts
+   └── Other Government Documents
+
+The links should open the official portals, not third-party copies.
+
+For example, KRA's official eTIMS taxpayer portal is available at its taxpayer portal, and KRA confirms that eTIMS supports multiple solutions and that invoices from those solutions can be accessed through the taxpayer portal.
+
+KRA iTax is separately used for tax registration, filing, payments and related tax services.
+
+e-GP is Kenya's government electronic procurement platform and includes supplier functionality and procurement processes.
+
+For employees, the NSSF employer portal supports employer payroll/payment processing and electronic payment orders.
+
+SHA also has an official employer portal for employer registration and SHIF contributions.
+
+2. 🧾 THE DOCUMENT CENTER
+
+This should be one of GELWO's most important modules.
+
+GELWO DOCUMENT CENTER
+
+Every document has:
+
+Document ID
+Document Type
+Customer
+Order/Project
+Amount
+Created By
+Created Date
+Status
+Version
+File
+Visibility
+Document types
+
+📋 Quotations
+🧾 Invoices
+💳 Receipts
+🚚 Delivery Notes
+📦 Purchase Orders
+📑 Contracts
+📄 Agreements
+🛠️ Service Reports
+📊 Reports
+📁 Tax Documents
+🧮 eTIMS Documents
+🏛️ Government Documents
+👥 HR Documents
+💰 Payroll Documents
+📜 Certificates
+📎 Attachments
+
+3. 🔄 DOCUMENT → CUSTOMER PORTAL FLOW
+
+This is exactly where your idea becomes powerful.
+
+Suppose GELWO generates an invoice.
+
+ADMIN
+  │
+  ▼
+CREATE INVOICE
+  │
+  ▼
+INVOICE STORED
+  │
+  ▼
+OPTIONAL eTIMS PROCESS
+  │
+  ▼
+eTIMS INFORMATION / DOCUMENT
+  │
+  ▼
+ADMIN REVIEWS
+  │
+  ▼
+PUBLISH TO CUSTOMER
+  │
+  ▼
+CUSTOMER NOTIFICATION
+  │
+  ▼
+CUSTOMER PORTAL
+  │
+  ▼
+📄 DOWNLOAD INVOICE
+
+The customer sees:
+
+My Documents
+────────────────────────────────────
+
+📄 INV-2026-00125
+GELWO Software Development
+
+KSh 180,000
+
+Status: 🟢 Issued
+
+[VIEW] [DOWNLOAD]
+
+────────────────────────────────────
+
+🧾 REC-2026-00092
+Payment Receipt
+
+KSh 90,000
+
+Status: 🟢 Paid
+
+[VIEW] [DOWNLOAD]
+
+────────────────────────────────────
+
+🚚 DN-2026-00041
+Delivery Note
+
+Status: 🟢 Delivered
+
+[VIEW] [DOWNLOAD]
+4. 🧾 eTIMS MODULE
+
+I'd actually make this a dedicated GELWO backend module.
+
+eTIMS CENTER
+eTIMS CENTER
+────────────────────────────
+
+Invoices Today       24
+Successful           22
+Pending                1
+Failed                 1
+
+────────────────────────────
+
+[ CREATE eTIMS INVOICE ]
+
+[ VIEW eTIMS DOCUMENTS ]
+
+[ GENERATE REPORT ]
+
+[ VIEW SALES REPORT ]
+
+[ VIEW PURCHASE REPORT ]
+
+KRA's eTIMS user guide shows transaction and reporting areas including sales by invoice, sales by item, sales by buyer, purchase reports and sales receipts.
+
+Important architecture
+
+There are two implementation levels:
+
+Level 1 — Portal-assisted
+
+Admin clicks:
+
+OPEN eTIMS
+
+and GELWO opens the official KRA portal.
+
+After generating the required report/document, admin uploads it into GELWO and assigns it to a customer/order.
+
+Level 2 — Authorized integration
+
+If GELWO qualifies for and implements KRA's supported system-to-system integration, the GELWO backend can exchange the permitted information directly with eTIMS.
+
+KRA specifically documents a system-to-system integration option, so we can design GELWO's architecture to accommodate it rather than hard-code a workaround.
+
+5. 📑 REPORT GENERATION
+
+The admin should be able to choose:
+
+GENERATE REPORT
+
+Report Type:
+[ eTIMS Sales Report ▼ ]
+
+Period:
+[ 01/08/2026 ] → [ 31/08/2026 ]
+
+Customer:
+[ All Customers ▼ ]
+
+Service/Product:
+[ All ▼ ]
+
+Format:
+○ PDF
+○ Excel
+○ CSV
+
+[ GENERATE REPORT ]
+
+Then:
+
+REPORT GENERATED ✅
+
+Report ID:
+GL-RPT-2026-00821
+
+Period:
+August 2026
+
+Generated by:
+Admin
+
+[DOWNLOAD]
+[PUBLISH TO CUSTOMER]
+6. 🚚 DELIVERY NOTE SYSTEM
+
+A delivery note should be automatically connected to an order.
+
+ORDER
+   ↓
+PACKING
+   ↓
+DELIVERY NOTE
+   ↓
+DISPATCH
+   ↓
+DELIVERY
+   ↓
+CUSTOMER CONFIRMATION
+Delivery Note
+GELWO TECHNOLOGIES
+
+DELIVERY NOTE
+DN-2026-00125
+
+Customer:
+ABC Company
+
+Order:
+GL-ORD-00281
+
+Items:
+──────────────────────
+Laptop          5
+Keyboard       10
+Mouse           10
+──────────────────────
+
+Delivered by:
+Staff/Driver
+
+Date:
+26 Aug 2026
+
+Customer acknowledgement:
+
+[ SIGN / CONFIRM ]
+
+[GENERATE PDF]
+[PUBLISH TO PORTAL]
+
+Once uploaded/published:
+
+Customer → My Orders → Documents → Delivery Note → Download
+
+7. 💳 RECEIPT SYSTEM
+
+Payment comes in:
+
+PAYMENT
+   ↓
+PAYMENT VERIFIED
+   ↓
+RECEIPT GENERATED
+   ↓
+DOCUMENT CENTER
+   ↓
+CUSTOMER PORTAL
+
+The customer automatically receives:
+
+Payment received — your receipt is now available in your GELWO portal.
+
+8. 📦 STOCK INVENTORY
+
+Now let's expand your backend considerably.
+
+Stock dashboard
+STOCK INVENTORY
+
+Total Products        1,284
+In Stock                972
+Low Stock                82
+Out of Stock             31
+Reserved                 44
+Incoming                155
+
+Each product:
+
+PRODUCT
+HP Laptop
+
+SKU: GEL-ICT-00042
+
+Opening Stock
+Purchases
+Sales
+Returns
+Damaged
+Reserved
+Available
+Reorder Level
+Supplier
+Cost Price
+Selling Price
+Automatic calculation
+AVAILABLE STOCK
+
+Opening
++ Purchases
++ Returns
++ Adjustments
+- Sales
+- Damaged
+- Transfers
+- Reserved
+= Available
+9. 🧰 SERVICE INVENTORY
+
+This is different from physical product inventory.
+
+For example:
+
+Solar Installation
+SERVICE INVENTORY
+
+Solar Panels
+Inverters
+Cables
+Mounting Kits
+Batteries
+Connectors
+Labour
+Transport
+Installation Hours
+Technicians
+
+For software:
+
+SOFTWARE SERVICE INVENTORY
+
+Developer Hours
+Designer Hours
+QA Hours
+Hosting
+Domain
+SMS
+API Usage
+AI Usage
+Database
+Maintenance
+
+This allows the quotation engine to calculate the actual resources required.
+
+10. 📅 SERVICE SCHEDULING
+
+This should become a proper calendar system.
+
+SERVICE CALENDAR
+
+MON    TUE    WED    THU    FRI
+
+08:00
+       Solar
+       Install
+
+10:00
+               ICT
+               Support
+
+12:00
+                       Client
+                       Meeting
+
+14:00
+       Branding
+       Project
+
+16:00
+               Network
+               Maintenance
+
+Every service gets:
+
+Customer
+Service
+Location
+Assigned staff
+Start date
+Start time
+Duration
+Expected completion
+Status
+Materials
+Notes
+Documents
+11. ⏱️ SERVICE DURATION ENGINE
+
+This is another clever feature.
+
+Example:
+
+SERVICE
+
+Network Installation
+
+Estimated:
+6 hours
+
+Technicians:
+2
+
+Required equipment:
+Network tester
+Crimping tools
+Cable tester
+
+Scheduled:
+27 Aug 2026
+09:00 – 15:00
+
+If the job runs late:
+
+EXPECTED: 6 hours
+ACTUAL:   8 hours
+
+⚠️ DELAY DETECTED
+
+Admin can record the reason.
+
+12. 👥 STAFF MANAGEMENT
+STAFF CENTER
+STAFF
+────────────────────
+
+Total Staff        12
+Active             10
+On Leave            1
+Off Duty            1
+
+Each staff member gets a profile:
+
+EMPLOYEE PROFILE
+
+Employee ID
+Full Name
+Department
+Position
+Phone
+Email
+Start Date
+Contract Type
+Salary
+Bank/Payment Details
+NSSF Number
+SHA/SHIF Details
+KRA PIN
+Emergency Contact
+Documents
+Leave Balance
+Attendance
+Payroll History
+
+Sensitive information should be encrypted and visible only to authorized HR/payroll roles.
+
+13. 💰 PAYROLL
+
+This should connect directly to staff records.
+
+STAFF
+   ↓
+ATTENDANCE
+   ↓
+WORK DAYS
+   ↓
+OVERTIME
+   ↓
+ALLOWANCES
+   ↓
+DEDUCTIONS
+   ↓
+STATUTORY CONTRIBUTIONS
+   ↓
+NET PAY
+   ↓
+PAYSLIP
+Payroll calculation
+Basic Salary
++ Allowances
++ Overtime
++ Bonuses
+----------------
+Gross Pay
+- PAYE
+- SHIF/SHA
+- NSSF
+- Other authorized deductions
+----------------
+NET PAY
+
+The exact statutory calculation rules should be maintained as configurable, versioned rules, rather than hard-coded forever.
+
+14. 🏥 SHA / SHIF
+
+Inside the employee profile:
+
+STATUTORY CONTRIBUTIONS
+
+KRA
+PIN: XXXXXXXX
+
+SHA / SHIF
+Member No: XXXXXXXX
+Status: Active
+
+NSSF
+Member No: XXXXXXXX
+Status: Active
+
+Then a button:
+
+[ OPEN SHA EMPLOYER PORTAL ]
+
+SHA's employer portal specifically supports employer registration and SHIF contributions.
+
+And the backend can maintain:
+
+SHA CONTRIBUTION
+
+August 2026
+
+Employees: 12
+Total contribution: KSh XXX
+
+Status:
+🟡 Pending
+15. 👴 NSSF
+
+Same concept:
+
+[ OPEN NSSF EMPLOYER PORTAL ]
+
+The official NSSF employer service includes payroll/payment processing, electronic payment orders and employer self-service functions.
+
+GELWO internally keeps:
+
+NSSF
+
+Payroll Period:
+August 2026
+
+Employees:
+12
+
+Employer contribution:
+KSh XXX
+
+Employee contribution:
+KSh XXX
+
+Total:
+KSh XXX
+
+Return:
+Generated
+
+Payment:
+Pending
+
+Then upload the resulting official document/confirmation into GELWO.
+
+16. 🏖️ LEAVE & OFF DAYS
+Leave types
+
+🏖️ Annual Leave
+🤒 Sick Leave
+👨‍👩‍👧 Family-related leave
+📚 Study/Training Leave
+📝 Other approved leave
+
+Employee submits:
+
+LEAVE REQUEST
+
+Type:
+Annual Leave
+
+From:
+02 Sept
+
+To:
+06 Sept
+
+Days:
+5
+
+Reason:
+[................]
+
+[SUBMIT]
+
+Manager receives:
+
+APPROVE / REJECT
+
+Then the calendar updates automatically.
+
+17. 🏠 STAFF OFF DAYS
+
+Different from formal leave.
+
+STAFF OFF SCHEDULE
+
+GRIFFIN
+Monday — OFF
+
+WARREN
+Sunday — OFF
+
+TECHNICIAN A
+Wednesday — OFF
+
+This should feed into service scheduling so GELWO doesn't accidentally assign an unavailable employee.
+
+18. 👔 HIRING
+
+Create:
+
+Recruitment Center
+JOB OPENING
+
+Position:
+Software Developer
+
+Department:
+Technology
+
+Employment Type:
+Full-time
+
+Salary Range:
+[Configured internally]
+
+Requirements:
+...
+
+Applications:
+27
+
+Shortlisted:
+8
+
+Interview:
+4
+
+Offer:
+1
+
+Hired:
+1
+
+Then:
+
+Candidate → Employee
+
+with one click after hiring.
+
+19. 🚪 EMPLOYEE SEPARATION
+
+Don't simply delete a fired/resigned employee.
+
+Use:
+
+Employee Separation
+Employee
+    ↓
+Separation Request
+    ↓
+Reason
+    ↓
+Approval
+    ↓
+Clearance
+    ↓
+Final Payroll
+    ↓
+Asset Return
+    ↓
+Account Deactivation
+    ↓
+Archive Employee
+
+Their historical payroll and work records remain available for authorized administrators.
+
+20. 📍 DAILY SERVICE TRACKING
+
+This is something I'd make particularly powerful.
+
+DAILY OPERATIONS
+TODAY — 26 AUG 2026
+
+SERVICES
+
+🟢 Completed       8
+🔵 In Progress     5
+🟡 Scheduled       7
+🔴 Delayed         2
+
+Click a service:
+
+SERVICE #SRV-00218
+
+Customer:
+ABC Ltd
+
+Service:
+Network Maintenance
+
+Technician:
+John Doe
+
+Scheduled:
+09:00
+
+Started:
+09:17
+
+Expected:
+13:00
+
+Current:
+IN PROGRESS 🟢
+
+Materials:
+✓ Cat6 Cable
+✓ RJ45
+✓ Network Tester
+
+Notes:
+....................
+
+[MARK COMPLETE]
+[UPLOAD SERVICE REPORT]
+21. 📱 CUSTOMER PORTAL — DOCUMENTS
+
+The customer should have a beautiful Document Vault.
+
+MY DOCUMENTS
+
+📋 Quotations
+   4 documents
+
+🧾 Invoices
+   8 documents
+
+💳 Receipts
+   7 documents
+
+🚚 Delivery Notes
+   5 documents
+
+📊 Reports
+   3 documents
+
+🛠️ Service Reports
+   6 documents
+
+📁 Contracts
+   2 documents
+
+🏛️ Shared Compliance Documents
+   1 document
+
+Each document:
+
+VIEW → DOWNLOAD → SHARE/PRINT where appropriate
+
+22. 🔥 THE COMPLETE GELWO DATA FLOW
+
+This is the architecture I'd ultimately aim for:
+
+                         CUSTOMER
+                            │
+                            ▼
+                   GELWO CUSTOMER PORTAL
+                            │
+              ┌─────────────┼─────────────┐
+              ▼             ▼             ▼
+           PRODUCTS       SERVICES      SUPPORT
+              │             │             │
+              ▼             ▼             ▼
+           ORDERS       QUOTATIONS      TICKETS
+              │             │
+              └──────┬──────┘
+                     ▼
+                 INVOICE
+                     │
+                     ▼
+                  PAYMENT
+                     │
+           ┌─────────┴─────────┐
+           ▼                   ▼
+        RECEIPT             ORDER
+                               │
+                    ┌──────────┴──────────┐
+                    ▼                     ▼
+                INVENTORY             SERVICE
+                    │                  PROJECT
+                    │                     │
+                    ▼                     ▼
+                DELIVERY             SCHEDULING
+                    │                     │
+                    ▼                     ▼
+             DELIVERY NOTE          STAFF ASSIGNMENT
+                    │                     │
+                    └─────────┬───────────┘
+                              ▼
+                         COMPLETION
+                              │
+                              ▼
+                       DOCUMENT CENTER
+                              │
+                              ▼
+                       CUSTOMER PORTAL
+
+
+                    ┌──────────────────────┐
+                    │ GOVERNMENT & COMPLIANCE│
+                    ├──────────────────────┤
+                    │ eTIMS                │
+                    │ iTax                 │
+                    │ e-GP                 │
+                    │ SHA / SHIF           │
+                    │ NSSF                 │
+                    └──────────┬───────────┘
+                               │
+                    Official links /
+                 authorized integrations
+                               │
+                               ▼
+                       GELWO DOCUMENT VAULT
+                               │
+                               ▼
+                        CUSTOMER PORTAL
+
+
+                         STAFF SYSTEM
+                              │
+             ┌────────────────┼────────────────┐
+             ▼                ▼                ▼
+          STAFF            LEAVE            PAYROLL
+             │                │                │
+             │                │       ┌────────┼────────┐
+             │                │       ▼        ▼        ▼
+             │                │      PAYE    SHA/SHIF  NSSF
+             │                │
+             └────────────────┴───────────────┐
+                                              ▼
+                                      HR DOCUMENT CENTER
+23. 🔐 ONE VERY IMPORTANT SECURITY RULE
+
+For the government portals, GELWO should never store an admin's raw government password in the ordinary database.
+
+Instead:
+
+Portal links
+
+Use official URLs.
+
+Authorized integrations
+
+Use official APIs/integration mechanisms where available.
+
+Documents
+
+Store copies/records inside GELWO with:
+
+Encryption
+Access controls
+Audit logs
+Version history
+Document expiry
+Who uploaded it
+Who downloaded it
+Who published it
+Which customer can see it
+
+This is particularly important because SHA's employer terms explicitly address credential confidentiality, employee-data consent and data protection obligations.
+
+24. 🧠 THE FINAL GELWO ADMIN SIDEBAR
+
+I'd structure your backend roughly like this:
+
+GELWO COMMAND CENTER
+│
+├── 🏠 Dashboard
+│
+├── 🛒 Commerce
+│   ├── Products
+│   ├── Orders
+│   ├── Customers
+│   ├── Inventory
+│   └── Deliveries
+│
+├── 🧰 Services
+│   ├── Service Catalog
+│   ├── Service Inventory
+│   ├── Quotations
+│   ├── Scheduling
+│   ├── Projects
+│   └── Daily Operations
+│
+├── 💰 Finance
+│   ├── Invoices
+│   ├── Receipts
+│   ├── Payments
+│   ├── Expenses
+│   └── Reports
+│
+├── 👥 Human Resources
+│   ├── Staff
+│   ├── Recruitment
+│   ├── Payroll
+│   ├── Attendance
+│   ├── Leave
+│   ├── Off Days
+│   └── Separation
+│
+├── 📄 Documents
+│   ├── Quotations
+│   ├── Invoices
+│   ├── Receipts
+│   ├── Delivery Notes
+│   ├── Service Reports
+│   ├── Contracts
+│   └── Document Vault
+│
+├── 🇰🇪 Government & Compliance
+│   ├── eTIMS
+│   ├── iTax
+│   ├── e-GP
+│   ├── SHA / SHIF
+│   ├── NSSF
+│   └── Compliance Records
+│
+├── 💬 Communication
+│   ├── Customer Messages
+│   ├── Support Tickets
+│   ├── Notifications
+│   └── Announcements
+│
+├── 📊 Analytics
+│   ├── Sales
+│   ├── Services
+│   ├── Inventory
+│   ├── Finance
+│   ├── Staff
+│   └── Customers
+│
+└── ⚙️ System
+    ├── Users & Roles
+    ├── Permissions
+    ├── Audit Logs
+    ├── Settings
+    └── Integrations
+The really powerful part
+
+The customer doesn't need to know whether a document came from eTIMS, GELWO's invoice generator, the delivery department, HR, a service technician or the finance department.
+
+The customer simply sees:
+
+📁 My GELWO Documents
+
+And everything relevant to that customer appears there.
+
+Meanwhile, the administrator sees the complete operational picture:
+
+Customer → Service/Product → Quote → Invoice → Payment → eTIMS/compliance → Inventory → Staff → Schedule → Delivery/Project → Documents → Customer Portal

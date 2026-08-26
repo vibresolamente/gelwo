@@ -1,4 +1,5 @@
-'use client';
+/* eslint-disable react/no-unescaped-entities, @next/next/no-img-element */
+
 
 import React from 'react';
 import { Header } from '@/components/Header';

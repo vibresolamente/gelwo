@@ -70,7 +70,7 @@ interface AppContextType {
     fullName: string;
     companyName?: string;
     phone?: string;
-    role?: 'customer' | 'admin';
+    role?: any;
   }) => Promise<{ user: UserProfile | null; error: string | null }>;
   logoutUser: () => void;
 }
