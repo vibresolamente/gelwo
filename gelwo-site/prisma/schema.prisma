@@ -208,8 +208,10 @@ model Invoice {
 
 model Payment {
   id            String   @id @default(cuid())
-  invoiceId     String
-  invoice       Invoice  @relation(fields: [invoiceId], references: [id])
+  invoiceId     String?
+  invoice       Invoice? @relation(fields: [invoiceId], references: [id])
+  orderId       String?   // new optional link to Order
+  order         Order?   @relation(fields: [orderId], references: [id])
   amount        Float
   method        String // e.g., "mpesa", "stripe", "bank"
   status        String   @default("pending") // pending, completed, failed
@@ -258,12 +260,13 @@ model StaffAssignment {
 }
 
 model Notification {
-  id          String    @id @default(cuid())
-  recipientId String // could be customerId or staffId
-  type        String // e.g., "quotationReady", "paymentReceived"
-  payloadJson Json
-  readAt      DateTime?
-  createdAt   DateTime  @default(now())
+  id            String    @id @default(cuid())
+  recipientId   String // could be customerId or staffId
+  type          String // e.g., "quotationReady", "paymentReceived"
+  payloadJson   Json
+  readAt        DateTime?
+  createdAt     DateTime  @default(now())
+  conversationId String? // optional link to a conversation for chat notifications
 }
 
 model Document {
@@ -434,4 +437,65 @@ model PayrollRecord {
   status         String       @default("draft") // draft, approved, paid
   createdAt      DateTime     @default(now())
 }
+
+// ------- New communication & order models -------
+model Order {
+  id           String   @id @default(uuid())
+  orderNumber  String   @unique
+  customerId   String?
+  customer     Customer? @relation(fields: [customerId], references: [id])
+  status       String   @default("pending") // pending, confirmed, dispatched, delivered, cancelled
+  totalAmount  Float    @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  orderItems   OrderItem[]
+  payments     Payment[]
+  documents    Document[]
+  notifications Notification[]
+}
+
+model OrderItem {
+  id        String @id @default(uuid())
+  orderId   String
+  order     Order @relation(fields: [orderId], references: [id])
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id])
+  quantity  Int @default(1)
+  unitPrice Float
+  totalPrice Float @default(0)
+}
+
+model Conversation {
+  id               String   @id @default(uuid())
+  participants     Jsonb    // array of participant objects {type: "customer"|"admin", id: "..."}
+  linkedEntityId   String?
+  linkedEntityType String? // e.g., "order", "project", "quotation"
+  createdAt        DateTime @default(now())
+  messages         Message[]
+}
+
+model Message {
+  id            String   @id @default(uuid())
+  conversationId String   @relation(fields: [conversationId], references: [id])
+  senderId      String   // could be a Customer.id or User.id
+  recipientId   String   // opposite party
+  content       String
+  createdAt     DateTime @default(now())
+  readAt        DateTime?
+}
+
+model SupportTicket {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  status      String   @default("open") // open, in_progress, resolved, closed
+  priority    String   @default("medium") // low, medium, high, urgent
+  customerId  String?
+  customer    Customer? @relation(fields: [customerId], references: [id])
+  assignedTo  String?   // User.id of staff handling the ticket
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  messages    Message[] @relation("TicketMessages")
+}
+
 
